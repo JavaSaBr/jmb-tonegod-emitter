@@ -1,17 +1,12 @@
-package com.ss.editor.tonedog.emitter.control.model.property.control.particle.influencer;
+package com.ss.editor.tonedog.emitter.control.model.property.control.particle.influencer.interpolation.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.jme3.renderer.queue.GeometryList;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
-import com.ss.editor.Messages;
-import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.tonedog.emitter.control.model.property.control.particle.influencer.interpolation.element.InterpolationElement;
 import com.ss.editor.tonedog.emitter.control.operation.ParticleInfluencerPropertyOperation;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.UpdatableControl;
-import com.ss.editor.ui.control.model.tree.dialog.geometry.GeometrySelectorDialog;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
@@ -26,16 +21,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tonegod.emitter.influencers.impl.PhysicsInfluencer;
+import tonegod.emitter.influencers.InterpolatedParticleInfluencer;
+import tonegod.emitter.influencers.ParticleInfluencer;
+import tonegod.emitter.interpolation.Interpolation;
 
 import java.util.function.BiConsumer;
 
 /**
- * The control for editing geometry list in the {@link PhysicsInfluencer}.
+ * The control for editing interpolations in the {@link ParticleInfluencer}.
  *
+ * @param <I> the type parameter
  * @author JavaSaBr
  */
-public class PhysicsNodeListControl extends VBox implements UpdatableControl {
+public abstract class AbstractInterpolationInfluencerControl<I extends InterpolatedParticleInfluencer> extends VBox
+        implements UpdatableControl {
 
     /**
      * The consumer of changes.
@@ -44,10 +43,10 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     private final ModelChangeConsumer modelChangeConsumer;
 
     /**
-     * The physics influencer.
+     * The influencer.
      */
     @NotNull
-    private final PhysicsInfluencer influencer;
+    private final I influencer;
 
     /**
      * The parent.
@@ -61,22 +60,21 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     @Nullable
     private VBox elementContainer;
 
-    public PhysicsNodeListControl(@NotNull final ModelChangeConsumer modelChangeConsumer,
-                                  @NotNull final PhysicsInfluencer influencer,
-                                  @NotNull final Object parent) {
+    public AbstractInterpolationInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer,
+                                                  @NotNull final I influencer,
+                                                  @NotNull final Object parent) {
         this.modelChangeConsumer = modelChangeConsumer;
         this.parent = parent;
         this.influencer = influencer;
         createControls();
-        FXUtils.addClassesTo(this, CSSClasses.DEF_VBOX, CSSClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER,
-                CSSClasses.PHYSICS_NODE_LIST_CONTROL);
+        FXUtils.addClassesTo(this, CSSClasses.DEF_VBOX, CSSClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER);
     }
 
     /**
      * Create controls.
      */
     @FxThread
-    private void createControls() {
+    protected void createControls() {
 
         final Label propertyNameLabel = new Label(getControlTitle() + ":");
 
@@ -89,7 +87,6 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         final Button removeButton = new Button();
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
-        removeButton.setDisable(true);
 
         final HBox buttonContainer = new HBox(addButton, removeButton);
 
@@ -101,10 +98,10 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         FXUtils.addToPane(buttonContainer, this);
 
         FXUtils.addClassTo(propertyNameLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(elementContainer, CSSClasses.DEF_VBOX);
         FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
         FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
         FXUtils.addClassTo(buttonContainer, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(elementContainer, CSSClasses.DEF_VBOX);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
     }
@@ -114,9 +111,9 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      *
      * @return the count of minimum elements.
      */
-    @FromAnyThread
+    @FxThread
     protected int getMinElements() {
-        return 0;
+        return 2;
     }
 
     /**
@@ -124,9 +121,9 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      *
      * @return the control title
      */
-    @FromAnyThread
+    @FxThread
     protected @NotNull String getControlTitle() {
-        return Messages.MODEL_PROPERTY_GEOMETRY_LIST;
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -134,8 +131,8 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      *
      * @return the influencer.
      */
-    @FromAnyThread
-    public @NotNull PhysicsInfluencer getInfluencer() {
+    @FxThread
+    public @NotNull I getInfluencer() {
         return influencer;
     }
 
@@ -144,7 +141,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      *
      * @return the element container.
      */
-    @FromAnyThread
+    @FxThread
     protected @NotNull VBox getElementContainer() {
         return notNull(elementContainer);
     }
@@ -154,7 +151,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      *
      * @return the consumer of changes.
      */
-    @FromAnyThread
+    @FxThread
     protected @NotNull ModelChangeConsumer getModelChangeConsumer() {
         return modelChangeConsumer;
     }
@@ -165,13 +162,17 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     @FxThread
     public void reload() {
 
-        final PhysicsInfluencer influencer = getInfluencer();
+        final I influencer = getInfluencer();
         final VBox root = getElementContainer();
         final ObservableList<Node> children = root.getChildren();
 
         if (isNeedRebuild(influencer, children.size())) {
             UIUtils.clear(root);
             fillControl(influencer, root);
+        } else {
+            children.stream()
+                    .map(InterpolationElement.class::cast)
+                    .forEach(InterpolationElement::reload);
         }
     }
 
@@ -183,8 +184,8 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      * @return the boolean
      */
     @FxThread
-    protected boolean isNeedRebuild(@NotNull final PhysicsInfluencer influencer, final int currentCount) {
-        return influencer.getGeometries().size() != currentCount;
+    protected boolean isNeedRebuild(@NotNull final I influencer, final int currentCount) {
+        return influencer.getStepCount() != currentCount;
     }
 
     /**
@@ -194,38 +195,14 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      * @param root       the root
      */
     @FxThread
-    protected void fillControl(@NotNull final PhysicsInfluencer influencer, @NotNull final VBox root) {
-
-        final GeometryList geometries = influencer.getGeometries();
-
-        for (int i = 0, length = geometries.size(); i < length; i++) {
-
-            final Geometry geometry = geometries.get(i);
-            final Label label = new Label(Messages.MODEL_PROPERTY_GEOMETRY + ": " + geometry.getName());
-            label.prefWidthProperty().bind(widthProperty());
-
-            FXUtils.addToPane(label, root);
-        }
+    protected void fillControl(@NotNull final I influencer, @NotNull final VBox root) {
     }
 
     /**
      * Handle removing last interpolation.
      */
-    @FromAnyThread
+    @FxThread
     protected void processRemove() {
-
-        final PhysicsInfluencer influencer = getInfluencer();
-        final GeometryList geometries = influencer.getGeometries();
-
-        final Geometry geometry = geometries.get(geometries.size() - 1);
-
-        execute(true, false, (physicsInfluencer, needRemove) -> {
-            if (needRemove) {
-                physicsInfluencer.removeLast();
-            } else {
-                physicsInfluencer.addCollidable(geometry);
-            }
-        });
     }
 
     /**
@@ -233,28 +210,21 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      */
     @FxThread
     protected void processAdd() {
-
-        final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();
-        final Spatial model = modelChangeConsumer.getCurrentModel();
-
-        final GeometrySelectorDialog dialog = new GeometrySelectorDialog(model, this::processAdd);
-        dialog.show();
     }
 
     /**
-     * Handle adding new interpolation.
+     * Request to change interpolation.
      *
-     * @param geometry the selected geometry.
+     * @param newValue the new interpolation.
+     * @param index    the index.
      */
-    @FromAnyThread
-    protected void processAdd(@NotNull final Geometry geometry) {
-        execute(true, false, (physicsInfluencer, needAdd) -> {
-            if (needAdd) {
-                physicsInfluencer.addCollidable(geometry);
-            } else {
-                physicsInfluencer.removeLast();
-            }
-        });
+    @FxThread
+    public void requestToChange(@Nullable final Interpolation newValue, final int index) {
+
+        final I influencer = getInfluencer();
+        final Interpolation oldValue = influencer.getInterpolation(index);
+
+        execute(newValue, oldValue, (alphaInfluencer, interpolation) -> alphaInfluencer.updateInterpolation(interpolation, index));
     }
 
     /**
@@ -265,12 +235,10 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      * @param oldValue     the old value.
      * @param applyHandler the apply handler.
      */
-    @FromAnyThread
-    protected <T> void execute(@Nullable final T newValue, @Nullable final T oldValue,
-                               @NotNull final BiConsumer<PhysicsInfluencer, T> applyHandler) {
+    @FxThread
+    protected <T> void execute(@Nullable final T newValue, @Nullable final T oldValue, @NotNull final BiConsumer<I, T> applyHandler) {
 
-        final ParticleInfluencerPropertyOperation<PhysicsInfluencer, T> operation =
-                new ParticleInfluencerPropertyOperation<>(influencer, parent, getPropertyName(), newValue, oldValue);
+        final ParticleInfluencerPropertyOperation<I, T> operation = new ParticleInfluencerPropertyOperation<>(influencer, parent, getPropertyName(), newValue, oldValue);
         operation.setApplyHandler(applyHandler);
 
         final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();
@@ -282,7 +250,6 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      *
      * @return the property name
      */
-    @FromAnyThread
     protected @NotNull String getPropertyName() {
         return getControlTitle();
     }

@@ -1,7 +1,6 @@
 package com.ss.editor.tonedog.emitter.control.model.property.control.particle.influencer;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.ParticleInfluencerPropertyControl;
 import com.ss.editor.ui.control.property.impl.FloatPropertyControl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

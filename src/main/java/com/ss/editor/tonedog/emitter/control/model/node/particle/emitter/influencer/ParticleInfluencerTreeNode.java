@@ -2,8 +2,8 @@ package com.ss.editor.tonedog.emitter.control.model.node.particle.emitter.influe
 
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.tonedog.emitter.control.model.tree.action.influerencer.RemoveParticleInfluencerAction;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.influerencer.RemoveParticleInfluencerAction;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.collections.ObservableList;

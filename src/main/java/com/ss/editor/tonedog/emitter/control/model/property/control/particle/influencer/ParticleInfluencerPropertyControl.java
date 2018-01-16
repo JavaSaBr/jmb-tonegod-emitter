@@ -1,8 +1,8 @@
 package com.ss.editor.tonedog.emitter.control.model.property.control.particle.influencer;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.tonedog.emitter.control.operation.ParticleInfluencerPropertyOperation;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
-import com.ss.editor.ui.control.model.property.operation.ParticleInfluencerPropertyOperation;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.rlib.function.SixObjectConsumer;
 import org.jetbrains.annotations.NotNull;

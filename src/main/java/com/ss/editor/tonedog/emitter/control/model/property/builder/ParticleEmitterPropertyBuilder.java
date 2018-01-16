@@ -5,8 +5,8 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.particle.MaterialEmitterPropertyControl;
-import com.ss.editor.ui.control.model.property.control.particle.Toneg0dParticleEmitterSpriteCountModelPropertyControl;
+import com.ss.editor.tonedog.emitter.control.model.property.control.particle.ParticleEmitterMaterialPropertyControl;
+import com.ss.editor.tonedog.emitter.control.model.property.control.particle.ParticleEmitterSpriteCountModelPropertyControl;
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
@@ -264,7 +264,7 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
         magnitudeControl.setEditObject(emitterNode);
 
         final PropertyControl<ModelChangeConsumer, ParticleEmitterNode, ParticlesMaterial> materialControl =
-                new MaterialEmitterPropertyControl(particlesMaterial, Messages.MODEL_PROPERTY_MATERIAL, changeConsumer);
+                new ParticleEmitterMaterialPropertyControl(particlesMaterial, Messages.MODEL_PROPERTY_MATERIAL, changeConsumer);
         materialControl.setApplyHandler(ParticleEmitterNode::setParticlesMaterial);
         materialControl.setSyncHandler(ParticleEmitterNode::getParticlesMaterial);
         materialControl.setEditObject(emitterNode);
@@ -281,8 +281,8 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
         lifeMinMaxControl.setSyncHandler(ParticleEmitterNode::getLifeMinMax);
         lifeMinMaxControl.setEditObject(emitterNode);
 
-        final Toneg0dParticleEmitterSpriteCountModelPropertyControl spriteCountControl =
-                new Toneg0dParticleEmitterSpriteCountModelPropertyControl(spriteCount, Messages.MODEL_PROPERTY_SPRITE_COUNT, changeConsumer);
+        final ParticleEmitterSpriteCountModelPropertyControl spriteCountControl =
+                new ParticleEmitterSpriteCountModelPropertyControl(spriteCount, Messages.MODEL_PROPERTY_SPRITE_COUNT, changeConsumer);
         spriteCountControl.setApplyHandler(ParticleEmitterNode::setSpriteCount);
         spriteCountControl.setSyncHandler(ParticleEmitterNode::getSpriteCount);
         spriteCountControl.setEditObject(emitterNode);

@@ -2,7 +2,6 @@ package com.ss.editor.tonedog.emitter.control.model.property.control.particle.in
 
 import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.ParticleInfluencerPropertyControl;
 import com.ss.editor.ui.control.property.impl.FloatPropertyControl;
 import com.ss.editor.ui.control.property.impl.Vector3FPropertyControl;
 import org.jetbrains.annotations.NotNull;
