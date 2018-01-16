@@ -1,0 +1,7 @@
+/out/
+/build/
+/.gradle/
+/.idea/
+/embedded-plugins/
+*.iml
+*.so
