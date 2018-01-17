@@ -60,8 +60,9 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
                                 @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
-        if (!(object instanceof ParticleInfluencer) || parent == null) return;
-
+        if (!(object instanceof ParticleInfluencer) || parent == null) {
+            return;
+        }
 
         if (object instanceof AlphaInfluencer) {
             createControls(container, changeConsumer, (AlphaInfluencer) object, parent);

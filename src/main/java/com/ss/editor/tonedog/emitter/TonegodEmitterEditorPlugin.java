@@ -10,15 +10,15 @@ import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.plugin.api.RenderFilterExtension;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState;
 import com.ss.editor.tonedog.emitter.control.property.builder.ParticleEmitterPropertyBuilder;
-import com.ss.editor.tonedog.emitter.control.property.builder.ParticleInfluencerPropertyBuilder;
+import com.ss.editor.tonedog.emitter.control.tree.ParticlesTreeNodeFactory;
 import com.ss.editor.tonedog.emitter.control.tree.action.CreateParticleEmitterAction;
 import com.ss.editor.tonedog.emitter.control.tree.action.CreateSoftParticleEmitterAction;
-import com.ss.editor.tonedog.emitter.control.tree.ParticlesTreeNodeFactory;
 import com.ss.editor.tonedog.emitter.model.ParticleInfluencers;
 import com.ss.editor.ui.control.model.node.spatial.NodeTreeNode;
 import com.ss.editor.ui.control.model.node.spatial.SpatialTreeNode;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.builder.impl.GeometryPropertyBuilder;
+import com.ss.editor.ui.control.model.property.builder.impl.ParticleInfluencerPropertyBuilder;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.ResetParticleEmittersAction;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
 import com.ss.editor.ui.control.tree.node.TreeNodeFactoryRegistry;
@@ -26,6 +26,8 @@ import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.plugin.PluginContainer;
 import com.ss.rlib.plugin.PluginSystem;
 import com.ss.rlib.plugin.annotation.PluginDescription;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;
@@ -48,6 +50,17 @@ import java.net.URL;
         description = "Provides integration with the library 'tonegod.emitter'."
 )
 public class TonegodEmitterEditorPlugin extends EditorPlugin {
+
+    @NotNull
+    private static final String GRADLE_DEPENDENCIES;
+
+    @NotNull
+    private static final String MAVEN_DEPENDENCIES;
+
+    static {
+        GRADLE_DEPENDENCIES = FileUtils.read(TonegodEmitterEditorPlugin.class.getResourceAsStream("/com/ss/editor/tonegod/emitter/dependency/gradle.html"));
+        MAVEN_DEPENDENCIES = FileUtils.read(TonegodEmitterEditorPlugin.class.getResourceAsStream("/com/ss/editor/tonegod/emitter/dependency/maven.html"));
+    }
 
     public TonegodEmitterEditorPlugin(@NotNull final PluginContainer pluginContainer) {
         super(pluginContainer);
@@ -140,18 +153,18 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
     @Override
     @FromAnyThread
     public @Nullable String getUsedGradleDependencies() {
-        return super.getUsedGradleDependencies();
+        return GRADLE_DEPENDENCIES;
     }
 
     @Override
     @FromAnyThread
     public @Nullable String getUsedMavenDependencies() {
-        return super.getUsedMavenDependencies();
+        return MAVEN_DEPENDENCIES;
     }
 
     @Override
     @FromAnyThread
     public @Nullable URL getHomePageUrl() {
-        return super.getHomePageUrl();
+        return Utils.get(() -> new URL("https://github.com/JavaSaBr/tonegodemitter"));
     }
 }

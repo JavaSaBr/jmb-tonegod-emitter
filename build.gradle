@@ -57,7 +57,10 @@ dependencies {
     compile 'com.github.JavaSaBr:jmonkeybuilder:develop-SNAPSHOT'
     compile 'com.github.JavaSaBr:tonegodemitter:2.4.1'
 
-    pluginDependences 'com.github.JavaSaBr:tonegodemitter:2.4.1'
+    pluginDependences ('com.github.JavaSaBr:tonegodemitter:2.4.1') {
+        exclude group: 'org.jmonkeyengine'
+        exclude group: 'org.jetbrains'
+    }
 
     testCompile "org.junit.platform:junit-platform-commons:$junitPlatformVersion"
     testRuntime "org.junit.platform:junit-platform-engine:$junitPlatformVersion"
@@ -130,21 +133,21 @@ task createPluginFolders(dependsOn: 'cleanPluginFolders') {
 }
 
 task copyPluginDependences(type: Copy, dependsOn: ['install', 'createPluginFolders']) {
-    doFirst {
 
-        def configuration = configurations.pluginDependences
-        def dependencies = configuration.dependencies
+    def configuration = configurations.pluginDependences
+    def dependencies = configuration.dependencies
 
-        if (dependencies.isEmpty()) {
-            return
-        }
-
-        def projectFolder = Paths.get("$buildDir").getParent()
-        def libsFolder = projectFolder.resolve("embedded-plugins").resolve("libs")
-
-        into libsFolder.toString()
-        from configuration
+    if (dependencies.isEmpty()) {
+        return
     }
+
+    def projectFolder = Paths.get("$buildDir").getParent()
+    def embeddedPluginsFolder = projectFolder.resolve("embedded-plugins")
+    def pluginFolder = embeddedPluginsFolder.resolve(String.valueOf(artifactId))
+    def libsFolder = pluginFolder.resolve("libs")
+
+    into libsFolder.toString()
+    from configuration
 }
 
 task preparePlugin(type: Copy, dependsOn: 'copyPluginDependences') {
