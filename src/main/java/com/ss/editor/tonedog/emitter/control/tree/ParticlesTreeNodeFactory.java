@@ -7,7 +7,7 @@ import com.ss.editor.tonedog.emitter.control.tree.node.influencer.ParticleInflue
 import com.ss.editor.tonedog.emitter.control.tree.node.influencer.ParticleInfluencersTreeNode;
 import com.ss.editor.tonedog.emitter.model.ParticleInfluencers;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.control.tree.node.TreeNodeFactory;
+import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;

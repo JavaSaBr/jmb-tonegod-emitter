@@ -3,13 +3,13 @@ package com.ss.editor.tonedog.emitter.control.property.control.particle.influenc
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.InterpolationElement;
 import com.ss.editor.tonedog.emitter.control.operation.ParticleInfluencerPropertyOperation;
+import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.InterpolationElement;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.UpdatableControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -67,7 +67,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
         this.parent = parent;
         this.influencer = influencer;
         createControls();
-        FXUtils.addClassesTo(this, CSSClasses.DEF_VBOX, CSSClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER);
+        FXUtils.addClassesTo(this, CssClasses.DEF_VBOX, CssClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER);
     }
 
     /**
@@ -97,11 +97,11 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
         FXUtils.addToPane(elementContainer, this);
         FXUtils.addToPane(buttonContainer, this);
 
-        FXUtils.addClassTo(propertyNameLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(elementContainer, CSSClasses.DEF_VBOX);
-        FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
-        FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
-        FXUtils.addClassTo(buttonContainer, CSSClasses.DEF_HBOX);
+        FXUtils.addClassTo(propertyNameLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(elementContainer, CssClasses.DEF_VBOX);
+        FXUtils.addClassTo(addButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER);
+        FXUtils.addClassTo(removeButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER);
+        FXUtils.addClassTo(buttonContainer, CssClasses.DEF_HBOX);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
     }
@@ -167,7 +167,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
         final ObservableList<Node> children = root.getChildren();
 
         if (isNeedRebuild(influencer, children.size())) {
-            UIUtils.clear(root);
+            UiUtils.clear(root);
             fillControl(influencer, root);
         } else {
             children.stream()

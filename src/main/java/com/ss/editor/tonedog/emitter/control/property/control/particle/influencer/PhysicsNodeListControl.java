@@ -11,10 +11,10 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.tonedog.emitter.control.operation.ParticleInfluencerPropertyOperation;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.UpdatableControl;
-import com.ss.editor.ui.control.model.tree.dialog.geometry.GeometrySelectorDialog;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.dialog.geometry.GeometrySelectorDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -68,8 +68,8 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         this.parent = parent;
         this.influencer = influencer;
         createControls();
-        FXUtils.addClassesTo(this, CSSClasses.DEF_VBOX, CSSClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER,
-                CSSClasses.PHYSICS_NODE_LIST_CONTROL);
+        FXUtils.addClassesTo(this, CssClasses.DEF_VBOX, CssClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER,
+                CssClasses.PHYSICS_NODE_LIST_CONTROL);
     }
 
     /**
@@ -100,11 +100,11 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         FXUtils.addToPane(elementContainer, this);
         FXUtils.addToPane(buttonContainer, this);
 
-        FXUtils.addClassTo(propertyNameLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
-        FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
-        FXUtils.addClassTo(buttonContainer, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(elementContainer, CSSClasses.DEF_VBOX);
+        FXUtils.addClassTo(propertyNameLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(addButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER);
+        FXUtils.addClassTo(removeButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER);
+        FXUtils.addClassTo(buttonContainer, CssClasses.DEF_HBOX);
+        FXUtils.addClassTo(elementContainer, CssClasses.DEF_VBOX);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
     }
@@ -170,7 +170,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         final ObservableList<Node> children = root.getChildren();
 
         if (isNeedRebuild(influencer, children.size())) {
-            UIUtils.clear(root);
+            UiUtils.clear(root);
             fillControl(influencer, root);
         }
     }

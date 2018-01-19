@@ -5,7 +5,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.control.AbstractInterpolationInfluencerControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -92,7 +92,7 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
         setIgnoreListeners(true);
         reload();
         setIgnoreListeners(false);
-        FXUtils.addClassesTo(this, CSSClasses.DEF_HBOX, CSSClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT);
+        FXUtils.addClassesTo(this, CssClasses.DEF_HBOX, CssClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT);
     }
 
     /**
@@ -108,7 +108,7 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
             editableLabel = new Label(getEditableTitle() + ":");
             editableLabel.prefWidthProperty().bind(widthProperty().multiply(0.2));
 
-            FXUtils.addClassTo(editableLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+            FXUtils.addClassTo(editableLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         }
 
         editableControl = createEditableControl();
@@ -131,8 +131,8 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
         FXUtils.addToPane(interpolationLabel, this);
         FXUtils.addToPane(interpolationComboBox, this);
 
-        FXUtils.addClassTo(interpolationLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(interpolationComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(interpolationLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(interpolationComboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**

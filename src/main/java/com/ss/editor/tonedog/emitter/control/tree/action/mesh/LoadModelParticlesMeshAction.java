@@ -18,7 +18,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileActio
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.util.array.Array;
@@ -70,7 +70,7 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
     @Override
     @FxThread
     protected void process() {
-        UIUtils.openFileAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);
+        UiUtils.openFileAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);
     }
 
     /**
@@ -88,7 +88,7 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
 
         final ModelKey modelKey = new ModelKey(assetPath);
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
         final Spatial loadedModel = assetManager.loadModel(modelKey);
         final Geometry geometry = NodeUtils.findGeometry(loadedModel);
 

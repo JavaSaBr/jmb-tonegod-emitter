@@ -5,8 +5,8 @@ import com.jme3.math.ColorRGBA;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.control.ColorInfluencerControl;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.css.CssClasses;
+import com.ss.editor.ui.util.UiUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
@@ -38,7 +38,7 @@ public class ColorInterpolationElement extends InterpolationElement<ColorInfluen
         colorPicker.prefWidthProperty().bind(widthProperty().multiply(0.35));
         colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
 
-        FXUtils.addClassTo(colorPicker, CSSClasses.ABSTRACT_PARAM_CONTROL_COLOR_PICKER);
+        FXUtils.addClassTo(colorPicker, CssClasses.ABSTRACT_PARAM_CONTROL_COLOR_PICKER);
 
         return colorPicker;
     }
@@ -49,7 +49,7 @@ public class ColorInterpolationElement extends InterpolationElement<ColorInfluen
     @FxThread
     private void processChange(@NotNull final Color newValue) {
         if (isIgnoreListeners()) return;
-        final ColorRGBA newColor = UIUtils.from(newValue);
+        final ColorRGBA newColor = UiUtils.from(newValue);
         final ColorInfluencerControl control = getControl();
         control.requestToChange(newColor, getIndex());
     }

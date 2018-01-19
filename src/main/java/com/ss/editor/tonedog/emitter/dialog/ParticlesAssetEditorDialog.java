@@ -12,8 +12,9 @@ import com.jme3.shader.VarType;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.asset.file.AssetEditorDialog;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -94,7 +95,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
         settingsContainer.add(applyLightingTransformCheckBox, 1, 1);
         settingsContainer.add(preview, 0, 2, 2, 1);
 
-        FXUtils.addClassTo(settingsContainer, CSSClasses.DEF_GRID_PANE);
+        FXUtils.addClassTo(settingsContainer, CssClasses.DEF_GRID_PANE);
 
         return settingsContainer;
     }
@@ -130,7 +131,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
 
         final CheckBox transformBox = getApplyLightingTransformCheckBox();
 
-        final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+        final AssetManager assetManager = EditorUtil.getAssetManager();
 
         final Path file = element.getFile();
         final Path assetFile = getAssetFile(file);
@@ -167,7 +168,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
 
         if (file != null && !Files.isDirectory(file)) {
 
-            final AssetManager assetManager = JME_APPLICATION.getAssetManager();
+            final AssetManager assetManager = EditorUtil.getAssetManager();
             final Path assetFile = getAssetFile(file);
 
             if (assetFile == null) {
