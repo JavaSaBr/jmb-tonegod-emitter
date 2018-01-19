@@ -6,22 +6,22 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
+import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.plugin.api.RenderFilterExtension;
-import com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState;
 import com.ss.editor.tonedog.emitter.control.property.builder.ParticleEmitterPropertyBuilder;
+import com.ss.editor.tonedog.emitter.control.property.builder.ParticleInfluencerPropertyBuilder;
 import com.ss.editor.tonedog.emitter.control.tree.ParticlesTreeNodeFactory;
 import com.ss.editor.tonedog.emitter.control.tree.action.CreateParticleEmitterAction;
 import com.ss.editor.tonedog.emitter.control.tree.action.CreateSoftParticleEmitterAction;
 import com.ss.editor.tonedog.emitter.model.ParticleInfluencers;
-import com.ss.editor.ui.control.model.node.spatial.NodeTreeNode;
-import com.ss.editor.ui.control.model.node.spatial.SpatialTreeNode;
-import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
-import com.ss.editor.ui.control.model.property.builder.impl.GeometryPropertyBuilder;
-import com.ss.editor.ui.control.model.property.builder.impl.ParticleInfluencerPropertyBuilder;
-import com.ss.editor.ui.control.model.tree.action.particle.emitter.ResetParticleEmittersAction;
+import com.ss.editor.ui.control.model.ModelPropertyEditor;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderRegistry;
-import com.ss.editor.ui.control.tree.node.TreeNodeFactoryRegistry;
+import com.ss.editor.ui.control.property.builder.impl.GeometryPropertyBuilder;
+import com.ss.editor.ui.control.tree.action.impl.particle.emitter.ResetParticleEmittersAction;
+import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
+import com.ss.editor.ui.control.tree.node.impl.spatial.NodeTreeNode;
+import com.ss.editor.ui.control.tree.node.impl.spatial.SpatialTreeNode;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.plugin.PluginContainer;
 import com.ss.rlib.plugin.PluginSystem;
@@ -72,7 +72,7 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
         super.onAfterCreateJmeContext(pluginSystem);
 
         // add the selection finder to handle selection events in 3D editors
-        AbstractSceneEditor3DState.registerSelectionFinder(object -> {
+        AbstractSceneEditor3DPart.registerSelectionFinder(object -> {
             if (object instanceof ParticleGeometry) {
                 return findParent((Spatial) object, ParticleEmitterNode.class::isInstance);
             } else return null;

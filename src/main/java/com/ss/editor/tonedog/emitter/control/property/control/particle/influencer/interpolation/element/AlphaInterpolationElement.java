@@ -6,7 +6,7 @@ import static java.lang.Math.min;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.control.AlphaInfluencerControl;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -42,7 +42,7 @@ public class AlphaInterpolationElement extends InterpolationElement<AlphaInfluen
         textField.prefWidthProperty().bind(widthProperty().multiply(0.35));
         textField.setOnKeyReleased(this::processChange);
 
-        FXUtils.addClassTo(textField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD);
+        FXUtils.addClassTo(textField, CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD);
 
         return textField;
     }

@@ -9,10 +9,10 @@ import com.ss.editor.tonedog.emitter.control.tree.action.mesh.LoadModelParticles
 import com.ss.editor.tonedog.emitter.control.tree.action.shape.*;
 import com.ss.editor.tonedog.emitter.model.ParticleInfluencers;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.node.spatial.NodeTreeNode;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.editor.ui.control.tree.node.impl.spatial.NodeTreeNode;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
@@ -58,7 +58,10 @@ public class ParticleEmitterNodeTreeNode extends NodeTreeNode<ParticleEmitterNod
     @FxThread
     public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
-        if (!(nodeTree instanceof ModelNodeTree)) return;
+
+        if (!(nodeTree instanceof ModelNodeTree)) {
+            return;
+        }
 
         final Menu changeMeshMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_PARTICLES_MESH, new ImageView(Icons.MESH_16));
         final ObservableList<MenuItem> subItems = changeMeshMenu.getItems();

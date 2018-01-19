@@ -49,7 +49,7 @@ public class RemoveParticleInfluencerOperation extends AbstractEditorOperation<M
             emitterNode.removeInfluencer(influencer);
             emitterNode.emitAllParticles();
 
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXRemovedChild(new ParticleInfluencers(emitterNode), influencer));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(new ParticleInfluencers(emitterNode), influencer));
         });
     }
 
@@ -62,7 +62,7 @@ public class RemoveParticleInfluencerOperation extends AbstractEditorOperation<M
             emitterNode.addInfluencer(influencer, childIndex);
             emitterNode.emitAllParticles();
 
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFXAddedChild(new ParticleInfluencers(emitterNode), influencer, childIndex, false));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(new ParticleInfluencers(emitterNode), influencer, childIndex, false));
         });
     }
 }

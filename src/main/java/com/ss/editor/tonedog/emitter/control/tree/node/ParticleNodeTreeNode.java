@@ -2,7 +2,7 @@ package com.ss.editor.tonedog.emitter.control.tree.node;
 
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.node.spatial.NodeTreeNode;
+import com.ss.editor.ui.control.tree.node.impl.spatial.NodeTreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.node.ParticleNode;

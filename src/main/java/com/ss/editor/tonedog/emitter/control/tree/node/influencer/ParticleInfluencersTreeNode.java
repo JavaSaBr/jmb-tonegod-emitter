@@ -8,7 +8,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.tonedog.emitter.control.tree.action.influerencer.*;
 import com.ss.editor.tonedog.emitter.model.ParticleInfluencers;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.util.array.Array;
