@@ -44,7 +44,7 @@ import java.net.URL;
  */
 @PluginDescription(
         id = "com.ss.editor.tonegod.emitter",
-        version = "1.0.0",
+        version = "1.0.1",
         minAppVersion = "1.6.0",
         name = "Tonegod.Emitter Support",
         description = "Provides integration with the library 'tonegod.emitter'."
