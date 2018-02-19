@@ -43,8 +43,7 @@ public class ParticlesTreeNodeFactory implements TreeNodeFactory {
     }
 
     @Override
-    @FxThread
-    public int getOrder() {
+    public int getPriority() {
         return 1;
     }
 }

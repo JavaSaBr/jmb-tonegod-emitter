@@ -10,6 +10,7 @@ import com.ss.editor.tonedog.emitter.control.property.control.particle.ParticleE
 import com.ss.editor.ui.control.property.PropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
+import com.ss.editor.ui.control.property.builder.impl.SpatialPropertyBuilder;
 import com.ss.editor.ui.control.property.impl.*;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.VBox;
@@ -29,6 +30,8 @@ import java.util.function.BiConsumer;
  * @author JavaSaBr
  */
 public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
+
+    public static final int PRIORITY = SpatialPropertyBuilder.PRIORITY + 1;
 
     @NotNull
     private static final DirectionType[] DIRECTION_TYPES = DirectionType.values();
@@ -311,5 +314,10 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
         buildSplitLine(container);
 
         FXUtils.addToPane(materialControl, container);
+    }
+
+    @Override
+    public int getPriority() {
+        return PRIORITY;
     }
 }
