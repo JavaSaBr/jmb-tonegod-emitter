@@ -7,7 +7,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.control.ColorInfluencerControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;

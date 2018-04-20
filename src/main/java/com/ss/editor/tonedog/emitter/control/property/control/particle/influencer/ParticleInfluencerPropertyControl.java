@@ -4,12 +4,9 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.tonedog.emitter.control.operation.ParticleInfluencerPropertyOperation;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.ui.control.property.PropertyControl;
-import com.ss.rlib.function.SixObjectConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.influencers.ParticleInfluencer;
-
-import java.util.function.BiConsumer;
 
 /**
  * The base implementation of the property control for the {@link ModelFileEditor}.
@@ -29,7 +26,7 @@ public class ParticleInfluencerPropertyControl<D extends ParticleInfluencer, T> 
      * @param parent the parent
      * @return the six object consumer
      */
-    public static <D extends ParticleInfluencer, T> @NotNull SixObjectConsumer<ModelChangeConsumer, D, String, T, T, BiConsumer<D, T>> newChangeHandler(@NotNull final Object parent) {
+    public static <D extends ParticleInfluencer, T> @NotNull ChangeHandler<ModelChangeConsumer, D, T> newChangeHandler(@NotNull final Object parent) {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
 
             final ParticleInfluencerPropertyOperation<D, T> operation =

@@ -1,6 +1,6 @@
 package com.ss.editor.tonedog.emitter.control.tree.action.shape;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.scene.Mesh;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -12,8 +12,8 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

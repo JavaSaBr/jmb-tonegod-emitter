@@ -1,6 +1,6 @@
 package com.ss.editor.tonedog.emitter.control.tree;
 
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.tonedog.emitter.control.tree.node.ParticleEmitterNodeTreeNode;
 import com.ss.editor.tonedog.emitter.control.tree.node.influencer.ParticleInfluencerTreeNode;

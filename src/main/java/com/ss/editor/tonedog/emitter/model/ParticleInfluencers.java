@@ -37,7 +37,7 @@ public class ParticleInfluencers {
      *
      * @return the list of influencers.
      */
-    public @NotNull List<ParticleInfluencer> getInfluencers() {
+    public @NotNull List<ParticleInfluencer<?>> getInfluencers() {
         return emitterNode.getInfluencers();
     }
 

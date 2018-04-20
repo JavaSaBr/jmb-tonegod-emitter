@@ -1,6 +1,6 @@
 package com.ss.editor.tonedog.emitter.control.tree.action.influerencer;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -53,7 +53,7 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction<ModelChan
 
         final ParticleInfluencer influencer = node.getElement();
         final ParticleEmitterNode emitterNode = particleInfluencers.getEmitterNode();
-        final List<ParticleInfluencer> influencers = emitterNode.getInfluencers();
+        final List<ParticleInfluencer<?>> influencers = emitterNode.getInfluencers();
         final int childIndex = influencers.indexOf(influencer);
 
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();

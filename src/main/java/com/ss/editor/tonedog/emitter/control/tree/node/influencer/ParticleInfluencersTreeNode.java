@@ -1,7 +1,7 @@
 package com.ss.editor.tonedog.emitter.control.tree.node.influencer;
 
-import static com.ss.rlib.util.ClassUtils.getConstructor;
-import static com.ss.rlib.util.ClassUtils.newInstance;
+import static com.ss.rlib.common.util.ClassUtils.getConstructor;
+import static com.ss.rlib.common.util.ClassUtils.newInstance;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
@@ -11,10 +11,10 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
+import com.ss.rlib.common.util.dictionary.DictionaryFactory;
+import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -94,7 +94,7 @@ public class ParticleInfluencersTreeNode extends TreeNode<ParticleInfluencers> {
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
         final ParticleInfluencers element = getElement();
-        final List<ParticleInfluencer> influencers = element.getInfluencers();
+        final List<ParticleInfluencer<?>> influencers = element.getInfluencers();
         influencers.forEach(influencer -> result.add(FACTORY_REGISTRY.createFor(influencer)));
         return result;
     }

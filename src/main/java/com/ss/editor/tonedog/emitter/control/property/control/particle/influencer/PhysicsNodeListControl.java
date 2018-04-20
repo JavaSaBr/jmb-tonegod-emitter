@@ -1,6 +1,6 @@
 package com.ss.editor.tonedog.emitter.control.property.control.particle.influencer;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.renderer.queue.GeometryList;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
@@ -15,7 +15,7 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.geometry.GeometrySelectorDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;

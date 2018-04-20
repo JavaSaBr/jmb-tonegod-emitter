@@ -8,7 +8,8 @@ import com.ss.editor.tonedog.emitter.control.property.control.particle.influence
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.control.*;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,8 +58,12 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
 
     @Override
     @FxThread
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
-                                @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
+    protected void buildForImpl(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer
+    ) {
 
         if (!(object instanceof ParticleInfluencer) || parent == null) {
             return;
@@ -100,20 +105,23 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final InterpolatedParticleInfluencer influencer,
-                                @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull InterpolatedParticleInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final float fixedDuration = influencer.getFixedDuration();
+        var fixedDuration = influencer.getFixedDuration();
 
-        final FloatParticleInfluencerPropertyControl<InterpolatedParticleInfluencer> fixedDurationControl =
+        FloatParticleInfluencerPropertyControl<InterpolatedParticleInfluencer> fixedDurationControl =
                 new FloatParticleInfluencerPropertyControl<>(fixedDuration, Messages.MODEL_PROPERTY_FIXED_DURATION, changeConsumer, parent);
 
         fixedDurationControl.setSyncHandler(InterpolatedParticleInfluencer::getFixedDuration);
         fixedDurationControl.setApplyHandler(InterpolatedParticleInfluencer::setFixedDuration);
         fixedDurationControl.setEditObject(influencer);
 
-        FXUtils.addToPane(fixedDurationControl, container);
+        FxUtils.addChild(container, fixedDurationControl);
     }
 
     /**
@@ -125,13 +133,17 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final AlphaInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull AlphaInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final AlphaInfluencerControl influencerControl = new AlphaInfluencerControl(changeConsumer, influencer, parent);
+        var influencerControl = new AlphaInfluencerControl(changeConsumer, influencer, parent);
         influencerControl.reload();
 
-        FXUtils.addToPane(influencerControl, container);
+        FxUtils.addChild(container, influencerControl);
 
         buildSplitLine(container);
     }
@@ -145,24 +157,30 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final ColorInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull ColorInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final boolean randomStartColor = influencer.isRandomStartColor();
+        var randomStartColor = influencer.isRandomStartColor();
 
-        final ColorInfluencerControl colorControl = new ColorInfluencerControl(changeConsumer, influencer, parent);
+        var colorControl = new ColorInfluencerControl(changeConsumer, influencer, parent);
         colorControl.reload();
 
-        final BooleanParticleInfluencerPropertyControl<ColorInfluencer> randomStartColorControl =
+        BooleanParticleInfluencerPropertyControl<ColorInfluencer> randomStartColorControl =
                 new BooleanParticleInfluencerPropertyControl<>(randomStartColor, Messages.MODEL_PROPERTY_IS_RANDOM_START_COLOR, changeConsumer, parent);
 
         randomStartColorControl.setSyncHandler(ColorInfluencer::isRandomStartColor);
         randomStartColorControl.setApplyHandler(ColorInfluencer::setRandomStartColor);
         randomStartColorControl.setEditObject(influencer);
 
-        FXUtils.addToPane(colorControl, container);
+        FxUtils.addChild(container, colorControl);
+
         buildSplitLine(container);
-        FXUtils.addToPane(randomStartColorControl, container);
+
+        FxUtils.addChild(container, randomStartColorControl);
     }
 
     /**

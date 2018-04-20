@@ -1,7 +1,7 @@
 package com.ss.editor.tonedog.emitter.control.tree.action;
 
 import static com.ss.editor.util.EditorUtil.getDefaultLayer;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
