@@ -49,9 +49,9 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
     }
 
     /**
-     * Create mesh info particle data mesh info.
+     * Create a particle data mesh info.
      *
-     * @return the particle data mesh info
+     * @return the particle data mesh info.
      */
     protected abstract @NotNull ParticleDataMeshInfo createMeshInfo();
 }

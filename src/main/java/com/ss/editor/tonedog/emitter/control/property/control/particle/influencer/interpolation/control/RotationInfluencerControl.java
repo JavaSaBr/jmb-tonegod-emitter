@@ -41,8 +41,8 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
     /**
      * Request to change.
      *
-     * @param newValue the new value
-     * @param index    the index
+     * @param newValue the new value.
+     * @param index    the index.
      */
     @FxThread
     public void requestToChange(@NotNull Vector3f newValue, int index) {

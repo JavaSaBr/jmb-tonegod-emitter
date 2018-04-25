@@ -36,18 +36,6 @@ import java.util.function.Consumer;
 public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMaterial> {
 
     /**
-     * The label 'Texture parameter name'.
-     */
-    @Nullable
-    private Label textureParamNameLabel;
-
-    /**
-     * The label 'Apply lighting transform'.
-     */
-    @Nullable
-    private Label applyLightingTransformLabel;
-
-    /**
      * The combo box with texture parameter name.
      */
     @Nullable
@@ -68,11 +56,11 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
 
         var preview = super.buildSecondPart(container);
 
-        textureParamNameLabel = new Label(Messages.PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL + ":");
+        var textureParamNameLabel = new Label(Messages.PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL + ":");
         textureParamNameLabel.prefWidthProperty()
                 .bind(container.widthProperty().multiply(0.25));
 
-        applyLightingTransformLabel = new Label(Messages.PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL + ":");
+        var applyLightingTransformLabel = new Label(Messages.PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL + ":");
         applyLightingTransformLabel.prefWidthProperty()
                 .bind(container.widthProperty().multiply(0.25));
 
@@ -107,9 +95,9 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     }
 
     /**
-     * Get the check box for applying the lighting transform.
+     * Get the check box to apply lighting transformations.
      *
-     * @return the check box for applying the lighting transform.
+     * @return the check box to apply lighting transformations.
      */
     @FxThread
     private @NotNull CheckBox getApplyLightingTransformCheckBox() {

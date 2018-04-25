@@ -44,7 +44,7 @@ public class AlphaInterpolationElement extends
     }
 
     /**
-     * Handle changing alpha value.
+     * Apply the new value.
      */
     @FxThread
     private void apply(@NotNull Float newValue) {
@@ -53,9 +53,6 @@ public class AlphaInterpolationElement extends
         }
     }
 
-    /**
-     * Reload this element.
-     */
     @Override
     @FxThread
     public void reload() {

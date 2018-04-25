@@ -101,7 +101,7 @@ public class DestinationWeightInterpolationElement extends
     }
 
     /**
-     * Handle changing destination value.
+     * Apply the new destination value.
      */
     @FxThread
     private void applyDestination() {
@@ -118,7 +118,7 @@ public class DestinationWeightInterpolationElement extends
     }
 
     /**
-     * Handle changing weight value.
+     * Apply the new weight value.
      */
     @FxThread
     private void applyWeight() {
@@ -133,6 +133,8 @@ public class DestinationWeightInterpolationElement extends
     }
 
     /**
+     * Get the field X.
+     *
      * @return the field X.
      */
     @FxThread
@@ -141,6 +143,8 @@ public class DestinationWeightInterpolationElement extends
     }
 
     /**
+     * Get the field Y.
+     *
      * @return the field Y.
      */
     @FxThread
@@ -149,6 +153,8 @@ public class DestinationWeightInterpolationElement extends
     }
 
     /**
+     * Get the field Z.
+     *
      * @return the field Z.
      */
     @FxThread
@@ -157,6 +163,8 @@ public class DestinationWeightInterpolationElement extends
     }
 
     /**
+     * Get the weight field.
+     *
      * @return the weight field.
      */
     @FxThread

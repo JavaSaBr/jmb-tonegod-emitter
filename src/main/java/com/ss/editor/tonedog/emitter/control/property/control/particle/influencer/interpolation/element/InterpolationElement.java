@@ -61,6 +61,9 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
         INTERPOLATIONS.addAll(InterpolationManager.getAvailable());
     }
 
+    /**
+     * The parent control.
+     */
     @NotNull
     private final C control;
 
@@ -124,7 +127,7 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
         interpolationComboBox.prefWidthProperty()
                 .bind(widthProperty().multiply(0.35));
 
-        FxControlUtils.onSelectedItemChange(interpolationComboBox, this::processChange);
+        FxControlUtils.onSelectedItemChange(interpolationComboBox, this::apply);
 
         FxUtils.addClass(interpolationLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW)
                 .addClass(interpolationComboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
@@ -147,20 +150,20 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
     }
 
     /**
-     * Create editable control.
+     * Create an editable control.
      *
-     * @return the e
+     * @return the created editable control.
      */
     @FxThread
     protected abstract @NotNull E createEditableControl();
 
     /**
-     * Process change.
+     * Apply the new value.
      *
-     * @param newValue the new value
+     * @param newValue the new value.
      */
     @FxThread
-    protected void processChange(@NotNull Interpolation newValue) {
+    protected void apply(@NotNull Interpolation newValue) {
         if (isIgnoreListeners()) {
             getControl().requestToChange(newValue, index);
         }
@@ -177,7 +180,7 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
     }
 
     /**
-     * Is ignore listeners boolean.
+     * Return true if listeners is ignored.
      *
      * @return true if listeners is ignored.
      */
@@ -197,9 +200,9 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
     }
 
     /**
-     * Sets ignore listeners.
+     * Set true if need to ignore listeners.
      *
-     * @param ignoreListeners the flag for ignoring listeners.
+     * @param ignoreListeners true if need to ignore listeners.
      */
     @FxThread
     protected void setIgnoreListeners(boolean ignoreListeners) {
@@ -241,12 +244,12 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
     }
 
     /**
-     * Is need editable label boolean.
+     * Return true if need to have an editable label.
      *
-     * @return the boolean
+     * @return true if need to have an editable label.
      */
     @FromAnyThread
-    public boolean isNeedEditableLabel() {
+    protected boolean isNeedEditableLabel() {
         return true;
     }
 }

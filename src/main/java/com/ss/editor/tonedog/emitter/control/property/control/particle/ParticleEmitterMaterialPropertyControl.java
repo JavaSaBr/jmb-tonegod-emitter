@@ -30,7 +30,7 @@ public class ParticleEmitterMaterialPropertyControl extends
     }
 
     /**
-     * Show dialog for choosing another material.
+     * Show a dialog to choose another material.
      */
     @FxThread
     protected void processChange() {

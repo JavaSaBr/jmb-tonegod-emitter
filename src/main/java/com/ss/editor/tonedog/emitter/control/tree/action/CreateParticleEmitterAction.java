@@ -67,7 +67,7 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
     }
 
     /**
-     * Create emitter node particle emitter node.
+     * Create an emitter particle node.
      *
      * @return the particle emitter node
      */

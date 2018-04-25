@@ -120,7 +120,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * Gets control title.
+     * Get the control title.
      *
      * @return the control title
      */
@@ -130,7 +130,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * Gets influencer.
+     * Get the influencer.
      *
      * @return the influencer.
      */
@@ -140,7 +140,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * Gets element container.
+     * Get the element container.
      *
      * @return the element container.
      */
@@ -150,9 +150,9 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * Gets model change consumer.
+     * Get the model change consumer.
      *
-     * @return the consumer of changes.
+     * @return the model change consumer.
      */
     @FxThread
     protected @NotNull ModelChangeConsumer getModelChangeConsumer() {
@@ -180,11 +180,11 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * Is need rebuild boolean.
+     * Return true if need to rebuild this control.
      *
      * @param influencer   the influencer
      * @param currentCount the current count
-     * @return the boolean
+     * @return true if need to rebuild this control.
      */
     @FxThread
     protected boolean isNeedRebuild(@NotNull I influencer, int currentCount) {
@@ -194,29 +194,29 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     /**
      * Fill this control.
      *
-     * @param influencer the influencer
-     * @param root       the root
+     * @param influencer the influencer.
+     * @param root       the root.
      */
     @FxThread
     protected void fillControl(@NotNull I influencer, @NotNull VBox root) {
     }
 
     /**
-     * Handle removing last interpolation.
+     * Handle of removing a last interpolation.
      */
     @FxThread
     protected void processRemove() {
     }
 
     /**
-     * Handle adding new interpolation.
+     * Handle of adding a new interpolation.
      */
     @FxThread
     protected void processAdd() {
     }
 
     /**
-     * Request to change interpolation.
+     * Request to change an interpolation.
      *
      * @param newValue the new interpolation.
      * @param index    the index.
@@ -232,7 +232,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * Execute change operation.
+     * Execute the operation.
      *
      * @param <T>          the type of value.
      * @param newValue     the new value.
@@ -251,7 +251,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * Gets property name.
+     * Get the property name.
      *
      * @return the property name
      */

@@ -155,9 +155,9 @@ public class Vector3fInterpolationElement<P extends InterpolatedParticleInfluenc
     /**
      * Request to change the vector value.
      *
-     * @param x the x
-     * @param y the y
-     * @param z the z
+     * @param x the x.
+     * @param y the y.
+     * @param z the z.
      */
     @FxThread
     protected void requestToChange(float x, float y, float z) {
@@ -188,10 +188,10 @@ public class Vector3fInterpolationElement<P extends InterpolatedParticleInfluenc
     }
 
     /**
-     * Get vector value from the influencer.
+     * Get a vector value from the influencer.
      *
-     * @param influencer the influencer
-     * @return the value
+     * @param influencer the influencer.
+     * @return the value.
      */
     @FxThread
     protected @NotNull Vector3f getValue(@NotNull P influencer) {

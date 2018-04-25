@@ -48,8 +48,8 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
     /**
      * Request to change.
      *
-     * @param newValue the new value
-     * @param index    the index
+     * @param newValue the new value.
+     * @param index    the index.
      */
     @FxThread
     public void requestToChange(@NotNull ColorRGBA newValue, int index) {

@@ -33,7 +33,7 @@ public class ParticleInfluencers {
     }
 
     /**
-     * Get the list of influencers.
+     * Get a list of influencers.
      *
      * @return the list of influencers.
      */

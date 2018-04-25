@@ -13,7 +13,6 @@ import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.dialog.geometry.GeometrySelectorDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.fx.util.FXUtils;
 import com.ss.rlib.fx.util.FxUtils;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
@@ -126,7 +125,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     }
 
     /**
-     * Gets control title.
+     * Get the control title.
      *
      * @return the control title
      */
@@ -136,7 +135,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     }
 
     /**
-     * Gets influencer.
+     * Get the influencer.
      *
      * @return the influencer.
      */
@@ -146,7 +145,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     }
 
     /**
-     * Gets element container.
+     * Get the element container.
      *
      * @return the element container.
      */
@@ -156,9 +155,9 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     }
 
     /**
-     * Gets model change consumer.
+     * Get the model change consumer.
      *
-     * @return the consumer of changes.
+     * @return the model change consumer.
      */
     @FromAnyThread
     protected @NotNull ModelChangeConsumer getModelChangeConsumer() {
@@ -182,11 +181,11 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     }
 
     /**
-     * Is need rebuild boolean.
+     * Return true if need to rebuild this control.
      *
-     * @param influencer   the influencer
-     * @param currentCount the current count
-     * @return the boolean
+     * @param influencer   the influencer.
+     * @param currentCount the current count.
+     * @return true if need to rebuild this control.
      */
     @FxThread
     protected boolean isNeedRebuild(@NotNull PhysicsInfluencer influencer, int currentCount) {
@@ -196,8 +195,8 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     /**
      * Fill this control.
      *
-     * @param influencer the influencer
-     * @param root       the root
+     * @param influencer the influencer.
+     * @param root       the root.
      */
     @FxThread
     protected void fillControl(@NotNull PhysicsInfluencer influencer, @NotNull VBox root) {
@@ -210,12 +209,12 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
             var label = new Label(Messages.MODEL_PROPERTY_GEOMETRY + ": " + geometry.getName());
             label.prefWidthProperty().bind(widthProperty());
 
-            FXUtils.addToPane(label, root);
+            FxUtils.addChild(root, label);
         }
     }
 
     /**
-     * Handle removing last interpolation.
+     * Handle of removing a last interpolation.
      */
     @FromAnyThread
     protected void processRemove() {
@@ -235,7 +234,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     }
 
     /**
-     * Handle adding new interpolation.
+     * Handle of adding a new interpolation.
      */
     @FxThread
     protected void processAdd() {
@@ -248,7 +247,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     }
 
     /**
-     * Handle adding new interpolation.
+     * Handle of adding a new interpolation.
      *
      * @param geometry the selected geometry.
      */
@@ -264,7 +263,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     }
 
     /**
-     * Execute the change operation.
+     * Execute the operation.
      *
      * @param <T>          the type of value.
      * @param newValue     the new value.

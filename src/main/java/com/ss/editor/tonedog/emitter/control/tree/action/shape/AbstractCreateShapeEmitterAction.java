@@ -69,7 +69,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
     }
 
     /**
-     * Get a list of property definitions to create a mesh.
+     * Get a list of property definitions.
      *
      * @return the list of definitions.
      */
@@ -80,7 +80,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
      * Create a mesh.
      *
      * @param vars the table with variables.
-     * @return the mesh
+     * @return the created mesh.
      */
     @FxThread
     protected abstract @NotNull Mesh createMesh(@NotNull final VarTable vars);

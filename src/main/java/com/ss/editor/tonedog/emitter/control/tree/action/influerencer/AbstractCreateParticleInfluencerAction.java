@@ -49,9 +49,9 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
     }
 
     /**
-     * Create influencer particle influencer.
+     * Create a particle influencer.
      *
-     * @return the particle influencer
+     * @return the particle influencer.
      */
     @FxThread
     protected abstract @NotNull ParticleInfluencer createInfluencer();

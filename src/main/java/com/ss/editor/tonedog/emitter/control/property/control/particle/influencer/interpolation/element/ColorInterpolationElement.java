@@ -46,7 +46,7 @@ public class ColorInterpolationElement extends
     }
 
     /**
-     * Handle change color value.
+     * Apply the new value.
      */
     @FxThread
     private void apply(@NotNull Color newValue) {
