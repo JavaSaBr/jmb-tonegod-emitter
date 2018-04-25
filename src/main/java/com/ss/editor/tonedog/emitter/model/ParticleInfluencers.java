@@ -19,7 +19,7 @@ public class ParticleInfluencers {
     @NotNull
     private final ParticleEmitterNode emitterNode;
 
-    public ParticleInfluencers(@NotNull final ParticleEmitterNode emitterNode) {
+    public ParticleInfluencers(@NotNull ParticleEmitterNode emitterNode) {
         this.emitterNode = emitterNode;
     }
 

@@ -19,7 +19,7 @@ import tonegod.emitter.particle.ParticleDataMeshInfo;
  */
 public class CreateImpostorParticleMeshAction extends AbstractCreateParticleMeshAction {
 
-    public CreateImpostorParticleMeshAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public CreateImpostorParticleMeshAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 

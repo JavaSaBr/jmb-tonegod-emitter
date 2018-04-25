@@ -34,7 +34,7 @@ public class CreateQuadShapeEmitterAction extends AbstractCreateShapeEmitterActi
     @NotNull
     private static final String PROPERTY_FLIP_COORDS = "flipCoords";
 
-    public CreateQuadShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public CreateQuadShapeEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -54,7 +54,7 @@ public class CreateQuadShapeEmitterAction extends AbstractCreateShapeEmitterActi
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
+        var definitions = ArrayFactory.<PropertyDefinition>newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_WIDTH, PROPERTY_WIDTH, 1F));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_HEIGHT, PROPERTY_HEIGHT, 1F));
         definitions.add(new PropertyDefinition(BOOLEAN, Messages.MODEL_PROPERTY_FLIP_COORDS, PROPERTY_FLIP_COORDS, true));
@@ -70,10 +70,10 @@ public class CreateQuadShapeEmitterAction extends AbstractCreateShapeEmitterActi
 
     @Override
     @FxThread
-    protected @NotNull Mesh createMesh(@NotNull final VarTable vars) {
-        final float width = vars.getFloat(PROPERTY_WIDTH);
-        final float height = vars.getFloat(PROPERTY_HEIGHT);
-        final boolean flipCoords = vars.getBoolean(PROPERTY_FLIP_COORDS);
+    protected @NotNull Mesh createMesh(@NotNull VarTable vars) {
+        var width = vars.getFloat(PROPERTY_WIDTH);
+        var height = vars.getFloat(PROPERTY_HEIGHT);
+        var flipCoords = vars.getBoolean(PROPERTY_FLIP_COORDS);
         return new Quad(width, height, flipCoords);
     }
 }

@@ -22,8 +22,10 @@ import tonegod.emitter.influencers.ParticleInfluencer;
  */
 public abstract class AbstractCreateParticleInfluencerAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public AbstractCreateParticleInfluencerAction(@NotNull final NodeTree<ModelChangeConsumer> nodeTree,
-                                                  @NotNull final TreeNode<?> node) {
+    public AbstractCreateParticleInfluencerAction(
+            @NotNull NodeTree<ModelChangeConsumer> nodeTree,
+            @NotNull TreeNode<?> node
+    ) {
         super(nodeTree, node);
     }
 
@@ -38,15 +40,12 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
     protected void process() {
         super.process();
 
-        final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
+        var element = (ParticleInfluencers) getNode().getElement();
+        var emitterNode = element.getEmitterNode();
+        var influencer = createInfluencer();
 
-        final TreeNode<?> treeNode = getNode();
-        final ParticleInfluencers element = (ParticleInfluencers) treeNode.getElement();
-        final ParticleEmitterNode emitterNode = element.getEmitterNode();
-        final ParticleInfluencer influencer = createInfluencer();
-
-        changeConsumer.execute(new AddParticleInfluencerOperation(influencer, emitterNode));
+        notNull(getNodeTree().getChangeConsumer())
+                .execute(new AddParticleInfluencerOperation(influencer, emitterNode));
     }
 
     /**

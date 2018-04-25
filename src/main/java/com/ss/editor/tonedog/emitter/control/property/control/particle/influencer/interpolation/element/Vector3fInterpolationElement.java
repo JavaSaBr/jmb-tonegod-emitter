@@ -6,7 +6,7 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.control.AbstractInterpolationInfluencerControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.fx.control.input.FloatTextField;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ public class Vector3fInterpolationElement<P extends InterpolatedParticleInfluenc
     @Nullable
     private FloatTextField zField;
 
-    public Vector3fInterpolationElement(@NotNull final C control, final int index) {
+    public Vector3fInterpolationElement(@NotNull C control, int index) {
         super(control, index);
     }
 
@@ -49,32 +49,38 @@ public class Vector3fInterpolationElement<P extends InterpolatedParticleInfluenc
     @FxThread
     protected @NotNull Parent createEditableControl() {
 
-        final HBox container = new HBox();
-        container.prefWidthProperty().bind(widthProperty().multiply(0.4));
+        var container = new HBox();
+        container.prefWidthProperty()
+                .bind(widthProperty().multiply(0.4));
 
         xField = new FloatTextField();
         xField.setMinMax(getMinValue(), getMaxValue());
-        xField.prefWidthProperty().bind(container.widthProperty().multiply(0.33));
-        xField.addChangeListener((observable, oldValue, newValue) -> processChange());
+        xField.prefWidthProperty()
+                .bind(container.widthProperty().multiply(0.33));
 
         yField = new FloatTextField();
         yField.setMinMax(getMinValue(), getMaxValue());
-        yField.prefWidthProperty().bind(container.widthProperty().multiply(0.33));
-        yField.addChangeListener((observable, oldValue, newValue) -> processChange());
+        yField.prefWidthProperty()
+                .bind(container.widthProperty().multiply(0.33));
 
         zField = new FloatTextField();
         zField.setMinMax(getMinValue(), getMaxValue());
-        zField.prefWidthProperty().bind(container.widthProperty().multiply(0.33));
+        zField.prefWidthProperty()
+                .bind(container.widthProperty().multiply(0.33));
+
+        xField.addChangeListener((observable, oldValue, newValue) -> processChange());
+        yField.addChangeListener((observable, oldValue, newValue) -> processChange());
         zField.addChangeListener((observable, oldValue, newValue) -> processChange());
 
-        FXUtils.addToPane(xField, container);
-        FXUtils.addToPane(yField, container);
-        FXUtils.addToPane(zField, container);
+        FxUtils.addClass(xField, yField, zField,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
+                        CssClasses.TRANSPARENT_TEXT_FIELD)
+                .addClass(container,
+                        CssClasses.DEF_HBOX,
+                        CssClasses.TEXT_INPUT_CONTAINER,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
 
-        FXUtils.addClassesTo(xField, yField, zField, CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
-                CssClasses.TRANSPARENT_TEXT_FIELD);
-        FXUtils.addClassesTo(container, CssClasses.DEF_HBOX, CssClasses.TEXT_INPUT_CONTAINER,
-                CssClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
+        FxUtils.addChild(container, xField, yField, zField);
 
         return container;
     }
@@ -110,11 +116,14 @@ public class Vector3fInterpolationElement<P extends InterpolatedParticleInfluenc
      */
     @FxThread
     private void processChange() {
-        if (isIgnoreListeners()) return;
 
-        final float x = getXField().getValue();
-        final float y = getYField().getValue();
-        final float z = getZField().getValue();
+        if (isIgnoreListeners()) {
+            return;
+        }
+
+        var x = getXField().getValue();
+        var y = getYField().getValue();
+        var z = getZField().getValue();
 
         requestToChange(x, y, z);
     }
@@ -151,7 +160,7 @@ public class Vector3fInterpolationElement<P extends InterpolatedParticleInfluenc
      * @param z the z
      */
     @FxThread
-    protected void requestToChange(final float x, final float y, final float z) {
+    protected void requestToChange(float x, float y, float z) {
     }
 
     /**
@@ -160,20 +169,18 @@ public class Vector3fInterpolationElement<P extends InterpolatedParticleInfluenc
     @FxThread
     public void reload() {
 
-        final C control = getControl();
-        final P influencer = control.getInfluencer();
+        var influencer = getControl().getInfluencer();
+        var value = getValue(influencer);
 
-        final Vector3f value = getValue(influencer);
-
-        final FloatTextField xField = getXField();
+        var xField = getXField();
         xField.setValue(value.getX());
         xField.positionCaret(xField.getText().length());
 
-        final FloatTextField yField = getYField();
+        var yField = getYField();
         yField.setValue(value.getY());
         yField.positionCaret(yField.getText().length());
 
-        final FloatTextField zField = getZField();
+        var zField = getZField();
         zField.setValue(value.getZ());
         zField.positionCaret(zField.getText().length());
 
@@ -187,7 +194,7 @@ public class Vector3fInterpolationElement<P extends InterpolatedParticleInfluenc
      * @return the value
      */
     @FxThread
-    protected @NotNull Vector3f getValue(@NotNull final P influencer) {
+    protected @NotNull Vector3f getValue(@NotNull P influencer) {
         throw new UnsupportedOperationException();
     }
 }

@@ -22,12 +22,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 import tonegod.emitter.influencers.impl.*;
 
 import java.lang.reflect.Constructor;
-import java.util.List;
 
 /**
  * The implementation of the {@link TreeNode} for representing the {@link ParticleInfluencers} in the editor.
@@ -53,7 +51,7 @@ public class ParticleInfluencersTreeNode extends TreeNode<ParticleInfluencers> {
         CONSTRUCTORS.put(SpriteInfluencer.class, getConstructor(CreateSpriteParticleInfluencerAction.class, NodeTree.class, TreeNode.class));
     }
 
-    public ParticleInfluencersTreeNode(@NotNull final ParticleInfluencers element, final long objectId) {
+    public ParticleInfluencersTreeNode(@NotNull ParticleInfluencers element, long objectId) {
         super(element, objectId);
     }
 
@@ -71,13 +69,13 @@ public class ParticleInfluencersTreeNode extends TreeNode<ParticleInfluencers> {
 
     @Override
     @FxThread
-    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull NodeTree<?> nodeTree, @NotNull ObservableList<MenuItem> items) {
 
-        final ParticleInfluencers element = getElement();
-        final ParticleEmitterNode emitterNode = element.getEmitterNode();
+        var element = getElement();
+        var emitterNode = element.getEmitterNode();
 
-        final Menu createMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_12));
-        final ObservableList<MenuItem> createItems = createMenu.getItems();
+        var createMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_12));
+        var createItems = createMenu.getItems();
 
         CONSTRUCTORS.forEach((type, constructor) -> {
             if (emitterNode.getInfluencer(type) != null) return;
@@ -91,11 +89,13 @@ public class ParticleInfluencersTreeNode extends TreeNode<ParticleInfluencers> {
 
     @Override
     @FxThread
-    public @NotNull Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
-        final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
-        final ParticleInfluencers element = getElement();
-        final List<ParticleInfluencer<?>> influencers = element.getInfluencers();
-        influencers.forEach(influencer -> result.add(FACTORY_REGISTRY.createFor(influencer)));
+    public @NotNull Array<TreeNode<?>> getChildren(@NotNull NodeTree<?> nodeTree) {
+
+        var result = ArrayFactory.<TreeNode<?>>newArray(TreeNode.class);
+
+        getElement().getInfluencers()
+                .forEach(influencer -> result.add(FACTORY_REGISTRY.createFor(influencer)));
+
         return result;
     }
 

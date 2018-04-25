@@ -15,6 +15,9 @@ public interface PluginMessages {
     @NotNull ResourceBundle RESOURCE_BUNDLE = getResourceBundle(TonegodEmitterEditorPlugin.class,
             "com/ss/editor/tonegod/emitter/messages/messages");
 
-    @NotNull String MODEL_NODE_TREE_ACTION_CREATE_PARTICLE_EMITTER = RESOURCE_BUNDLE.getString("ModelNodeTreeActionCreateParticleEmitter");
-    @NotNull String MODEL_NODE_TREE_ACTION_CREATE_SOFT_PARTICLE_EMITTER = RESOURCE_BUNDLE.getString("ModelNodeTreeActionCreateSoftParticleEmitter");
+    @NotNull String MODEL_NODE_TREE_ACTION_CREATE_PARTICLE_EMITTER =
+            RESOURCE_BUNDLE.getString("ModelNodeTreeActionCreateParticleEmitter");
+
+    @NotNull String MODEL_NODE_TREE_ACTION_CREATE_SOFT_PARTICLE_EMITTER =
+            RESOURCE_BUNDLE.getString("ModelNodeTreeActionCreateSoftParticleEmitter");
 }

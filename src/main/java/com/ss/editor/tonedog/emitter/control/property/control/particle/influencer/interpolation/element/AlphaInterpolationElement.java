@@ -1,19 +1,13 @@
 package com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element;
 
-import static java.lang.Float.parseFloat;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.control.AlphaInfluencerControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.fx.util.FXUtils;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.ScrollEvent;
+import com.ss.rlib.fx.control.input.FloatTextField;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.influencers.impl.AlphaInfluencer;
 
 /**
@@ -21,9 +15,10 @@ import tonegod.emitter.influencers.impl.AlphaInfluencer;
  *
  * @author JavaSaBr
  */
-public class AlphaInterpolationElement extends InterpolationElement<AlphaInfluencer, TextField, AlphaInfluencerControl> {
+public class AlphaInterpolationElement extends
+        InterpolationElement<AlphaInfluencer, FloatTextField, AlphaInfluencerControl> {
 
-    public AlphaInterpolationElement(@NotNull final AlphaInfluencerControl control, final int index) {
+    public AlphaInterpolationElement(@NotNull AlphaInfluencerControl control, int index) {
         super(control, index);
     }
 
@@ -35,64 +30,27 @@ public class AlphaInterpolationElement extends InterpolationElement<AlphaInfluen
 
     @Override
     @FxThread
-    protected TextField createEditableControl() {
+    protected @NotNull FloatTextField createEditableControl() {
 
-        final TextField textField = new TextField();
-        textField.setOnScroll(this::processScroll);
-        textField.prefWidthProperty().bind(widthProperty().multiply(0.35));
-        textField.setOnKeyReleased(this::processChange);
+        var textField = new FloatTextField();
+        textField.setMinMax(0F, 1F);
+        textField.prefWidthProperty()
+                .bind(widthProperty().multiply(0.35));
 
-        FXUtils.addClassTo(textField, CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD);
+        FxControlUtils.onValueChange(textField, this::apply);
+        FxUtils.addClass(textField, CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD);
 
         return textField;
-    }
-
-    /**
-     * The process of scrolling value.
-     */
-    @FxThread
-    private void processScroll(@NotNull final ScrollEvent event) {
-        if (!event.isControlDown()) return;
-
-        final TextField source = (TextField) event.getSource();
-        final String text = source.getText();
-
-        float value;
-        try {
-            value = parseFloat(text);
-        } catch (final NumberFormatException e) {
-            return;
-        }
-
-        long longValue = (long) (value * 1000);
-        longValue += event.getDeltaY() * 1;
-
-        final String result = String.valueOf(max(min(longValue / 1000F, 1F), 0F));
-        source.setText(result);
-        source.positionCaret(result.length());
-
-        processChange((KeyEvent) null);
     }
 
     /**
      * Handle changing alpha value.
      */
     @FxThread
-    private void processChange(@Nullable final KeyEvent event) {
-        if (isIgnoreListeners() || (event != null && event.getCode() != KeyCode.ENTER)) return;
-
-        final TextField editableControl = getEditableControl();
-        float newValue;
-        try {
-            newValue = Float.parseFloat(editableControl.getText());
-        } catch (final NumberFormatException e) {
-            return;
+    private void apply(@NotNull Float newValue) {
+        if (!isIgnoreListeners()) {
+            getControl().requestToChange(newValue, getIndex());
         }
-
-        newValue = max(min(newValue, 1F), 0F);
-
-        final AlphaInfluencerControl control = getControl();
-        control.requestToChange(newValue, getIndex());
     }
 
     /**
@@ -102,14 +60,12 @@ public class AlphaInterpolationElement extends InterpolationElement<AlphaInfluen
     @FxThread
     public void reload() {
 
-        final AlphaInfluencerControl control = getControl();
-        final AlphaInfluencer influencer = control.getInfluencer();
+        var influencer = getControl().getInfluencer();
+        var alpha = influencer.getAlpha(getIndex());
 
-        final Float alpha = influencer.getAlpha(getIndex());
-
-        final TextField editableControl = getEditableControl();
-        final int caretPosition = editableControl.getCaretPosition();
-        editableControl.setText(alpha.toString());
+        var editableControl = getEditableControl();
+        var caretPosition = editableControl.getCaretPosition();
+        editableControl.setValue(alpha);
         editableControl.positionCaret(caretPosition);
 
         super.reload();

@@ -17,8 +17,10 @@ import tonegod.emitter.influencers.impl.RadialVelocityInfluencer;
  */
 public class CreateRadialVelocityParticleInfluencerAction extends AbstractCreateParticleInfluencerAction {
 
-    public CreateRadialVelocityParticleInfluencerAction(@NotNull final NodeTree<ModelChangeConsumer> nodeTree,
-                                                        @NotNull final TreeNode<?> node) {
+    public CreateRadialVelocityParticleInfluencerAction(
+            @NotNull NodeTree<ModelChangeConsumer> nodeTree,
+            @NotNull TreeNode<?> node
+    ) {
         super(nodeTree, node);
     }
 

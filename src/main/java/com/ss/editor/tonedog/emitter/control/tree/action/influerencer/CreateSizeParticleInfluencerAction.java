@@ -17,9 +17,10 @@ import tonegod.emitter.influencers.impl.SizeInfluencer;
  */
 public class CreateSizeParticleInfluencerAction extends AbstractCreateParticleInfluencerAction {
 
-
-    public CreateSizeParticleInfluencerAction(@NotNull final NodeTree<ModelChangeConsumer> nodeTree,
-                                              @NotNull final TreeNode<?> node) {
+    public CreateSizeParticleInfluencerAction(
+            @NotNull NodeTree<ModelChangeConsumer> nodeTree,
+            @NotNull TreeNode<?> node
+    ) {
         super(nodeTree, node);
     }
 

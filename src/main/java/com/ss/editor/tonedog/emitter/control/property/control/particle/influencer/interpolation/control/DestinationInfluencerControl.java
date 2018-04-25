@@ -5,13 +5,11 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.DestinationWeightInterpolationElement;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.DestinationInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
-
-import java.util.List;
 
 /**
  * The control for editing sizes in the {@link DestinationInfluencer}.
@@ -20,8 +18,11 @@ import java.util.List;
  */
 public class DestinationInfluencerControl extends AbstractInterpolationInfluencerControl<DestinationInfluencer> {
 
-    public DestinationInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer,
-                                        @NotNull final DestinationInfluencer influencer, @NotNull final Object parent) {
+    public DestinationInfluencerControl(
+            @NotNull ModelChangeConsumer modelChangeConsumer,
+            @NotNull DestinationInfluencer influencer,
+            @NotNull Object parent
+    ) {
         super(modelChangeConsumer, influencer, parent);
     }
 
@@ -44,12 +45,13 @@ public class DestinationInfluencerControl extends AbstractInterpolationInfluence
      * @param index    the index
      */
     @FxThread
-    public void requestToChange(@NotNull final Vector3f newValue, final int index) {
+    public void requestToChange(@NotNull Vector3f newValue, int index) {
 
-        final DestinationInfluencer influencer = getInfluencer();
-        final Vector3f oldValue = influencer.getDestination(index);
+        var influencer = getInfluencer();
+        var oldValue = influencer.getDestination(index);
 
-        execute(newValue, oldValue, (destinationInfluencer, destination) -> destinationInfluencer.updateDestination(destination, index));
+        execute(newValue, oldValue, (destinationInfluencer, destination) ->
+                destinationInfluencer.updateDestination(destination, index));
     }
 
     /**
@@ -59,26 +61,25 @@ public class DestinationInfluencerControl extends AbstractInterpolationInfluence
      * @param index    the index
      */
     @FxThread
-    public void requestToChange(@NotNull final Float newValue, final int index) {
+    public void requestToChange(@NotNull Float newValue, int index) {
 
-        final DestinationInfluencer influencer = getInfluencer();
-        final Float oldValue = influencer.getWeight(index);
+        var influencer = getInfluencer();
+        var oldValue = influencer.getWeight(index);
 
-        execute(newValue, oldValue, (destinationInfluencer, weight) -> destinationInfluencer.updateWeight(weight, index));
+        execute(newValue, oldValue, (destinationInfluencer, weight) ->
+                destinationInfluencer.updateWeight(weight, index));
     }
 
     @Override
     @FxThread
-    protected void fillControl(@NotNull final DestinationInfluencer influencer, @NotNull final VBox root) {
+    protected void fillControl(@NotNull DestinationInfluencer influencer, @NotNull VBox root) {
 
-        final List<Vector3f> speeds = influencer.getDestinations();
+        var speeds = influencer.getDestinations();
 
         for (int i = 0, length = speeds.size(); i < length; i++) {
-
-            final DestinationWeightInterpolationElement element = new DestinationWeightInterpolationElement(this, i);
+            var element = new DestinationWeightInterpolationElement(this, i);
             element.prefWidthProperty().bind(widthProperty());
-
-            FXUtils.addToPane(element, root);
+            FxUtils.addChild(root, element);
         }
     }
 
@@ -98,12 +99,12 @@ public class DestinationInfluencerControl extends AbstractInterpolationInfluence
     @FxThread
     protected void processRemove() {
 
-        final DestinationInfluencer influencer = getInfluencer();
-        final List<Vector3f> destinations = influencer.getDestinations();
+        var influencer = getInfluencer();
+        var destinations = influencer.getDestinations();
 
-        final Vector3f destination = influencer.getDestination(destinations.size() - 1);
-        final Interpolation interpolation = influencer.getInterpolation(destinations.size() - 1);
-        final Float weight = influencer.getWeight(destinations.size() - 1);
+        var destination = influencer.getDestination(destinations.size() - 1);
+        var interpolation = influencer.getInterpolation(destinations.size() - 1);
+        var weight = influencer.getWeight(destinations.size() - 1);
 
         execute(true, false, (rotationInfluencer, needRemove) -> {
             if (needRemove) {

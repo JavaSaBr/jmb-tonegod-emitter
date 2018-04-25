@@ -34,7 +34,7 @@ public class CreateDomeShapeEmitterAction extends AbstractCreateShapeEmitterActi
     @NotNull
     private static final String PROPERTY_RADIUS = "radius";
 
-    public CreateDomeShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public CreateDomeShapeEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -54,7 +54,7 @@ public class CreateDomeShapeEmitterAction extends AbstractCreateShapeEmitterActi
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
+        var definitions = ArrayFactory.<PropertyDefinition>newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_PLANES, PROPERTY_PLANES, 10));
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_RADIAL_SAMPLES, PROPERTY_RADIAL_SAMPLES, 10));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_RADIUS, PROPERTY_RADIUS, 1F));
@@ -70,10 +70,10 @@ public class CreateDomeShapeEmitterAction extends AbstractCreateShapeEmitterActi
 
     @Override
     @FxThread
-    protected @NotNull Mesh createMesh(@NotNull final VarTable vars) {
-        final int planes = vars.getInteger(PROPERTY_PLANES);
-        final int radialSamples = vars.getInteger(PROPERTY_RADIAL_SAMPLES);
-        final float radius = vars.getFloat(PROPERTY_RADIUS);
+    protected @NotNull Mesh createMesh(@NotNull VarTable vars) {
+        var planes = vars.getInteger(PROPERTY_PLANES);
+        var radialSamples = vars.getInteger(PROPERTY_RADIAL_SAMPLES);
+        var radius = vars.getFloat(PROPERTY_RADIUS);
         return new Dome(planes, radialSamples, radius);
     }
 }
