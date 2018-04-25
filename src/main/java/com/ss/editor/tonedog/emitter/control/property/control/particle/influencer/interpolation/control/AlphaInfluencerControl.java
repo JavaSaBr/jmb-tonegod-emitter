@@ -4,13 +4,11 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.AlphaInterpolationElement;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.AlphaInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
-
-import java.util.List;
 
 /**
  * The control for editing alphas in the {@link AlphaInfluencer}.
@@ -19,8 +17,11 @@ import java.util.List;
  */
 public class AlphaInfluencerControl extends AbstractInterpolationInfluencerControl<AlphaInfluencer> {
 
-    public AlphaInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer,
-                                  @NotNull final AlphaInfluencer influencer, @NotNull final Object parent) {
+    public AlphaInfluencerControl(
+            @NotNull ModelChangeConsumer modelChangeConsumer,
+            @NotNull AlphaInfluencer influencer,
+            @NotNull Object parent
+    ) {
         super(modelChangeConsumer, influencer, parent);
     }
 
@@ -33,26 +34,27 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
     /**
      * Request to change.
      *
-     * @param newValue the new value
-     * @param index    the index
+     * @param newValue the new value.
+     * @param index    the index.
      */
     @FxThread
-    public void requestToChange(@NotNull final Float newValue, final int index) {
-        final AlphaInfluencer influencer = getInfluencer();
-        final Float oldValue = influencer.getAlpha(index);
-        execute(newValue, oldValue, (alphaInfluencer, alpha) -> alphaInfluencer.updateAlpha(alpha, index));
+    public void requestToChange(@NotNull Float newValue, int index) {
+        var influencer = getInfluencer();
+        var oldValue = influencer.getAlpha(index);
+        execute(newValue, oldValue, (alphaInfluencer, alpha) ->
+                alphaInfluencer.updateAlpha(alpha, index));
     }
 
     @Override
     @FxThread
-    protected void fillControl(@NotNull final AlphaInfluencer influencer, @NotNull final VBox root) {
+    protected void fillControl(@NotNull AlphaInfluencer influencer, @NotNull VBox root) {
 
-        final List<Float> alphas = influencer.getAlphas();
+        var alphas = influencer.getAlphas();
 
         for (int i = 0, length = alphas.size(); i < length; i++) {
-            final AlphaInterpolationElement element = new AlphaInterpolationElement(this, i);
+            var element = new AlphaInterpolationElement(this, i);
             element.prefWidthProperty().bind(widthProperty());
-            FXUtils.addToPane(element, root);
+            FxUtils.addChild(root, element);
         }
     }
 
@@ -72,11 +74,11 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
     @FxThread
     protected void processRemove() {
 
-        final AlphaInfluencer influencer = getInfluencer();
-        final List<Float> alphas = influencer.getAlphas();
+        var influencer = getInfluencer();
+        var alphas = influencer.getAlphas();
 
-        final Float alpha = influencer.getAlpha(alphas.size() - 1);
-        final Interpolation interpolation = influencer.getInterpolation(alphas.size() - 1);
+        var alpha = influencer.getAlpha(alphas.size() - 1);
+        var interpolation = influencer.getInterpolation(alphas.size() - 1);
 
         execute(true, false, (alphaInfluencer, needRemove) -> {
             if (needRemove) {

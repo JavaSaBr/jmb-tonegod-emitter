@@ -1,8 +1,7 @@
 package com.ss.editor.tonedog.emitter.control.tree.action.mesh;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.tonedog.emitter.control.operation.ChangeParticleMeshOperation;
 import com.ss.editor.ui.Icons;
@@ -23,7 +22,7 @@ import tonegod.emitter.particle.ParticleDataMeshInfo;
  */
 public abstract class AbstractCreateParticleMeshAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    AbstractCreateParticleMeshAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    AbstractCreateParticleMeshAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -38,21 +37,21 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
     protected void process() {
         super.process();
 
-        final NodeTree<?> nodeTree = getNodeTree();
+        var nodeTree = getNodeTree();
 
-        final TreeNode<?> treeNode = getNode();
-        final ParticleEmitterNode emitterNode = (ParticleEmitterNode) treeNode.getElement();
-        final ParticleGeometry geometry = emitterNode.getParticleGeometry();
-        final ParticleDataMeshInfo meshInfo = createMeshInfo();
+        var treeNode = getNode();
+        var emitterNode = (ParticleEmitterNode) treeNode.getElement();
+        var geometry = emitterNode.getParticleGeometry();
+        var meshInfo = createMeshInfo();
 
-        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
-        changeConsumer.execute(new ChangeParticleMeshOperation(meshInfo, geometry));
+        notNull(nodeTree.getChangeConsumer())
+                .execute(new ChangeParticleMeshOperation(meshInfo, geometry));
     }
 
     /**
-     * Create mesh info particle data mesh info.
+     * Create a particle data mesh info.
      *
-     * @return the particle data mesh info
+     * @return the particle data mesh info.
      */
     protected abstract @NotNull ParticleDataMeshInfo createMeshInfo();
 }

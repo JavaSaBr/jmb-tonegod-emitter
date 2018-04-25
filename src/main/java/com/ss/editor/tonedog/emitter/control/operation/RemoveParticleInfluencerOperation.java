@@ -33,8 +33,11 @@ public class RemoveParticleInfluencerOperation extends AbstractEditorOperation<M
      */
     private final int childIndex;
 
-    public RemoveParticleInfluencerOperation(@NotNull final ParticleInfluencer influencer,
-                                             @NotNull final ParticleEmitterNode emitterNode, final int childIndex) {
+    public RemoveParticleInfluencerOperation(
+            @NotNull ParticleInfluencer influencer,
+            @NotNull ParticleEmitterNode emitterNode,
+            int childIndex
+    ) {
         this.influencer = influencer;
         this.emitterNode = emitterNode;
         this.childIndex = childIndex;
@@ -42,27 +45,29 @@ public class RemoveParticleInfluencerOperation extends AbstractEditorOperation<M
 
     @Override
     @FxThread
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoImpl(@NotNull ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
 
             emitterNode.killAllParticles();
             emitterNode.removeInfluencer(influencer);
             emitterNode.emitAllParticles();
 
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(new ParticleInfluencers(emitterNode), influencer));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(new ParticleInfluencers(emitterNode),
+                    influencer));
         });
     }
 
     @Override
     @FxThread
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void undoImpl(@NotNull ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
 
             emitterNode.killAllParticles();
             emitterNode.addInfluencer(influencer, childIndex);
             emitterNode.emitAllParticles();
 
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(new ParticleInfluencers(emitterNode), influencer, childIndex, false));
+            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(new ParticleInfluencers(emitterNode),
+                    influencer, childIndex, false));
         });
     }
 }

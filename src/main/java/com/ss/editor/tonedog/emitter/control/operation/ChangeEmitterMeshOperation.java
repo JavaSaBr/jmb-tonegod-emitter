@@ -6,7 +6,6 @@ import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
-import tonegod.emitter.EmitterMesh;
 import tonegod.emitter.ParticleEmitterNode;
 
 /**
@@ -28,31 +27,32 @@ public class ChangeEmitterMeshOperation extends AbstractEditorOperation<ModelCha
     @NotNull
     private volatile Mesh prevShape;
 
-    public ChangeEmitterMeshOperation(@NotNull final Mesh newShape, @NotNull final ParticleEmitterNode emitterNode) {
+    public ChangeEmitterMeshOperation(@NotNull Mesh newShape, @NotNull ParticleEmitterNode emitterNode) {
         this.prevShape = newShape;
         this.emitterNode = emitterNode;
     }
 
     @Override
     @FxThread
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoImpl(@NotNull ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> switchShape(editor));
     }
 
     @JmeThread
-    private void switchShape(final @NotNull ModelChangeConsumer editor) {
+    private void switchShape(@NotNull ModelChangeConsumer editor) {
 
-        final EmitterMesh emitterMesh = emitterNode.getEmitterShape();
-        final Mesh newShape = prevShape;
+        var emitterMesh = emitterNode.getEmitterShape();
+        var newShape = prevShape;
         prevShape = emitterMesh.getMesh();
         emitterNode.changeEmitterShapeMesh(newShape);
 
-        EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxReplaced(emitterNode, emitterMesh, emitterMesh, true, true));
+        EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxReplaced(emitterNode, emitterMesh,
+                emitterMesh, true, true));
     }
 
     @Override
     @FxThread
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void undoImpl(@NotNull ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> switchShape(editor));
     }
 }

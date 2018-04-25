@@ -5,13 +5,11 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.ColorInterpolationElement;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.ColorInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
-
-import java.util.List;
 
 /**
  * The control for editing colors in the {@link ColorInfluencer}.
@@ -20,8 +18,11 @@ import java.util.List;
  */
 public class ColorInfluencerControl extends AbstractInterpolationInfluencerControl<ColorInfluencer> {
 
-    public ColorInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer,
-                                  @NotNull final ColorInfluencer influencer, @NotNull final Object parent) {
+    public ColorInfluencerControl(
+            @NotNull ModelChangeConsumer modelChangeConsumer,
+            @NotNull ColorInfluencer influencer,
+            @NotNull Object parent
+    ) {
         super(modelChangeConsumer, influencer, parent);
     }
 
@@ -33,30 +34,31 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
 
     @Override
     @FxThread
-    protected void fillControl(@NotNull final ColorInfluencer influencer, @NotNull final VBox root) {
+    protected void fillControl(@NotNull ColorInfluencer influencer, @NotNull VBox root) {
 
-        final List<ColorRGBA> colors = influencer.getColors();
+        var colors = influencer.getColors();
 
         for (int i = 0, length = colors.size(); i < length; i++) {
-            final ColorInterpolationElement element = new ColorInterpolationElement(this, i);
+            var element = new ColorInterpolationElement(this, i);
             element.prefWidthProperty().bind(widthProperty());
-            FXUtils.addToPane(element, root);
+            FxUtils.addChild(root, element);
         }
     }
 
     /**
      * Request to change.
      *
-     * @param newValue the new value
-     * @param index    the index
+     * @param newValue the new value.
+     * @param index    the index.
      */
     @FxThread
-    public void requestToChange(@NotNull final ColorRGBA newValue, final int index) {
+    public void requestToChange(@NotNull ColorRGBA newValue, int index) {
 
-        final ColorInfluencer influencer = getInfluencer();
-        final ColorRGBA oldValue = influencer.getColor(index);
+        var influencer = getInfluencer();
+        var oldValue = influencer.getColor(index);
 
-        execute(newValue, oldValue, (colorInfluencer, colorRGBA) -> colorInfluencer.updateColor(colorRGBA, index));
+        execute(newValue, oldValue, (colorInfluencer, colorRGBA) ->
+                colorInfluencer.updateColor(colorRGBA, index));
     }
 
     @Override
@@ -75,11 +77,11 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
     @FxThread
     protected void processRemove() {
 
-        final ColorInfluencer influencer = getInfluencer();
-        final List<ColorRGBA> colors = influencer.getColors();
+        var influencer = getInfluencer();
+        var colors = influencer.getColors();
 
-        final ColorRGBA color = influencer.getColor(colors.size() - 1);
-        final Interpolation interpolation = influencer.getInterpolation(colors.size() - 1);
+        var color = influencer.getColor(colors.size() - 1);
+        var interpolation = influencer.getInterpolation(colors.size() - 1);
 
         execute(true, false, (colorInfluencer, needRemove) -> {
             if (needRemove) {

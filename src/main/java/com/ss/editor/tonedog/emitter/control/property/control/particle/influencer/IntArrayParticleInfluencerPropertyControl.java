@@ -10,15 +10,18 @@ import tonegod.emitter.influencers.ParticleInfluencer;
  * The implementation of the {@link IntArrayPropertyControl} to edit int array values in the {@link
  * ParticleInfluencer}*.
  *
- * @param <T> the type parameter
+ * @param <D> the type of an editing object.
  * @author JavaSaBr
  */
-public class IntArrayParticleInfluencerPropertyControl<T extends ParticleInfluencer> extends
-        IntArrayPropertyControl<ModelChangeConsumer, T> {
+public class IntArrayParticleInfluencerPropertyControl<D extends ParticleInfluencer> extends
+        IntArrayPropertyControl<ModelChangeConsumer, D> {
 
-    public IntArrayParticleInfluencerPropertyControl(@Nullable final int[] element, @NotNull final String paramName,
-                                                     @NotNull final ModelChangeConsumer modelChangeConsumer,
-                                                     @NotNull final Object parent) {
+    public IntArrayParticleInfluencerPropertyControl(
+            @Nullable int[] element,
+            @NotNull String paramName,
+            @NotNull ModelChangeConsumer modelChangeConsumer,
+            @NotNull Object parent
+    ) {
         super(element, paramName, modelChangeConsumer, ParticleInfluencerPropertyControl.newChangeHandler(parent));
     }
 }

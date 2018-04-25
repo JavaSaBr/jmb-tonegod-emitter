@@ -1,13 +1,12 @@
 package com.ss.editor.tonedog.emitter.control.tree.action.influerencer;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.tonedog.emitter.control.operation.RemoveParticleInfluencerOperation;
 import com.ss.editor.tonedog.emitter.control.tree.node.influencer.ParticleInfluencerTreeNode;
 import com.ss.editor.tonedog.emitter.control.tree.node.influencer.ParticleInfluencersTreeNode;
-import com.ss.editor.tonedog.emitter.control.operation.RemoveParticleInfluencerOperation;
-import com.ss.editor.tonedog.emitter.model.ParticleInfluencers;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.action.AbstractNodeAction;
@@ -18,8 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
-import java.util.List;
-
 /**
  * The action for to remove the {@link ParticleInfluencer} from the {@link ParticleEmitterNode}.
  *
@@ -27,7 +24,7 @@ import java.util.List;
  */
 public class RemoveParticleInfluencerAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public RemoveParticleInfluencerAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public RemoveParticleInfluencerAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -47,17 +44,16 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction<ModelChan
     @FxThread
     protected void process() {
 
-        final ParticleInfluencerTreeNode node = (ParticleInfluencerTreeNode) getNode();
-        final ParticleInfluencersTreeNode parent = (ParticleInfluencersTreeNode) notNull(node.getParent());
-        final ParticleInfluencers particleInfluencers = notNull(parent.getElement());
+        var node = (ParticleInfluencerTreeNode) getNode();
+        var parent = (ParticleInfluencersTreeNode) notNull(node.getParent());
+        var particleInfluencers = notNull(parent.getElement());
 
-        final ParticleInfluencer influencer = node.getElement();
-        final ParticleEmitterNode emitterNode = particleInfluencers.getEmitterNode();
-        final List<ParticleInfluencer> influencers = emitterNode.getInfluencers();
-        final int childIndex = influencers.indexOf(influencer);
+        var influencer = node.getElement();
+        var emitterNode = particleInfluencers.getEmitterNode();
+        var influencers = emitterNode.getInfluencers();
+        var childIndex = influencers.indexOf(influencer);
 
-        final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
-        changeConsumer.execute(new RemoveParticleInfluencerOperation(influencer, emitterNode, childIndex));
+        notNull(getNodeTree().getChangeConsumer())
+                .execute(new RemoveParticleInfluencerOperation(influencer, emitterNode, childIndex));
     }
 }

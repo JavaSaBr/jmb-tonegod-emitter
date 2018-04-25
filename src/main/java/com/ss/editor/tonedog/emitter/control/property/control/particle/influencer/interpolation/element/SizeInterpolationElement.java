@@ -14,7 +14,7 @@ import tonegod.emitter.influencers.impl.SizeInfluencer;
  */
 public class SizeInterpolationElement extends Vector3fInterpolationElement<SizeInfluencer, SizeInfluencerControl> {
 
-    public SizeInterpolationElement(@NotNull final SizeInfluencerControl control, final int index) {
+    public SizeInterpolationElement(@NotNull SizeInfluencerControl control, int index) {
         super(control, index);
     }
 
@@ -38,14 +38,13 @@ public class SizeInterpolationElement extends Vector3fInterpolationElement<SizeI
 
     @Override
     @FxThread
-    protected void requestToChange(final float x, final float y, final float z) {
-        final SizeInfluencerControl control = getControl();
-        control.requestToChange(new Vector3f(x, y, z), getIndex());
+    protected void requestToChange(float x, float y, float z) {
+        getControl().requestToChange(new Vector3f(x, y, z), getIndex());
     }
 
     @Override
     @FxThread
-    protected @NotNull Vector3f getValue(@NotNull final SizeInfluencer influencer) {
+    protected @NotNull Vector3f getValue(@NotNull SizeInfluencer influencer) {
         return influencer.getSize(getIndex());
     }
 }

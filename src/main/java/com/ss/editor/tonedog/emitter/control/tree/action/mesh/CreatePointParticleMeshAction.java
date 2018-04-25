@@ -19,7 +19,7 @@ import tonegod.emitter.particle.ParticleDataPointMesh;
  */
 public class CreatePointParticleMeshAction extends AbstractCreateParticleMeshAction {
 
-    public CreatePointParticleMeshAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public CreatePointParticleMeshAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 

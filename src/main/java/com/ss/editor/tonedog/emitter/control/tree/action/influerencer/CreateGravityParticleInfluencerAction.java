@@ -17,8 +17,10 @@ import tonegod.emitter.influencers.impl.GravityInfluencer;
  */
 public class CreateGravityParticleInfluencerAction extends AbstractCreateParticleInfluencerAction {
 
-    public CreateGravityParticleInfluencerAction(@NotNull final NodeTree<ModelChangeConsumer> nodeTree,
-                                                 @NotNull final TreeNode<?> node) {
+    public CreateGravityParticleInfluencerAction(
+            @NotNull NodeTree<ModelChangeConsumer> nodeTree,
+            @NotNull TreeNode<?> node
+    ) {
         super(nodeTree, node);
     }
 

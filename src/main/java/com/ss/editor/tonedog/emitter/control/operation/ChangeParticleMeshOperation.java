@@ -1,10 +1,10 @@
 package com.ss.editor.tonedog.emitter.control.operation;
 
-import static com.ss.editor.util.NodeUtils.findParent;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
+import com.ss.editor.util.NodeUtils;
 import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.geometry.ParticleGeometry;
@@ -30,33 +30,33 @@ public class ChangeParticleMeshOperation extends AbstractEditorOperation<ModelCh
     @NotNull
     private volatile ParticleDataMeshInfo prevInfo;
 
-    public ChangeParticleMeshOperation(@NotNull final ParticleDataMeshInfo newInfo, @NotNull final ParticleGeometry geometry) {
+    public ChangeParticleMeshOperation(@NotNull ParticleDataMeshInfo newInfo, @NotNull ParticleGeometry geometry) {
         this.prevInfo = newInfo;
         this.geometry = geometry;
     }
 
     @Override
     @FxThread
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoImpl(@NotNull ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> switchInfo(editor));
     }
 
     @JmeThread
-    private void switchInfo(@NotNull final ModelChangeConsumer editor) {
+    private void switchInfo(@NotNull ModelChangeConsumer editor) {
 
-        final ParticleEmitterNode emitterNode = findParent(geometry, ParticleEmitterNode.class::isInstance);
+        var emitterNode = NodeUtils.<ParticleEmitterNode>findParent(geometry, ParticleEmitterNode.class::isInstance);
         if (emitterNode == null) {
             return;
         }
 
-        final ParticleDataMeshInfo newInfo = prevInfo;
+        var newInfo = prevInfo;
         prevInfo = emitterNode.getParticleMeshType();
         emitterNode.changeParticleMeshType(newInfo);
     }
 
     @Override
     @FxThread
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void undoImpl(@NotNull ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> switchInfo(editor));
     }
 }

@@ -1,6 +1,6 @@
 package com.ss.editor.tonedog.emitter.control.operation;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
@@ -55,9 +55,13 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
     @Nullable
     private BiConsumer<D, T> applyHandler;
 
-    public ParticleInfluencerPropertyOperation(@NotNull final D influencer, @NotNull final Object parent,
-                                               @NotNull final String propertyName, @Nullable final T newValue,
-                                               @Nullable final T oldValue) {
+    public ParticleInfluencerPropertyOperation(
+            @NotNull D influencer,
+            @NotNull Object parent,
+            @NotNull String propertyName,
+            @Nullable T newValue,
+            @Nullable T oldValue
+    ) {
         this.parent = parent;
         this.newValue = newValue;
         this.oldValue = oldValue;
@@ -70,12 +74,12 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
      *
      * @param applyHandler the handler.
      */
-    public void setApplyHandler(@NotNull final BiConsumer<D, T> applyHandler) {
+    public void setApplyHandler(@NotNull BiConsumer<D, T> applyHandler) {
         this.applyHandler = applyHandler;
     }
 
     @Override
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoImpl(@NotNull ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             apply(influencer, newValue);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(parent, influencer, propertyName));
@@ -88,12 +92,12 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
      * @param spatial the spatial.
      * @param value   the value.
      */
-    protected void apply(@NotNull final D spatial, @Nullable final T value) {
+    protected void apply(@NotNull D spatial, @Nullable T value) {
         notNull(applyHandler).accept(spatial, value);
     }
 
     @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void undoImpl(@NotNull ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
             apply(influencer, oldValue);
             EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(parent, influencer, propertyName));

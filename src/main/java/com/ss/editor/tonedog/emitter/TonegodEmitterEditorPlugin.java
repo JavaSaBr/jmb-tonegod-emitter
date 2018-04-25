@@ -23,11 +23,11 @@ import com.ss.editor.ui.control.tree.node.factory.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.control.tree.node.impl.spatial.NodeTreeNode;
 import com.ss.editor.ui.control.tree.node.impl.spatial.SpatialTreeNode;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.plugin.PluginContainer;
-import com.ss.rlib.plugin.PluginSystem;
-import com.ss.rlib.plugin.annotation.PluginDescription;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.Utils;
+import com.ss.rlib.common.plugin.PluginContainer;
+import com.ss.rlib.common.plugin.PluginSystem;
+import com.ss.rlib.common.plugin.annotation.PluginDescription;
+import com.ss.rlib.common.util.FileUtils;
+import com.ss.rlib.common.util.Utils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;
@@ -44,12 +44,14 @@ import java.net.URL;
  */
 @PluginDescription(
         id = "com.ss.editor.tonegod.emitter",
-        version = "1.0.2",
-        minAppVersion = "1.7.0",
+        version = "1.1.0",
+        minAppVersion = "1.8.0",
         name = "Tonegod.Emitter Support",
         description = "Provides integration with the library 'tonegod.emitter'."
 )
 public class TonegodEmitterEditorPlugin extends EditorPlugin {
+
+    private static final Class<TonegodEmitterEditorPlugin> CLASS = TonegodEmitterEditorPlugin.class;
 
     @NotNull
     private static final String GRADLE_DEPENDENCIES;
@@ -57,18 +59,19 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
     @NotNull
     private static final String MAVEN_DEPENDENCIES;
 
+
     static {
-        GRADLE_DEPENDENCIES = FileUtils.read(TonegodEmitterEditorPlugin.class.getResourceAsStream("/com/ss/editor/tonegod/emitter/dependency/gradle.html"));
-        MAVEN_DEPENDENCIES = FileUtils.read(TonegodEmitterEditorPlugin.class.getResourceAsStream("/com/ss/editor/tonegod/emitter/dependency/maven.html"));
+        GRADLE_DEPENDENCIES = FileUtils.read(CLASS.getResourceAsStream("/com/ss/editor/tonegod/emitter/dependency/gradle.html"));
+        MAVEN_DEPENDENCIES = FileUtils.read(CLASS.getResourceAsStream("/com/ss/editor/tonegod/emitter/dependency/maven.html"));
     }
 
-    public TonegodEmitterEditorPlugin(@NotNull final PluginContainer pluginContainer) {
+    public TonegodEmitterEditorPlugin(@NotNull PluginContainer pluginContainer) {
         super(pluginContainer);
     }
 
     @Override
     @JmeThread
-    public void onAfterCreateJmeContext(@NotNull final PluginSystem pluginSystem) {
+    public void onAfterCreateJmeContext(@NotNull PluginSystem pluginSystem) {
         super.onAfterCreateJmeContext(pluginSystem);
 
         // add the selection finder to handle selection events in 3D editors
@@ -79,34 +82,36 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
         });
 
         // register the filter to process tonegod soft particles
-        final TonegodTranslucentBucketFilter softParticlesFilter = new TonegodTranslucentBucketFilter(true);
-        final RenderFilterExtension filterExtension = RenderFilterExtension.getInstance();
+        var softParticlesFilter = new TonegodTranslucentBucketFilter(true);
+        var filterExtension = RenderFilterExtension.getInstance();
         filterExtension.register(softParticlesFilter);
         filterExtension.setOnRefresh(softParticlesFilter, TonegodTranslucentBucketFilter::refresh);
     }
 
     @Override
     @FxThread
-    public void onAfterCreateJavaFxContext(@NotNull final PluginSystem pluginSystem) {
+    public void onAfterCreateJavaFxContext(@NotNull PluginSystem pluginSystem) {
         super.onAfterCreateJavaFxContext(pluginSystem);
 
         // register disabling editing materials for tonegod particle geometries
         GeometryPropertyBuilder.registerCanEditMaterialChecker(geometry -> !(geometry instanceof ParticleGeometry));
 
-        // register the checker to prevent editing of toneogd particle emitter nodes if it was linked to a scene using AssetLinkNode
+        // register the checker to prevent editing of toneogd particle emitter nodes
+        // if it was linked to a scene using AssetLinkNode
         ModelPropertyEditor.registerCanEditChecker((object, parent) -> {
             if (parent instanceof ParticleInfluencers) {
-                final ParticleEmitterNode emitterNode = ((ParticleInfluencers) parent).getEmitterNode();
-                final Object linkNode = findParent(emitterNode, AssetLinkNode.class::isInstance);
+                var emitterNode = ((ParticleInfluencers) parent).getEmitterNode();
+                var linkNode = findParent(emitterNode, AssetLinkNode.class::isInstance);
                 return linkNode == null;
             }
             return true;
         });
 
-        // register the checker to detect some cases when we need to update properties of tonegod particle emitter nodes
+        // register the checker to detect some cases when we need
+        // to update properties of tonegod particle emitter nodes
         ModelPropertyEditor.registerIsNeedUpdateChecker((currentObject, object) -> {
             if (currentObject instanceof ParticleNode && object instanceof ParticleEmitterNode) {
-                final Object parent = findParent((Spatial) currentObject, ParticleEmitterNode.class::isInstance);
+                var parent = findParent((Spatial) currentObject, ParticleEmitterNode.class::isInstance);
                 return parent == object;
             }
             return false;
@@ -137,7 +142,7 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
 
     @Override
     @FromAnyThread
-    public void register(@NotNull final PropertyBuilderRegistry registry) {
+    public void register(@NotNull PropertyBuilderRegistry registry) {
         super.register(registry);
         registry.register(ParticleEmitterPropertyBuilder.getInstance());
         registry.register(ParticleInfluencerPropertyBuilder.getInstance());
@@ -145,7 +150,7 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
 
     @Override
     @FromAnyThread
-    public void register(@NotNull final TreeNodeFactoryRegistry registry) {
+    public void register(@NotNull TreeNodeFactoryRegistry registry) {
         super.register(registry);
         registry.register(ParticlesTreeNodeFactory.getInstance());
     }

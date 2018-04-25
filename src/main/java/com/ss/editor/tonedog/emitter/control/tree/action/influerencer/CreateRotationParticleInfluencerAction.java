@@ -17,8 +17,10 @@ import tonegod.emitter.influencers.impl.RotationInfluencer;
  */
 public class CreateRotationParticleInfluencerAction extends AbstractCreateParticleInfluencerAction {
 
-    public CreateRotationParticleInfluencerAction(@NotNull final NodeTree<ModelChangeConsumer> nodeTree,
-                                                  @NotNull final TreeNode<?> node) {
+    public CreateRotationParticleInfluencerAction(
+            @NotNull NodeTree<ModelChangeConsumer> nodeTree,
+            @NotNull TreeNode<?> node
+    ) {
         super(nodeTree, node);
     }
 
