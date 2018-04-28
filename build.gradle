@@ -182,7 +182,7 @@ task deployPlugin(type: Zip, dependsOn: 'preparePlugin') {
     def deployPluginFolder = projectFolder.resolve("deploy-plugin")
 
     from pluginFolder.toString()
-    destinationDir deployPluginFolder.toFile()
+    destinationDir = deployPluginFolder.toFile()
 }
 
 task wrapper(type: Wrapper) {
@@ -193,4 +193,9 @@ run.dependsOn {
     preparePlugin
 }
 
-run.jvmArgs(Arrays.asList("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005", "-Duser.country=EU", "-Duser.language=en"))
+run.jvmArgs(Arrays.asList(
+        "-Xdebug",
+        "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
+        "-Duser.country=EU",
+        "-Duser.language=en"
+))
