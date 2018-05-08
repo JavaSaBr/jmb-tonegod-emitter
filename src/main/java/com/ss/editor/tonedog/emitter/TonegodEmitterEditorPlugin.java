@@ -44,7 +44,7 @@ import java.net.URL;
  */
 @PluginDescription(
         id = "com.ss.editor.tonegod.emitter",
-        version = "1.1.0",
+        version = "1.1.1",
         minAppVersion = "1.8.0",
         name = "Tonegod.Emitter Support",
         description = "Provides integration with the library 'tonegod.emitter'."
@@ -170,6 +170,6 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
     @Override
     @FromAnyThread
     public @Nullable URL getHomePageUrl() {
-        return Utils.get(() -> new URL("https://github.com/JavaSaBr/tonegodemitter"));
+        return Utils.get("https://github.com/JavaSaBr/tonegodemitter", URL::new);
     }
 }
