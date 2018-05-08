@@ -17,7 +17,7 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 apply plugin: 'application'
 
 group = 'com.spaceshift'
-version = '1.1.0'
+version = '1.1.1'
 
 ext.artifactId = 'jmb-tonegod-emitter'
 
@@ -60,9 +60,9 @@ configurations {
 
 dependencies {
     compile 'com.spaceshift:jmonkeybuilder:1.8.0'
-    compile 'toneg0d:emitter:3.0.0'
+    compile 'toneg0d:emitter:3.0.1'
 
-    pluginDependences ('toneg0d:emitter:3.0.0') {
+    pluginDependences ('toneg0d:emitter:3.0.1') {
         exclude group: 'org.jmonkeyengine'
         exclude group: 'org.jetbrains'
     }
@@ -182,7 +182,7 @@ task deployPlugin(type: Zip, dependsOn: 'preparePlugin') {
     def deployPluginFolder = projectFolder.resolve("deploy-plugin")
 
     from pluginFolder.toString()
-    destinationDir deployPluginFolder.toFile()
+    destinationDir = deployPluginFolder.toFile()
 }
 
 task wrapper(type: Wrapper) {
@@ -193,4 +193,9 @@ run.dependsOn {
     preparePlugin
 }
 
-run.jvmArgs(Arrays.asList("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005", "-Duser.country=EU", "-Duser.language=en"))
+run.jvmArgs(Arrays.asList(
+        "-Xdebug",
+        "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
+        "-Duser.country=EU",
+        "-Duser.language=en"
+))
