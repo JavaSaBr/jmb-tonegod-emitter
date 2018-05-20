@@ -19,7 +19,7 @@ public class ParticleInfluencers {
     @NotNull
     private final ParticleEmitterNode emitterNode;
 
-    public ParticleInfluencers(@NotNull final ParticleEmitterNode emitterNode) {
+    public ParticleInfluencers(@NotNull ParticleEmitterNode emitterNode) {
         this.emitterNode = emitterNode;
     }
 
@@ -33,7 +33,7 @@ public class ParticleInfluencers {
     }
 
     /**
-     * Get the list of influencers.
+     * Get a list of influencers.
      *
      * @return the list of influencers.
      */

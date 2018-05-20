@@ -1,10 +1,10 @@
 package com.ss.editor.tonedog.emitter.control.operation;
 
-import static com.ss.editor.util.NodeUtils.findParent;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
+import com.ss.editor.util.NodeUtils;
 import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.geometry.ParticleGeometry;
@@ -44,7 +44,7 @@ public class ChangeParticleMeshOperation extends AbstractEditorOperation<ModelCh
     @JmeThread
     private void switchInfo(@NotNull ModelChangeConsumer editor) {
 
-        ParticleEmitterNode emitterNode = findParent(geometry, ParticleEmitterNode.class::isInstance);
+        var emitterNode = NodeUtils.<ParticleEmitterNode>findParent(geometry, ParticleEmitterNode.class::isInstance);
         if (emitterNode == null) {
             return;
         }

@@ -52,7 +52,7 @@ public class ChangeEmitterMeshOperation extends AbstractEditorOperation<ModelCha
 
     @Override
     @FxThread
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void undoImpl(@NotNull ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> switchShape(editor));
     }
 }

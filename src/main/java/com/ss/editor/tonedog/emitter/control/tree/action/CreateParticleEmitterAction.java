@@ -5,7 +5,6 @@ import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.extension.scene.SceneLayer;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AddChildOperation;
 import com.ss.editor.tonedog.emitter.PluginMessages;
@@ -29,7 +28,7 @@ import tonegod.emitter.influencers.impl.SizeInfluencer;
  */
 public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public CreateParticleEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public CreateParticleEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -50,23 +49,15 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
     protected void process() {
         super.process();
 
-        final NodeTree<?> nodeTree = getNodeTree();
-        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
-        final SceneLayer defaultLayer = getDefaultLayer(changeConsumer);
+        var changeConsumer = notNull(getNodeTree().getChangeConsumer());
+        var defaultLayer = getDefaultLayer(changeConsumer);
 
-        final ParticleEmitterNode emitter = createEmitterNode();
-        emitter.addInfluencers(new ColorInfluencer(), new AlphaInfluencer(), new SizeInfluencer());
+        var emitter = createEmitterNode();
+        emitter.addInfluencers(new ColorInfluencer(), new AlphaInfluencer(), new SizeInfluencer(0.1F, 0F));
         emitter.setEnabled(true);
 
-        final SizeInfluencer sizeInfluencer = emitter.getInfluencer(SizeInfluencer.class);
-
-        if (sizeInfluencer != null) {
-            sizeInfluencer.addSize(0.1f);
-            sizeInfluencer.addSize(0f);
-        }
-
-        final TreeNode<?> treeNode = getNode();
-        final Node parent = (Node) treeNode.getElement();
+        var treeNode = getNode();
+        var parent = (Node) treeNode.getElement();
 
         if (defaultLayer != null) {
             SceneLayer.setLayer(defaultLayer, emitter);
@@ -76,7 +67,7 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
     }
 
     /**
-     * Create emitter node particle emitter node.
+     * Create an emitter particle node.
      *
      * @return the particle emitter node
      */

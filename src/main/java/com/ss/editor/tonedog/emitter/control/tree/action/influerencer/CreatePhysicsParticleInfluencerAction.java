@@ -17,8 +17,10 @@ import tonegod.emitter.influencers.impl.PhysicsInfluencer;
  */
 public class CreatePhysicsParticleInfluencerAction extends AbstractCreateParticleInfluencerAction {
 
-    public CreatePhysicsParticleInfluencerAction(@NotNull final NodeTree<ModelChangeConsumer> nodeTree,
-                                                 @NotNull final TreeNode<?> node) {
+    public CreatePhysicsParticleInfluencerAction(
+            @NotNull NodeTree<ModelChangeConsumer> nodeTree,
+            @NotNull TreeNode<?> node
+    ) {
         super(nodeTree, node);
     }
 

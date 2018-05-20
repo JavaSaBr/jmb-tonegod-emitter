@@ -29,7 +29,7 @@ public class ParticlesTreeNodeFactory implements TreeNodeFactory {
 
     @Override
     @FxThread
-    public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
+    public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable T element, long objectId) {
 
         if (element instanceof ParticleEmitterNode) {
             return unsafeCast(new ParticleEmitterNodeTreeNode((ParticleEmitterNode) element, objectId));

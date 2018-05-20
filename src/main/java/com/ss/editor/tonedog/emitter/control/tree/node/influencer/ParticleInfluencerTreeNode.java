@@ -20,7 +20,7 @@ import tonegod.emitter.influencers.ParticleInfluencer;
  */
 public class ParticleInfluencerTreeNode extends TreeNode<ParticleInfluencer> {
 
-    public ParticleInfluencerTreeNode(@NotNull final ParticleInfluencer element, final long objectId) {
+    public ParticleInfluencerTreeNode(@NotNull ParticleInfluencer element, long objectId) {
         super(element, objectId);
     }
 
@@ -32,7 +32,7 @@ public class ParticleInfluencerTreeNode extends TreeNode<ParticleInfluencer> {
 
     @Override
     @FxThread
-    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull NodeTree<?> nodeTree, @NotNull ObservableList<MenuItem> items) {
         items.add(new RemoveParticleInfluencerAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);
     }
@@ -40,7 +40,6 @@ public class ParticleInfluencerTreeNode extends TreeNode<ParticleInfluencer> {
     @Override
     @FromAnyThread
     public @NotNull String getName() {
-        final ParticleInfluencer element = getElement();
-        return element.getName();
+        return getElement().getName();
     }
 }

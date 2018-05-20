@@ -27,7 +27,7 @@ public class CreateTriangleShapeEmitterAction extends AbstractCreateShapeEmitter
     @NotNull
     private static final String PROPERTY_SIZE = "size";
 
-    public CreateTriangleShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public CreateTriangleShapeEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -47,7 +47,7 @@ public class CreateTriangleShapeEmitterAction extends AbstractCreateShapeEmitter
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
+        var definitions = ArrayFactory.<PropertyDefinition>newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_SIZE, PROPERTY_SIZE, 1F));
 
         return definitions;
@@ -61,8 +61,8 @@ public class CreateTriangleShapeEmitterAction extends AbstractCreateShapeEmitter
 
     @Override
     @FxThread
-    protected @NotNull Mesh createMesh(@NotNull final VarTable vars) {
-        final float size = vars.getFloat(PROPERTY_SIZE);
+    protected @NotNull Mesh createMesh(@NotNull VarTable vars) {
+        var size = vars.getFloat(PROPERTY_SIZE);
         return new TriangleEmitterShape(size);
     }
 }

@@ -5,13 +5,11 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.RotationInterpolationElement;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.RotationInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
-
-import java.util.List;
 
 /**
  * The control for editing sizes in the {@link RotationInfluencer}.
@@ -20,8 +18,11 @@ import java.util.List;
  */
 public class RotationInfluencerControl extends AbstractInterpolationInfluencerControl<RotationInfluencer> {
 
-    public RotationInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer,
-                                     @NotNull final RotationInfluencer influencer, @NotNull final Object parent) {
+    public RotationInfluencerControl(
+            @NotNull ModelChangeConsumer modelChangeConsumer,
+            @NotNull RotationInfluencer influencer,
+            @NotNull Object parent
+    ) {
         super(modelChangeConsumer, influencer, parent);
     }
 
@@ -40,28 +41,29 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
     /**
      * Request to change.
      *
-     * @param newValue the new value
-     * @param index    the index
+     * @param newValue the new value.
+     * @param index    the index.
      */
     @FxThread
-    public void requestToChange(@NotNull final Vector3f newValue, final int index) {
+    public void requestToChange(@NotNull Vector3f newValue, int index) {
 
-        final RotationInfluencer influencer = getInfluencer();
-        final Vector3f oldValue = influencer.getRotationSpeed(index);
+        var influencer = getInfluencer();
+        var oldValue = influencer.getRotationSpeed(index);
 
-        execute(newValue, oldValue, (rotationInfluencer, alpha) -> rotationInfluencer.updateRotationSpeed(alpha, index));
+        execute(newValue, oldValue, (rotationInfluencer, alpha) ->
+                rotationInfluencer.updateRotationSpeed(alpha, index));
     }
 
     @Override
     @FxThread
-    protected void fillControl(@NotNull final RotationInfluencer influencer, @NotNull final VBox root) {
+    protected void fillControl(@NotNull RotationInfluencer influencer, @NotNull VBox root) {
 
-        final List<Vector3f> speeds = influencer.getRotationSpeeds();
+        var speeds = influencer.getRotationSpeeds();
 
         for (int i = 0, length = speeds.size(); i < length; i++) {
-            final RotationInterpolationElement element = new RotationInterpolationElement(this, i);
+            var element = new RotationInterpolationElement(this, i);
             element.prefWidthProperty().bind(widthProperty());
-            FXUtils.addToPane(element, root);
+            FxUtils.addChild(root, element);
         }
     }
 
@@ -81,11 +83,11 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
     @FxThread
     protected void processRemove() {
 
-        final RotationInfluencer influencer = getInfluencer();
-        final List<Vector3f> speeds = influencer.getRotationSpeeds();
+        var influencer = getInfluencer();
+        var speeds = influencer.getRotationSpeeds();
 
-        final Vector3f speed = influencer.getRotationSpeed(speeds.size() - 1);
-        final Interpolation interpolation = influencer.getInterpolation(speeds.size() - 1);
+        var speed = influencer.getRotationSpeed(speeds.size() - 1);
+        var interpolation = influencer.getInterpolation(speeds.size() - 1);
 
         execute(true, false, (rotationInfluencer, needRemove) -> {
             if (needRemove) {

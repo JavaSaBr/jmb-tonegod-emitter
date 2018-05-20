@@ -3,7 +3,6 @@ package com.ss.editor.tonedog.emitter.control.tree.action.shape;
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.scene.Mesh;
 import com.ss.editor.annotation.FxThread;
-import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
@@ -26,7 +25,7 @@ import tonegod.emitter.ParticleEmitterNode;
  */
 public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public AbstractCreateShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public AbstractCreateShapeEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -40,7 +39,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
     @FxThread
     protected void process() {
         super.process();
-        final GenericFactoryDialog dialog = new GenericFactoryDialog(getPropertyDefinitions(), this::handleResult);
+        var dialog = new GenericFactoryDialog(getPropertyDefinitions(), this::handleResult);
         dialog.setTitle(getDialogTitle());
         dialog.show();
     }
@@ -59,19 +58,18 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
      * @param vars the table with variables.
      */
     @FxThread
-    private void handleResult(@NotNull final VarTable vars) {
+    private void handleResult(@NotNull VarTable vars) {
 
-        final TreeNode<?> treeNode = getNode();
-        final ParticleEmitterNode element = (ParticleEmitterNode) treeNode.getElement();
-        final Mesh shape = createMesh(vars);
+        var treeNode = getNode();
+        var element = (ParticleEmitterNode) treeNode.getElement();
+        var shape = createMesh(vars);
 
-        final NodeTree<?> nodeTree = getNodeTree();
-        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
-        changeConsumer.execute(new ChangeEmitterMeshOperation(shape, element));
+        notNull(getNodeTree().getChangeConsumer())
+                .execute(new ChangeEmitterMeshOperation(shape, element));
     }
 
     /**
-     * Get a list of property definitions to create a mesh.
+     * Get a list of property definitions.
      *
      * @return the list of definitions.
      */
@@ -82,7 +80,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
      * Create a mesh.
      *
      * @param vars the table with variables.
-     * @return the mesh
+     * @return the created mesh.
      */
     @FxThread
     protected abstract @NotNull Mesh createMesh(@NotNull final VarTable vars);

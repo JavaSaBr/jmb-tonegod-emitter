@@ -10,9 +10,8 @@ import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UiUtils;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -60,14 +59,18 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     @Nullable
     private VBox elementContainer;
 
-    public AbstractInterpolationInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer,
-                                                  @NotNull final I influencer,
-                                                  @NotNull final Object parent) {
+    public AbstractInterpolationInfluencerControl(
+            @NotNull ModelChangeConsumer modelChangeConsumer,
+            @NotNull I influencer,
+            @NotNull Object parent
+    ) {
         this.modelChangeConsumer = modelChangeConsumer;
         this.parent = parent;
         this.influencer = influencer;
         createControls();
-        FXUtils.addClassesTo(this, CssClasses.DEF_VBOX, CssClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER);
+        FxUtils.addClass(this,
+                CssClasses.DEF_VBOX,
+                CssClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER);
     }
 
     /**
@@ -76,32 +79,32 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     @FxThread
     protected void createControls() {
 
-        final Label propertyNameLabel = new Label(getControlTitle() + ":");
+        var propertyNameLabel = new Label(getControlTitle() + ":");
 
         elementContainer = new VBox();
 
-        final Button addButton = new Button();
+        var addButton = new Button();
         addButton.setGraphic(new ImageView(Icons.ADD_16));
         addButton.setOnAction(event -> processAdd());
 
-        final Button removeButton = new Button();
+        var removeButton = new Button();
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
 
-        final HBox buttonContainer = new HBox(addButton, removeButton);
+        var buttonContainer = new HBox(addButton, removeButton);
 
-        final ObservableList<Node> children = elementContainer.getChildren();
-        children.addListener((ListChangeListener<Node>) c -> removeButton.setDisable(children.size() < (getMinElements() + 1)));
+        var children = elementContainer.getChildren();
+        children.addListener((ListChangeListener<Node>)
+                change -> removeButton.setDisable(children.size() < (getMinElements() + 1)));
 
-        FXUtils.addToPane(propertyNameLabel, this);
-        FXUtils.addToPane(elementContainer, this);
-        FXUtils.addToPane(buttonContainer, this);
 
-        FXUtils.addClassTo(propertyNameLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(elementContainer, CssClasses.DEF_VBOX);
-        FXUtils.addClassTo(addButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER);
-        FXUtils.addClassTo(removeButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER);
-        FXUtils.addClassTo(buttonContainer, CssClasses.DEF_HBOX);
+        FxUtils.addClass(propertyNameLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW)
+                .addClass(elementContainer, CssClasses.DEF_VBOX)
+                .addClass(addButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER)
+                .addClass(removeButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER)
+                .addClass(buttonContainer, CssClasses.DEF_HBOX);
+
+        FxUtils.addChild(this, propertyNameLabel, elementContainer, buttonContainer);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
     }
@@ -117,7 +120,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * Gets control title.
+     * Get the control title.
      *
      * @return the control title
      */
@@ -127,7 +130,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * Gets influencer.
+     * Get the influencer.
      *
      * @return the influencer.
      */
@@ -137,7 +140,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * Gets element container.
+     * Get the element container.
      *
      * @return the element container.
      */
@@ -147,9 +150,9 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * Gets model change consumer.
+     * Get the model change consumer.
      *
-     * @return the consumer of changes.
+     * @return the model change consumer.
      */
     @FxThread
     protected @NotNull ModelChangeConsumer getModelChangeConsumer() {
@@ -162,9 +165,9 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     @FxThread
     public void reload() {
 
-        final I influencer = getInfluencer();
-        final VBox root = getElementContainer();
-        final ObservableList<Node> children = root.getChildren();
+        var influencer = getInfluencer();
+        var root = getElementContainer();
+        var children = root.getChildren();
 
         if (isNeedRebuild(influencer, children.size())) {
             UiUtils.clear(root);
@@ -177,58 +180,59 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * Is need rebuild boolean.
+     * Return true if need to rebuild this control.
      *
      * @param influencer   the influencer
      * @param currentCount the current count
-     * @return the boolean
+     * @return true if need to rebuild this control.
      */
     @FxThread
-    protected boolean isNeedRebuild(@NotNull final I influencer, final int currentCount) {
+    protected boolean isNeedRebuild(@NotNull I influencer, int currentCount) {
         return influencer.getStepCount() != currentCount;
     }
 
     /**
      * Fill this control.
      *
-     * @param influencer the influencer
-     * @param root       the root
+     * @param influencer the influencer.
+     * @param root       the root.
      */
     @FxThread
-    protected void fillControl(@NotNull final I influencer, @NotNull final VBox root) {
+    protected void fillControl(@NotNull I influencer, @NotNull VBox root) {
     }
 
     /**
-     * Handle removing last interpolation.
+     * Handle of removing a last interpolation.
      */
     @FxThread
     protected void processRemove() {
     }
 
     /**
-     * Handle adding new interpolation.
+     * Handle of adding a new interpolation.
      */
     @FxThread
     protected void processAdd() {
     }
 
     /**
-     * Request to change interpolation.
+     * Request to change an interpolation.
      *
      * @param newValue the new interpolation.
      * @param index    the index.
      */
     @FxThread
-    public void requestToChange(@Nullable final Interpolation newValue, final int index) {
+    public void requestToChange(@Nullable Interpolation newValue, int index) {
 
-        final I influencer = getInfluencer();
-        final Interpolation oldValue = influencer.getInterpolation(index);
+        var influencer = getInfluencer();
+        var oldValue = influencer.getInterpolation(index);
 
-        execute(newValue, oldValue, (alphaInfluencer, interpolation) -> alphaInfluencer.updateInterpolation(interpolation, index));
+        execute(newValue, oldValue, (alphaInfluencer, interpolation) ->
+                alphaInfluencer.updateInterpolation(interpolation, index));
     }
 
     /**
-     * Execute change operation.
+     * Execute the operation.
      *
      * @param <T>          the type of value.
      * @param newValue     the new value.
@@ -236,17 +240,18 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
      * @param applyHandler the apply handler.
      */
     @FxThread
-    protected <T> void execute(@Nullable final T newValue, @Nullable final T oldValue, @NotNull final BiConsumer<I, T> applyHandler) {
+    protected <T> void execute(@Nullable T newValue, @Nullable T oldValue, @NotNull BiConsumer<I, T> applyHandler) {
 
-        final ParticleInfluencerPropertyOperation<I, T> operation = new ParticleInfluencerPropertyOperation<>(influencer, parent, getPropertyName(), newValue, oldValue);
+        var operation = new ParticleInfluencerPropertyOperation<I, T>(influencer, parent,
+                getPropertyName(), newValue, oldValue);
+
         operation.setApplyHandler(applyHandler);
 
-        final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();
-        modelChangeConsumer.execute(operation);
+        getModelChangeConsumer().execute(operation);
     }
 
     /**
-     * Gets property name.
+     * Get the property name.
      *
      * @return the property name
      */

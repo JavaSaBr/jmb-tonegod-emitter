@@ -6,7 +6,8 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.control.AbstractInterpolationInfluencerControl;
 import com.ss.editor.ui.css.CssClasses;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -60,6 +61,9 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
         INTERPOLATIONS.addAll(InterpolationManager.getAvailable());
     }
 
+    /**
+     * The parent control.
+     */
     @NotNull
     private final C control;
 
@@ -85,14 +89,14 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
      */
     private boolean ignoreListeners;
 
-    public InterpolationElement(@NotNull final C control, final int index) {
+    public InterpolationElement(@NotNull C control, int index) {
         this.control = control;
         this.index = index;
         createComponents();
         setIgnoreListeners(true);
         reload();
         setIgnoreListeners(false);
-        FXUtils.addClassesTo(this, CssClasses.DEF_HBOX, CssClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT);
+        FxUtils.addClass(this, CssClasses.DEF_HBOX, CssClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT);
     }
 
     /**
@@ -108,31 +112,31 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
             editableLabel = new Label(getEditableTitle() + ":");
             editableLabel.prefWidthProperty().bind(widthProperty().multiply(0.2));
 
-            FXUtils.addClassTo(editableLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+            FxUtils.addClass(editableLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         }
 
         editableControl = createEditableControl();
 
-        final Label interpolationLabel = new Label(Messages.MODEL_PROPERTY_INTERPOLATION + ":");
+        var interpolationLabel = new Label(Messages.MODEL_PROPERTY_INTERPOLATION + ":");
         interpolationLabel.prefWidthProperty().bind(widthProperty().multiply(0.25));
 
         interpolationComboBox = new ComboBox<>();
         interpolationComboBox.setEditable(false);
-        interpolationComboBox.prefWidthProperty().bind(widthProperty().multiply(0.35));
         interpolationComboBox.setConverter(STRING_CONVERTER);
         interpolationComboBox.getItems().setAll(INTERPOLATIONS);
-        interpolationComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
+        interpolationComboBox.prefWidthProperty()
+                .bind(widthProperty().multiply(0.35));
+
+        FxControlUtils.onSelectedItemChange(interpolationComboBox, this::apply);
+
+        FxUtils.addClass(interpolationLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW)
+                .addClass(interpolationComboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
 
         if (editableLabel != null) {
-            FXUtils.addToPane(editableLabel, this);
+            FxUtils.addChild(this, editableLabel);
         }
 
-        FXUtils.addToPane(editableControl, this);
-        FXUtils.addToPane(interpolationLabel, this);
-        FXUtils.addToPane(interpolationComboBox, this);
-
-        FXUtils.addClassTo(interpolationLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        FXUtils.addClassTo(interpolationComboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FxUtils.addChild(this, editableControl, interpolationLabel, interpolationComboBox);
     }
 
     /**
@@ -146,23 +150,23 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
     }
 
     /**
-     * Create editable control.
+     * Create an editable control.
      *
-     * @return the e
+     * @return the created editable control.
      */
     @FxThread
-    protected abstract E createEditableControl();
+    protected abstract @NotNull E createEditableControl();
 
     /**
-     * Process change.
+     * Apply the new value.
      *
-     * @param newValue the new value
+     * @param newValue the new value.
      */
     @FxThread
-    protected void processChange(@NotNull final Interpolation newValue) {
-        if (isIgnoreListeners()) return;
-        final C control = getControl();
-        control.requestToChange(newValue, index);
+    protected void apply(@NotNull Interpolation newValue) {
+        if (isIgnoreListeners()) {
+            getControl().requestToChange(newValue, index);
+        }
     }
 
     /**
@@ -176,7 +180,7 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
     }
 
     /**
-     * Is ignore listeners boolean.
+     * Return true if listeners is ignored.
      *
      * @return true if listeners is ignored.
      */
@@ -196,12 +200,12 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
     }
 
     /**
-     * Sets ignore listeners.
+     * Set true if need to ignore listeners.
      *
-     * @param ignoreListeners the flag for ignoring listeners.
+     * @param ignoreListeners true if need to ignore listeners.
      */
     @FxThread
-    protected void setIgnoreListeners(final boolean ignoreListeners) {
+    protected void setIgnoreListeners(boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
 
@@ -231,21 +235,21 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
     @FxThread
     public void reload() {
 
-        final C control = getControl();
-        final P influencer = control.getInfluencer();
+        var control = getControl();
+        var influencer = control.getInfluencer();
+        var newInterpolation = influencer.getInterpolation(getIndex());
 
-        final Interpolation newInterpolation = influencer.getInterpolation(getIndex());
-        final ComboBox<Interpolation> interpolationComboBox = getInterpolationComboBox();
-        interpolationComboBox.getSelectionModel().select(newInterpolation);
+        getInterpolationComboBox().getSelectionModel()
+                .select(newInterpolation);
     }
 
     /**
-     * Is need editable label boolean.
+     * Return true if need to have an editable label.
      *
-     * @return the boolean
+     * @return true if need to have an editable label.
      */
     @FromAnyThread
-    public boolean isNeedEditableLabel() {
+    protected boolean isNeedEditableLabel() {
         return true;
     }
 }

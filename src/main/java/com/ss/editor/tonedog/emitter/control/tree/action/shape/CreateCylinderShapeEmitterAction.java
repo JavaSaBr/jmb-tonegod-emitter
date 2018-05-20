@@ -37,7 +37,7 @@ public class CreateCylinderShapeEmitterAction extends AbstractCreateShapeEmitter
     @NotNull
     private static final String PROPERTY_HEIGHT = "height";
 
-    public CreateCylinderShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public CreateCylinderShapeEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -57,7 +57,7 @@ public class CreateCylinderShapeEmitterAction extends AbstractCreateShapeEmitter
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
+        var definitions = ArrayFactory.<PropertyDefinition>newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_AXIS_SAMPLES, PROPERTY_AXIS_SAMPLES, 8));
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_RADIAL_SAMPLES, PROPERTY_RADIAL_SAMPLES, 16));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_RADIUS, PROPERTY_RADIUS, 0.25F));
@@ -74,11 +74,11 @@ public class CreateCylinderShapeEmitterAction extends AbstractCreateShapeEmitter
 
     @Override
     @FxThread
-    protected @NotNull Mesh createMesh(@NotNull final VarTable vars) {
-        final int axisSamples = vars.getInteger(PROPERTY_AXIS_SAMPLES);
-        final int radialSamples = vars.getInteger(PROPERTY_RADIAL_SAMPLES);
-        final float radius = vars.getFloat(PROPERTY_RADIUS);
-        final float height = vars.getFloat(PROPERTY_HEIGHT);
+    protected @NotNull Mesh createMesh(@NotNull VarTable vars) {
+        var axisSamples = vars.getInteger(PROPERTY_AXIS_SAMPLES);
+        var radialSamples = vars.getInteger(PROPERTY_RADIAL_SAMPLES);
+        var radius = vars.getFloat(PROPERTY_RADIUS);
+        var height = vars.getFloat(PROPERTY_HEIGHT);
         return new Cylinder(axisSamples, radialSamples, radius, height);
     }
 }

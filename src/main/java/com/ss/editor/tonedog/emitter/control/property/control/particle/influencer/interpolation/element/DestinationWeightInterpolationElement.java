@@ -6,7 +6,8 @@ import com.ss.editor.annotation.FxThread;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.control.DestinationInfluencerControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.fx.control.input.FloatTextField;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxControlUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.Parent;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,8 @@ import tonegod.emitter.influencers.impl.DestinationInfluencer;
  *
  * @author JavaSaBr
  */
-public class DestinationWeightInterpolationElement extends InterpolationElement<DestinationInfluencer, Parent, DestinationInfluencerControl> {
+public class DestinationWeightInterpolationElement extends
+        InterpolationElement<DestinationInfluencer, Parent, DestinationInfluencerControl> {
 
     /**
      * The field X.
@@ -44,7 +46,7 @@ public class DestinationWeightInterpolationElement extends InterpolationElement<
     @Nullable
     private FloatTextField weightField;
 
-    public DestinationWeightInterpolationElement(@NotNull final DestinationInfluencerControl control, final int index) {
+    public DestinationWeightInterpolationElement(@NotNull DestinationInfluencerControl control, int index) {
         super(control, index);
     }
 
@@ -52,34 +54,42 @@ public class DestinationWeightInterpolationElement extends InterpolationElement<
     @FxThread
     protected @NotNull Parent createEditableControl() {
 
-        final HBox container = new HBox();
+        var container = new HBox();
         container.prefWidthProperty().bind(widthProperty().multiply(0.5));
 
         xField = new FloatTextField();
-        xField.prefWidthProperty().bind(container.widthProperty().divide(0.25));
-        xField.addChangeListener((observable, oldValue, newValue) -> processDestinationChange());
+        xField.prefWidthProperty()
+                .bind(container.widthProperty().divide(0.25));
 
         yField = new FloatTextField();
-        yField.prefWidthProperty().bind(container.widthProperty().divide(0.25));
-        yField.addChangeListener((observable, oldValue, newValue) -> processDestinationChange());
+        yField.prefWidthProperty()
+                .bind(container.widthProperty().divide(0.25));
 
         zField = new FloatTextField();
-        zField.prefWidthProperty().bind(container.widthProperty().divide(0.25));
-        zField.addChangeListener((observable, oldValue, newValue) -> processDestinationChange());
+        zField.prefWidthProperty()
+                .bind(container.widthProperty().divide(0.25));
 
         weightField = new FloatTextField();
-        weightField.prefWidthProperty().bind(container.widthProperty().divide(0.25));
-        weightField.addChangeListener((observable, oldValue, newValue) -> processWeightChange());
+        weightField.prefWidthProperty()
+                .bind(container.widthProperty().divide(0.25));
 
-        FXUtils.addToPane(xField, container);
-        FXUtils.addToPane(yField, container);
-        FXUtils.addToPane(zField, container);
-        FXUtils.addToPane(weightField, container);
+        FxControlUtils.onValueChange(xField, this::applyDestination);
+        FxControlUtils.onValueChange(yField, this::applyDestination);
+        FxControlUtils.onValueChange(zField, this::applyDestination);
+        FxControlUtils.onValueChange(weightField, this::applyWeight);
 
-        FXUtils.addClassesTo(xField, yField, zField, weightField, CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
-                CssClasses.TRANSPARENT_TEXT_FIELD);
-        FXUtils.addClassesTo(container, CssClasses.DEF_HBOX, CssClasses.TEXT_INPUT_CONTAINER,
-                CssClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
+        FxUtils.addClass(xField, yField,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
+                        CssClasses.TRANSPARENT_TEXT_FIELD)
+                .addClass(zField, weightField,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
+                        CssClasses.TRANSPARENT_TEXT_FIELD)
+                .addClass(container,
+                        CssClasses.DEF_HBOX,
+                        CssClasses.TEXT_INPUT_CONTAINER,
+                        CssClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
+
+        FxUtils.addChild(container, xField, yField, zField, weightField);
 
         return container;
     }
@@ -91,34 +101,40 @@ public class DestinationWeightInterpolationElement extends InterpolationElement<
     }
 
     /**
-     * Handle changing destination value.
+     * Apply the new destination value.
      */
     @FxThread
-    private void processDestinationChange() {
-        if (isIgnoreListeners()) return;
+    private void applyDestination() {
 
-        final float x = getXField().getValue();
-        final float y = getYField().getValue();
-        final float z = getZField().getValue();
+        if (isIgnoreListeners()) {
+            return;
+        }
 
-        final DestinationInfluencerControl control = getControl();
-        control.requestToChange(new Vector3f(x, y, z), getIndex());
+        var x = getXField().getValue();
+        var y = getYField().getValue();
+        var z = getZField().getValue();
+
+        getControl().requestToChange(new Vector3f(x, y, z), getIndex());
     }
 
     /**
-     * Handle changing weight value.
+     * Apply the new weight value.
      */
     @FxThread
-    private void processWeightChange() {
-        if (isIgnoreListeners()) return;
+    private void applyWeight() {
 
-        final float weight = weightField.getValue();
+        if (isIgnoreListeners()) {
+            return;
+        }
 
-        final DestinationInfluencerControl control = getControl();
-        control.requestToChange(weight, getIndex());
+        var weight = weightField.getValue();
+
+        getControl().requestToChange(weight, getIndex());
     }
 
     /**
+     * Get the field X.
+     *
      * @return the field X.
      */
     @FxThread
@@ -127,6 +143,8 @@ public class DestinationWeightInterpolationElement extends InterpolationElement<
     }
 
     /**
+     * Get the field Y.
+     *
      * @return the field Y.
      */
     @FxThread
@@ -135,6 +153,8 @@ public class DestinationWeightInterpolationElement extends InterpolationElement<
     }
 
     /**
+     * Get the field Z.
+     *
      * @return the field Z.
      */
     @FxThread
@@ -143,6 +163,8 @@ public class DestinationWeightInterpolationElement extends InterpolationElement<
     }
 
     /**
+     * Get the weight field.
+     *
      * @return the weight field.
      */
     @FxThread
@@ -154,25 +176,24 @@ public class DestinationWeightInterpolationElement extends InterpolationElement<
     @FxThread
     public void reload() {
 
-        final DestinationInfluencerControl control = getControl();
-        final DestinationInfluencer influencer = control.getInfluencer();
+        var influencer = getControl().getInfluencer();
 
-        final Vector3f destination = influencer.getDestination(getIndex());
-        final Float weight = influencer.getWeight(getIndex());
+        var destination = influencer.getDestination(getIndex());
+        var weight = influencer.getWeight(getIndex());
 
-        final FloatTextField xField = getXField();
+        var xField = getXField();
         xField.setValue(destination.getX());
         xField.positionCaret(xField.getText().length());
 
-        final FloatTextField yField = getYField();
+        var yField = getYField();
         yField.setValue(destination.getY());
         yField.positionCaret(yField.getText().length());
 
-        final FloatTextField zField = getZField();
+        var zField = getZField();
         zField.setValue(destination.getZ());
         zField.positionCaret(zField.getText().length());
 
-        final FloatTextField weightField = getWeightField();
+        var weightField = getWeightField();
         weightField.setValue(weight);
         weightField.positionCaret(weightField.getText().length());
 

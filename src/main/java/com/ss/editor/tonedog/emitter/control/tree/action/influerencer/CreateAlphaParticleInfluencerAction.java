@@ -17,8 +17,10 @@ import tonegod.emitter.influencers.impl.AlphaInfluencer;
  */
 public class CreateAlphaParticleInfluencerAction extends AbstractCreateParticleInfluencerAction {
 
-    public CreateAlphaParticleInfluencerAction(@NotNull final NodeTree<ModelChangeConsumer> nodeTree,
-                                               @NotNull final TreeNode<?> node) {
+    public CreateAlphaParticleInfluencerAction(
+            @NotNull NodeTree<ModelChangeConsumer> nodeTree,
+            @NotNull TreeNode<?> node
+    ) {
         super(nodeTree, node);
     }
 

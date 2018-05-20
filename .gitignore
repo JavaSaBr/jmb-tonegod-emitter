@@ -9,4 +9,4 @@
 /.settings/
 .project
 .classpath
-.dll
+*.dll

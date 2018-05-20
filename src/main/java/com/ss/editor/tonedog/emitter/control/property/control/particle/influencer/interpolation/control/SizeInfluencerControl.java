@@ -5,13 +5,11 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.SizeInterpolationElement;
-import com.ss.rlib.fx.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.SizeInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
-
-import java.util.List;
 
 /**
  * The control for editing sizes in the {@link SizeInfluencer}.
@@ -20,8 +18,11 @@ import java.util.List;
  */
 public class SizeInfluencerControl extends AbstractInterpolationInfluencerControl<SizeInfluencer> {
 
-    public SizeInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer,
-                                 @NotNull final SizeInfluencer influencer, @NotNull final Object parent) {
+    public SizeInfluencerControl(
+            @NotNull ModelChangeConsumer modelChangeConsumer,
+            @NotNull SizeInfluencer influencer,
+            @NotNull Object parent
+    ) {
         super(modelChangeConsumer, influencer, parent);
     }
 
@@ -34,28 +35,29 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
     /**
      * Request to change.
      *
-     * @param newValue the new value
-     * @param index    the index
+     * @param newValue the new value.
+     * @param index    the index.
      */
     @FxThread
-    public void requestToChange(@NotNull final Vector3f newValue, final int index) {
+    public void requestToChange(@NotNull Vector3f newValue, int index) {
 
-        final SizeInfluencer influencer = getInfluencer();
-        final Vector3f oldValue = influencer.getSize(index);
+        var influencer = getInfluencer();
+        var oldValue = influencer.getSize(index);
 
-        execute(newValue, oldValue, (sizeInfluencer, alpha) -> sizeInfluencer.updateSize(alpha, index));
+        execute(newValue, oldValue, (sizeInfluencer, alpha) ->
+                sizeInfluencer.updateSize(alpha, index));
     }
 
     @Override
     @FxThread
-    protected void fillControl(@NotNull final SizeInfluencer influencer, @NotNull final VBox root) {
+    protected void fillControl(@NotNull SizeInfluencer influencer, @NotNull VBox root) {
 
-        final List<Vector3f> sizes = influencer.getSizes();
+        var sizes = influencer.getSizes();
 
         for (int i = 0, length = sizes.size(); i < length; i++) {
-            final SizeInterpolationElement element = new SizeInterpolationElement(this, i);
+            var element = new SizeInterpolationElement(this, i);
             element.prefWidthProperty().bind(widthProperty());
-            FXUtils.addToPane(element, root);
+            FxUtils.addChild(root, element);
         }
     }
 
@@ -75,11 +77,11 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
     @FxThread
     protected void processRemove() {
 
-        final SizeInfluencer influencer = getInfluencer();
-        final List<Vector3f> sizes = influencer.getSizes();
+        var influencer = getInfluencer();
+        var sizes = influencer.getSizes();
 
-        final Vector3f size = influencer.getSize(sizes.size() - 1);
-        final Interpolation interpolation = influencer.getInterpolation(sizes.size() - 1);
+        var size = influencer.getSize(sizes.size() - 1);
+        var interpolation = influencer.getInterpolation(sizes.size() - 1);
 
         execute(true, false, (sizeInfluencer, needRemove) -> {
             if (needRemove) {

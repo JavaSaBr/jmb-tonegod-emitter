@@ -10,15 +10,18 @@ import tonegod.emitter.influencers.ParticleInfluencer;
  * The implementation of the {@link FloatPropertyControl} to edit float values in the {@link
  * ParticleInfluencer}*.
  *
- * @param <T> the type parameter
+ * @param <D> the type of an editing object.
  * @author JavaSaBr
  */
-public class FloatParticleInfluencerPropertyControl<T extends ParticleInfluencer> extends
-        FloatPropertyControl<ModelChangeConsumer, T> {
+public class FloatParticleInfluencerPropertyControl<D extends ParticleInfluencer> extends
+        FloatPropertyControl<ModelChangeConsumer, D> {
 
-    public FloatParticleInfluencerPropertyControl(@Nullable final Float element, @NotNull final String paramName,
-                                                  @NotNull final ModelChangeConsumer modelChangeConsumer,
-                                                  @NotNull final Object parent) {
+    public FloatParticleInfluencerPropertyControl(
+            @Nullable Float element,
+            @NotNull String paramName,
+            @NotNull ModelChangeConsumer modelChangeConsumer,
+            @NotNull Object parent
+    ) {
         super(element, paramName, modelChangeConsumer, ParticleInfluencerPropertyControl.newChangeHandler(parent));
     }
 }

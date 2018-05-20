@@ -28,7 +28,7 @@ public class CreateBoxShapeEmitterAction extends AbstractCreateShapeEmitterActio
     @NotNull
     private static final String PROPERTY_SIZE = "size";
 
-    public CreateBoxShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public CreateBoxShapeEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -48,8 +48,9 @@ public class CreateBoxShapeEmitterAction extends AbstractCreateShapeEmitterActio
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
-        definitions.add(new PropertyDefinition(VECTOR_3F, Messages.MODEL_PROPERTY_SIZE, PROPERTY_SIZE, new Vector3f(1, 1, 1)));
+        var definitions = ArrayFactory.<PropertyDefinition>newArray(PropertyDefinition.class);
+        definitions.add(new PropertyDefinition(VECTOR_3F, Messages.MODEL_PROPERTY_SIZE,
+                PROPERTY_SIZE, new Vector3f(1, 1, 1)));
 
         return definitions;
     }
@@ -62,8 +63,8 @@ public class CreateBoxShapeEmitterAction extends AbstractCreateShapeEmitterActio
 
     @Override
     @FxThread
-    protected @NotNull Mesh createMesh(@NotNull final VarTable vars) {
-        final Vector3f size = vars.get(PROPERTY_SIZE);
+    protected @NotNull Mesh createMesh(@NotNull VarTable vars) {
+        var size = vars.get(PROPERTY_SIZE, Vector3f.class);
         return new Box(size.getX(), size.getY(), size.getZ());
     }
 }

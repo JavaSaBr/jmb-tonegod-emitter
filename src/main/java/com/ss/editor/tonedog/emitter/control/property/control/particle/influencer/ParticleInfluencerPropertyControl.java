@@ -11,35 +11,39 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 /**
  * The base implementation of the property control for the {@link ModelFileEditor}.
  *
- * @param <D> the type parameter
- * @param <T> the type parameter
+ * @param <D> the type of an editing object.
+ * @param <T> the type of an editing property.
  * @author JavaSaBr
  */
 public class ParticleInfluencerPropertyControl<D extends ParticleInfluencer, T> extends
         PropertyControl<ModelChangeConsumer, D, T> {
 
     /**
-     * New change handler six object consumer.
+     * Create a new change handler.
      *
-     * @param <D>    the type parameter
-     * @param <T>    the type parameter
-     * @param parent the parent
-     * @return the six object consumer
+     * @param <D> the type of an editing object.
+     * @param <T> the type of an editing property.
+     * @param parent the parent.
+     * @return the new change handler.
      */
-    public static <D extends ParticleInfluencer, T> @NotNull ChangeHandler<ModelChangeConsumer, D, T> newChangeHandler(@NotNull final Object parent) {
+    public static <D extends ParticleInfluencer, T> @NotNull ChangeHandler<ModelChangeConsumer, D, T> newChangeHandler(
+            @NotNull Object parent
+    ) {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
 
-            final ParticleInfluencerPropertyOperation<D, T> operation =
-                    new ParticleInfluencerPropertyOperation<>(object, parent, propName, newValue, oldValue);
+            var operation = new ParticleInfluencerPropertyOperation<D, T>(object, parent, propName, newValue, oldValue);
             operation.setApplyHandler(handler);
 
             changeConsumer.execute(operation);
         };
     }
 
-    public ParticleInfluencerPropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
-                                             @NotNull final ModelChangeConsumer changeConsumer,
-                                             @NotNull final Object parent) {
+    public ParticleInfluencerPropertyControl(
+            @Nullable T propertyValue,
+            @NotNull String propertyName,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull Object parent
+    ) {
         super(propertyValue, propertyName, changeConsumer, newChangeHandler(parent));
     }
 }
