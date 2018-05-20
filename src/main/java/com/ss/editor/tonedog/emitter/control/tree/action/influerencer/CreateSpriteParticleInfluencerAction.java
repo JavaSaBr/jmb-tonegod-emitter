@@ -17,8 +17,10 @@ import tonegod.emitter.influencers.impl.SpriteInfluencer;
  */
 public class CreateSpriteParticleInfluencerAction extends AbstractCreateParticleInfluencerAction {
 
-    public CreateSpriteParticleInfluencerAction(@NotNull final NodeTree<ModelChangeConsumer> nodeTree,
-                                                @NotNull final TreeNode<?> node) {
+    public CreateSpriteParticleInfluencerAction(
+            @NotNull NodeTree<ModelChangeConsumer> nodeTree,
+            @NotNull TreeNode<?> node
+    ) {
         super(nodeTree, node);
     }
 

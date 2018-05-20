@@ -10,9 +10,9 @@ import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +34,7 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
     @NotNull
     private static final String PROPERTY_RADIUS = "radius";
 
-    public CreateSphereShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public CreateSphereShapeEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -54,7 +54,7 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
+        var definitions = ArrayFactory.<PropertyDefinition>newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_Z_SAMPLES, PROPERTY_Z_SAMPLES, 10));
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_RADIAL_SAMPLES, PROPERTY_RADIAL_SAMPLES, 10));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_RADIUS, PROPERTY_RADIUS, 1F));
@@ -70,10 +70,10 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
 
     @Override
     @FxThread
-    protected @NotNull Mesh createMesh(@NotNull final VarTable vars) {
-        final int zSamples = vars.getInteger(PROPERTY_Z_SAMPLES);
-        final int radialSamples = vars.getInteger(PROPERTY_RADIAL_SAMPLES);
-        final float radius = vars.getFloat(PROPERTY_RADIUS);
+    protected @NotNull Mesh createMesh(@NotNull VarTable vars) {
+        var zSamples = vars.getInteger(PROPERTY_Z_SAMPLES);
+        var radialSamples = vars.getInteger(PROPERTY_RADIAL_SAMPLES);
+        var radius = vars.getFloat(PROPERTY_RADIUS);
         return new Sphere(zSamples, radialSamples, radius);
     }
 }

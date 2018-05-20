@@ -28,15 +28,14 @@ public class AddParticleInfluencerOperation extends AbstractEditorOperation<Mode
     @NotNull
     private final ParticleEmitterNode parent;
 
-    public AddParticleInfluencerOperation(@NotNull final ParticleInfluencer influencer,
-                                          @NotNull final ParticleEmitterNode parent) {
+    public AddParticleInfluencerOperation(@NotNull ParticleInfluencer influencer, @NotNull ParticleEmitterNode parent) {
         this.influencer = influencer;
         this.parent = parent;
     }
 
     @Override
     @FxThread
-    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void redoImpl(@NotNull ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
 
             parent.killAllParticles();
@@ -50,7 +49,7 @@ public class AddParticleInfluencerOperation extends AbstractEditorOperation<Mode
 
     @Override
     @FxThread
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
+    protected void undoImpl(@NotNull ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJmeTask(() -> {
 
             parent.killAllParticles();

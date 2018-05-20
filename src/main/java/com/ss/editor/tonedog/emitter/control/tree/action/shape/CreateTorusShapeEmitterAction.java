@@ -10,9 +10,9 @@ import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.VarTable;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +37,7 @@ public class CreateTorusShapeEmitterAction extends AbstractCreateShapeEmitterAct
     @NotNull
     private static final String PROPERTY_OUTER_RADIUS = "outerRadius";
 
-    public CreateTorusShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public CreateTorusShapeEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -57,7 +57,7 @@ public class CreateTorusShapeEmitterAction extends AbstractCreateShapeEmitterAct
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
+        var definitions = ArrayFactory.<PropertyDefinition>newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_CIRCLE_SAMPLES, PROPERTY_CIRCLE_SAMPLES, 10));
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_RADIAL_SAMPLES, PROPERTY_RADIAL_SAMPLES, 10));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_INNER_RADIUS, PROPERTY_INNER_RADIUS, 0.1F));
@@ -74,11 +74,11 @@ public class CreateTorusShapeEmitterAction extends AbstractCreateShapeEmitterAct
 
     @Override
     @FxThread
-    protected @NotNull Mesh createMesh(@NotNull final VarTable vars) {
-        final int circleSamples = vars.getInteger(PROPERTY_CIRCLE_SAMPLES);
-        final int radialSamples = vars.getInteger(PROPERTY_RADIAL_SAMPLES);
-        final float innerRadius = vars.getFloat(PROPERTY_INNER_RADIUS);
-        final float outerRadius = vars.getFloat(PROPERTY_OUTER_RADIUS);
+    protected @NotNull Mesh createMesh(@NotNull VarTable vars) {
+        var circleSamples = vars.getInteger(PROPERTY_CIRCLE_SAMPLES);
+        var radialSamples = vars.getInteger(PROPERTY_RADIAL_SAMPLES);
+        var innerRadius = vars.getFloat(PROPERTY_INNER_RADIUS);
+        var outerRadius = vars.getFloat(PROPERTY_OUTER_RADIUS);
         return new Torus(circleSamples, radialSamples, innerRadius, outerRadius);
     }
 }

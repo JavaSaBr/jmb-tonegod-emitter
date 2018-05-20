@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-RC2'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
     }
 }
 
@@ -14,24 +14,27 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'idea'
 apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'application'
 
 group = 'com.spaceshift'
-version = '1.0.2'
+version = '1.1.1'
 
 ext.artifactId = 'jmb-tonegod-emitter'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.10
+targetCompatibility = 1.10
 
 compileTestJava {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 1.10
+    targetCompatibility = 1.10
     options.compilerArgs += '-parameters'
 }
 
-ext.junitPlatformVersion = "1.0.0-M5"
-ext.junitJupiterVersion = "5.0.0-M5"
+ext.junitPlatformVersion = "1.0.0"
+ext.junitJupiterVersion = "5.0.0"
 ext.log4jVersion = '2.6.2'
+
+mainClassName = "com.ss.editor.DevelopPluginStarter"
 
 junitPlatform {
     filters {
@@ -44,9 +47,11 @@ junitPlatform {
 }
 
 repositories {
-    mavenCentral()
     jcenter()
+    mavenCentral()
+    mavenLocal()
     maven { url 'https://jitpack.io' }
+    maven { url "https://dl.bintray.com/javasabr/maven" }
 }
 
 configurations {
@@ -54,10 +59,10 @@ configurations {
 }
 
 dependencies {
-    compile 'com.github.JavaSaBr:jmonkeybuilder:develop-SNAPSHOT'
-    compile 'com.github.JavaSaBr:tonegodemitter:2.6.3'
+    compile 'com.spaceshift:jmonkeybuilder:1.8.0'
+    compile 'toneg0d:emitter:3.0.1'
 
-    pluginDependences ('com.github.JavaSaBr:tonegodemitter:2.6.3') {
+    pluginDependences ('toneg0d:emitter:3.0.1') {
         exclude group: 'org.jmonkeyengine'
         exclude group: 'org.jetbrains'
     }
@@ -177,19 +182,20 @@ task deployPlugin(type: Zip, dependsOn: 'preparePlugin') {
     def deployPluginFolder = projectFolder.resolve("deploy-plugin")
 
     from pluginFolder.toString()
-    destinationDir deployPluginFolder.toFile()
+    destinationDir = deployPluginFolder.toFile()
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.5.1'
+    gradleVersion = '4.7'
 }
 
-defaultTasks 'install'
-
-// To specify a license in the pom:
-install {
-    repositories.mavenInstaller {
-        pom.version = version
-        pom.artifactId = artifactId
-    }
+run.dependsOn {
+    preparePlugin
 }
+
+run.jvmArgs(Arrays.asList(
+        "-Xdebug",
+        "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
+        "-Duser.country=EU",
+        "-Duser.language=en"
+))

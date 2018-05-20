@@ -1,11 +1,8 @@
 package com.ss.editor.tonedog.emitter.control.tree.action.mesh;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.jme3.asset.AssetManager;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.ModelKey;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
@@ -21,13 +18,12 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;
-import tonegod.emitter.geometry.ParticleGeometry;
 import tonegod.emitter.particle.ParticleDataMeshInfo;
 import tonegod.emitter.particle.ParticleDataTemplateMesh;
 
@@ -51,7 +47,7 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
-    public LoadModelParticlesMeshAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public LoadModelParticlesMeshAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -78,30 +74,27 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
      *
      * @param file the file
      */
-    protected void processOpen(@NotNull final Path file) {
+    protected void processOpen(@NotNull Path file) {
 
-        final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
+        var assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
+        var assetPath = EditorUtil.toAssetPath(assetFile);
 
-        final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
+        var modelKey = new ModelKey(assetPath);
 
-        final ModelKey modelKey = new ModelKey(assetPath);
-
-        final AssetManager assetManager = EditorUtil.getAssetManager();
-        final Spatial loadedModel = assetManager.loadModel(modelKey);
-        final Geometry geometry = NodeUtils.findGeometry(loadedModel);
+        var assetManager = EditorUtil.getAssetManager();
+        var loadedModel = assetManager.loadModel(modelKey);
+        var geometry = NodeUtils.findGeometry(loadedModel);
 
         if (geometry == null) {
             LOGGER.warning(this, "not found a geometry in the model " + assetPath);
             return;
         }
 
-        final TreeNode<?> treeNode = getNode();
-        final ParticleEmitterNode emitterNode = (ParticleEmitterNode) treeNode.getElement();
-        final ParticleGeometry particleGeometry = emitterNode.getParticleGeometry();
-        final ParticleDataMeshInfo meshInfo = new ParticleDataMeshInfo(ParticleDataTemplateMesh.class, geometry.getMesh());
+        var emitterNode = (ParticleEmitterNode) getNode().getElement();
+        var particleGeometry = emitterNode.getParticleGeometry();
+        var meshInfo = new ParticleDataMeshInfo(ParticleDataTemplateMesh.class, geometry.getMesh());
 
-        changeConsumer.execute(new ChangeParticleMeshOperation(meshInfo, particleGeometry));
+        notNull(getNodeTree().getChangeConsumer())
+                .execute(new ChangeParticleMeshOperation(meshInfo, particleGeometry));
     }
 }

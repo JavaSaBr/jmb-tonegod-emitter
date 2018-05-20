@@ -2,9 +2,7 @@ package com.ss.editor.tonedog.emitter.control.tree.action.shape;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.jme3.asset.AssetManager;
-import com.jme3.scene.Geometry;
+import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
@@ -21,8 +19,8 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.common.util.array.Array;
+import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +46,7 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
-    public LoadModelShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public LoadModelShapeEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -75,25 +73,23 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
      *
      * @param file the file
      */
-    protected void processOpen(@NotNull final Path file) {
+    protected void processOpen(@NotNull Path file) {
 
-        final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
+        var changeConsumer = notNull(getNodeTree().getChangeConsumer());
 
-        final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
-        final String assetPath = toAssetPath(assetFile);
+        var assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
+        var assetPath = toAssetPath(assetFile);
 
-        final AssetManager assetManager = EditorUtil.getAssetManager();
-        final Spatial loadedModel = assetManager.loadModel(assetPath);
-        final Geometry geometry = NodeUtils.findGeometry(loadedModel);
+        var assetManager = EditorUtil.getAssetManager();
+        var loadedModel = assetManager.loadModel(assetPath);
+        var geometry = NodeUtils.findGeometry(loadedModel);
 
         if (geometry == null) {
             LOGGER.warning(this, "not found a geometry in the model " + assetPath);
             return;
         }
 
-        final TreeNode<?> treeNode = getNode();
-        final ParticleEmitterNode element = (ParticleEmitterNode) treeNode.getElement();
+        var element = (ParticleEmitterNode) getNode().getElement();
 
         changeConsumer.execute(new ChangeEmitterMeshOperation(geometry.getMesh(), element));
     }

@@ -1,6 +1,6 @@
 package com.ss.editor.tonedog.emitter.control.tree;
 
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.common.util.ClassUtils.unsafeCast;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.tonedog.emitter.control.tree.node.ParticleEmitterNodeTreeNode;
 import com.ss.editor.tonedog.emitter.control.tree.node.influencer.ParticleInfluencerTreeNode;
@@ -29,7 +29,7 @@ public class ParticlesTreeNodeFactory implements TreeNodeFactory {
 
     @Override
     @FxThread
-    public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable final T element, final long objectId) {
+    public <T, V extends TreeNode<T>> @Nullable V createFor(@Nullable T element, long objectId) {
 
         if (element instanceof ParticleEmitterNode) {
             return unsafeCast(new ParticleEmitterNodeTreeNode((ParticleEmitterNode) element, objectId));

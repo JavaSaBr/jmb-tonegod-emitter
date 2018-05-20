@@ -10,15 +10,18 @@ import tonegod.emitter.influencers.ParticleInfluencer;
  * The implementation of the {@link FloatPropertyControl} to edit boolean values in the {@link
  * ParticleInfluencer}*.
  *
- * @param <T> the type parameter
+ * @param <D> the type of an editing object.
  * @author JavaSaBr
  */
-public class BooleanParticleInfluencerPropertyControl<T extends ParticleInfluencer> extends
-        BooleanPropertyControl<ModelChangeConsumer, T> {
+public class BooleanParticleInfluencerPropertyControl<D extends ParticleInfluencer> extends
+        BooleanPropertyControl<ModelChangeConsumer, D> {
 
-    public BooleanParticleInfluencerPropertyControl(@NotNull final Boolean element, @NotNull final String paramName,
-                                                    @NotNull final ModelChangeConsumer modelChangeConsumer,
-                                                    @NotNull final Object parent) {
+    public BooleanParticleInfluencerPropertyControl(
+            @NotNull Boolean element,
+            @NotNull String paramName,
+            @NotNull ModelChangeConsumer modelChangeConsumer,
+            @NotNull Object parent
+    ) {
         super(element, paramName, modelChangeConsumer, ParticleInfluencerPropertyControl.newChangeHandler(parent));
     }
 }

@@ -17,8 +17,10 @@ import tonegod.emitter.influencers.impl.ColorInfluencer;
  */
 public class CreateColorParticleInfluencerAction extends AbstractCreateParticleInfluencerAction {
 
-    public CreateColorParticleInfluencerAction(@NotNull final NodeTree<ModelChangeConsumer> nodeTree,
-                                               @NotNull final TreeNode<?> node) {
+    public CreateColorParticleInfluencerAction(
+            @NotNull NodeTree<ModelChangeConsumer> nodeTree,
+            @NotNull TreeNode<?> node
+    ) {
         super(nodeTree, node);
     }
 

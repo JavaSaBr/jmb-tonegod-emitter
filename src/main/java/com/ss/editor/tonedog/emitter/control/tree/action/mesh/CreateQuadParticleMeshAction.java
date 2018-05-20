@@ -19,7 +19,7 @@ import tonegod.emitter.particle.ParticleDataTriMesh;
  */
 public class CreateQuadParticleMeshAction extends AbstractCreateParticleMeshAction {
 
-    public CreateQuadParticleMeshAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
+    public CreateQuadParticleMeshAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
     }
 

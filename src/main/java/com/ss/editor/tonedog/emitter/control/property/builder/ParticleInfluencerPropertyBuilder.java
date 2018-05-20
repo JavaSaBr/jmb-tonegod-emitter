@@ -1,6 +1,5 @@
 package com.ss.editor.tonedog.emitter.control.property.builder;
 
-import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -8,7 +7,7 @@ import com.ss.editor.tonedog.emitter.control.property.control.particle.influence
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.control.*;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.fx.util.FxUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,22 +27,12 @@ import tonegod.emitter.influencers.impl.RadialVelocityInfluencer.RadialUpAlignme
  */
 public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
-    @NotNull
     private static final GravityAlignment[] GRAVITY_ALIGNMENTS = GravityAlignment.values();
-
-    @NotNull
     private static final CollisionReaction[] COLLISION_REACTIONS = CollisionReaction.values();
-
-    @NotNull
     private static final RadialPullCenter[] RADIAL_PULL_CENTERS = RadialPullCenter.values();
-
-    @NotNull
     private static final RadialPullAlignment[] RADIAL_PULL_ALIGNMENTS = RadialPullAlignment.values();
-
-    @NotNull
     private static final RadialUpAlignment[] RADIAL_UP_ALIGNMENTS = RadialUpAlignment.values();
 
-    @NotNull
     private static final PropertyBuilder INSTANCE = new ParticleInfluencerPropertyBuilder();
 
     @FxThread
@@ -57,8 +46,12 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
 
     @Override
     @FxThread
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
-                                @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
+    protected void buildForImpl(
+            @NotNull Object object,
+            @Nullable Object parent,
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer
+    ) {
 
         if (!(object instanceof ParticleInfluencer) || parent == null) {
             return;
@@ -100,20 +93,23 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final InterpolatedParticleInfluencer influencer,
-                                @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull InterpolatedParticleInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final float fixedDuration = influencer.getFixedDuration();
+        var fixedDuration = influencer.getFixedDuration();
 
-        final FloatParticleInfluencerPropertyControl<InterpolatedParticleInfluencer> fixedDurationControl =
-                new FloatParticleInfluencerPropertyControl<>(fixedDuration, Messages.MODEL_PROPERTY_FIXED_DURATION, changeConsumer, parent);
+        var fixedDurationControl = new FloatParticleInfluencerPropertyControl<InterpolatedParticleInfluencer>(
+                fixedDuration, Messages.MODEL_PROPERTY_FIXED_DURATION, changeConsumer, parent);
 
         fixedDurationControl.setSyncHandler(InterpolatedParticleInfluencer::getFixedDuration);
         fixedDurationControl.setApplyHandler(InterpolatedParticleInfluencer::setFixedDuration);
         fixedDurationControl.setEditObject(influencer);
 
-        FXUtils.addToPane(fixedDurationControl, container);
+        FxUtils.addChild(container, fixedDurationControl);
     }
 
     /**
@@ -125,13 +121,17 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final AlphaInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull AlphaInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final AlphaInfluencerControl influencerControl = new AlphaInfluencerControl(changeConsumer, influencer, parent);
+        var influencerControl = new AlphaInfluencerControl(changeConsumer, influencer, parent);
         influencerControl.reload();
 
-        FXUtils.addToPane(influencerControl, container);
+        FxUtils.addChild(container, influencerControl);
 
         buildSplitLine(container);
     }
@@ -145,24 +145,30 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final ColorInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull ColorInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final boolean randomStartColor = influencer.isRandomStartColor();
+        var randomStartColor = influencer.isRandomStartColor();
 
-        final ColorInfluencerControl colorControl = new ColorInfluencerControl(changeConsumer, influencer, parent);
+        var colorControl = new ColorInfluencerControl(changeConsumer, influencer, parent);
         colorControl.reload();
 
-        final BooleanParticleInfluencerPropertyControl<ColorInfluencer> randomStartColorControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomStartColor, Messages.MODEL_PROPERTY_IS_RANDOM_START_COLOR, changeConsumer, parent);
+        var randomStartColorControl = new BooleanParticleInfluencerPropertyControl<ColorInfluencer>(randomStartColor,
+                Messages.MODEL_PROPERTY_IS_RANDOM_START_COLOR, changeConsumer, parent);
 
         randomStartColorControl.setSyncHandler(ColorInfluencer::isRandomStartColor);
         randomStartColorControl.setApplyHandler(ColorInfluencer::setRandomStartColor);
         randomStartColorControl.setEditObject(influencer);
 
-        FXUtils.addToPane(colorControl, container);
+        FxUtils.addChild(container, colorControl);
+
         buildSplitLine(container);
-        FXUtils.addToPane(randomStartColorControl, container);
+
+        FxUtils.addChild(container, randomStartColorControl);
     }
 
     /**
@@ -174,35 +180,38 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final SizeInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull SizeInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final boolean randomSize = influencer.isRandomSize();
-        final float randomSizeTolerance = influencer.getRandomSizeTolerance();
+        var randomSize = influencer.isRandomSize();
+        var randomSizeTolerance = influencer.getRandomSizeTolerance();
 
-        final SizeInfluencerControl sizeControl = new SizeInfluencerControl(changeConsumer, influencer, parent);
+        var sizeControl = new SizeInfluencerControl(changeConsumer, influencer, parent);
         sizeControl.reload();
 
-        final BooleanParticleInfluencerPropertyControl<SizeInfluencer> randomStartSizeControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomSize,
-                        Messages.MODEL_PROPERTY_IS_RANDOM_START_SIZE, changeConsumer, parent);
+        var randomStartSizeControl = new BooleanParticleInfluencerPropertyControl<SizeInfluencer>(randomSize,
+                Messages.MODEL_PROPERTY_IS_RANDOM_START_SIZE, changeConsumer, parent);
 
         randomStartSizeControl.setSyncHandler(SizeInfluencer::isRandomSize);
         randomStartSizeControl.setApplyHandler(SizeInfluencer::setRandomSize);
         randomStartSizeControl.setEditObject(influencer);
 
-        final FloatParticleInfluencerPropertyControl<SizeInfluencer> sizeVariationToleranceControl =
-                new FloatParticleInfluencerPropertyControl<>(randomSizeTolerance,
-                        Messages.MODEL_PROPERTY_SIZE_VARIATION_FACTOR, changeConsumer, parent);
+        var sizeVariationToleranceControl = new FloatParticleInfluencerPropertyControl<SizeInfluencer>(
+                randomSizeTolerance, Messages.MODEL_PROPERTY_SIZE_VARIATION_FACTOR, changeConsumer, parent);
 
         sizeVariationToleranceControl.setSyncHandler(SizeInfluencer::getRandomSizeTolerance);
         sizeVariationToleranceControl.setApplyHandler(SizeInfluencer::setRandomSizeTolerance);
         sizeVariationToleranceControl.setEditObject(influencer);
 
-        FXUtils.addToPane(sizeControl, container);
+        FxUtils.addChild(container, sizeControl);
+
         buildSplitLine(container);
-        FXUtils.addToPane(randomStartSizeControl, container);
-        FXUtils.addToPane(sizeVariationToleranceControl, container);
+
+        FxUtils.addChild(container, randomStartSizeControl, sizeVariationToleranceControl);
     }
 
     /**
@@ -214,51 +223,48 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final SpriteInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull SpriteInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final int[] frameSequence = influencer.getFrameSequence();
-        final float fixedDuration = influencer.getFixedDuration();
+        var frameSequence = influencer.getFrameSequence();
+        var fixedDuration = influencer.getFixedDuration();
+        var animate = influencer.isAnimate();
+        var randomStartImage = influencer.isRandomStartImage();
 
-        final boolean animate = influencer.isAnimate();
-        final boolean randomStartImage = influencer.isRandomStartImage();
-
-        final IntArrayParticleInfluencerPropertyControl<SpriteInfluencer> frameSequenceControl =
-                new IntArrayParticleInfluencerPropertyControl<>(frameSequence,
-                        Messages.MODEL_PROPERTY_FRAME_SEQUENCE, changeConsumer, parent);
+        var frameSequenceControl = new IntArrayParticleInfluencerPropertyControl<SpriteInfluencer>(frameSequence,
+                Messages.MODEL_PROPERTY_FRAME_SEQUENCE, changeConsumer, parent);
 
         frameSequenceControl.setSyncHandler(SpriteInfluencer::getFrameSequence);
         frameSequenceControl.setApplyHandler(SpriteInfluencer::setFrameSequence);
         frameSequenceControl.setEditObject(influencer);
 
-        final BooleanParticleInfluencerPropertyControl<SpriteInfluencer> randomStartImageControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomStartImage,
-                        Messages.MODEL_PROPERTY_IS_RANDOM_START_IMAGE, changeConsumer, parent);
+        var randomStartImageControl = new BooleanParticleInfluencerPropertyControl<SpriteInfluencer>(randomStartImage,
+                Messages.MODEL_PROPERTY_IS_RANDOM_START_IMAGE, changeConsumer, parent);
 
         randomStartImageControl.setSyncHandler(SpriteInfluencer::isRandomStartImage);
         randomStartImageControl.setApplyHandler(SpriteInfluencer::setRandomStartImage);
         randomStartImageControl.setEditObject(influencer);
 
-        final BooleanParticleInfluencerPropertyControl<SpriteInfluencer> animateControl =
-                new BooleanParticleInfluencerPropertyControl<>(animate,
-                        Messages.MODEL_PROPERTY_IS_ANIMATE, changeConsumer, parent);
+        var animateControl = new BooleanParticleInfluencerPropertyControl<SpriteInfluencer>(animate,
+                Messages.MODEL_PROPERTY_IS_ANIMATE, changeConsumer, parent);
 
         animateControl.setSyncHandler(SpriteInfluencer::isAnimate);
         animateControl.setApplyHandler(SpriteInfluencer::setAnimate);
         animateControl.setEditObject(influencer);
 
-        final FloatParticleInfluencerPropertyControl<SpriteInfluencer> fixedDurationControl =
-                new FloatParticleInfluencerPropertyControl<>(fixedDuration,
-                        Messages.MODEL_PROPERTY_FIXED_DURATION, changeConsumer, parent);
+        var fixedDurationControl = new FloatParticleInfluencerPropertyControl<SpriteInfluencer>(fixedDuration,
+                Messages.MODEL_PROPERTY_FIXED_DURATION, changeConsumer, parent);
 
         fixedDurationControl.setSyncHandler(SpriteInfluencer::getFixedDuration);
         fixedDurationControl.setApplyHandler(SpriteInfluencer::setFixedDuration);
         fixedDurationControl.setEditObject(influencer);
 
-        FXUtils.addToPane(frameSequenceControl, container);
-        FXUtils.addToPane(randomStartImageControl, container);
-        FXUtils.addToPane(animateControl, container);
-        FXUtils.addToPane(fixedDurationControl, container);
+        FxUtils.addChild(container, frameSequenceControl, randomStartImageControl,
+                animateControl, fixedDurationControl);
     }
 
     /**
@@ -270,25 +276,30 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final DestinationInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull DestinationInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final boolean randomStartDestination = influencer.isRandomStartDestination();
+        var randomStartDestination = influencer.isRandomStartDestination();
 
-        final DestinationInfluencerControl influencerControl = new DestinationInfluencerControl(changeConsumer, influencer, parent);
+        var influencerControl = new DestinationInfluencerControl(changeConsumer, influencer, parent);
         influencerControl.reload();
 
-        final BooleanParticleInfluencerPropertyControl<DestinationInfluencer> randomStartDestinationControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomStartDestination,
-                        Messages.MODEL_PROPERTY_IS_RANDOM_START_DESTINATION, changeConsumer, parent);
+        var randomStartDestinationControl = new BooleanParticleInfluencerPropertyControl<DestinationInfluencer>(
+                randomStartDestination, Messages.MODEL_PROPERTY_IS_RANDOM_START_DESTINATION, changeConsumer, parent);
 
         randomStartDestinationControl.setSyncHandler(DestinationInfluencer::isRandomStartDestination);
         randomStartDestinationControl.setApplyHandler(DestinationInfluencer::setRandomStartDestination);
         randomStartDestinationControl.setEditObject(influencer);
 
-        FXUtils.addToPane(influencerControl, container);
+        FxUtils.addChild(container, influencerControl);
+
         buildSplitLine(container);
-        FXUtils.addToPane(randomStartDestinationControl, container);
+
+        FxUtils.addChild(container, randomStartDestinationControl);
     }
 
     /**
@@ -300,40 +311,39 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final ImpulseInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull ImpulseInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final float chance = influencer.getChance();
-        final float strength = influencer.getStrength();
-        final float magnitude = influencer.getMagnitude();
+        var chance = influencer.getChance();
+        var strength = influencer.getStrength();
+        var magnitude = influencer.getMagnitude();
 
-        final FloatParticleInfluencerPropertyControl<ImpulseInfluencer> chanceControl =
-                new FloatParticleInfluencerPropertyControl<>(chance,
-                        Messages.MODEL_PROPERTY_CHANCE, changeConsumer, parent);
+        var chanceControl = new FloatParticleInfluencerPropertyControl<ImpulseInfluencer>(chance,
+                Messages.MODEL_PROPERTY_CHANCE, changeConsumer, parent);
 
         chanceControl.setSyncHandler(ImpulseInfluencer::getChance);
         chanceControl.setApplyHandler(ImpulseInfluencer::setChance);
         chanceControl.setEditObject(influencer);
 
-        final FloatParticleInfluencerPropertyControl<ImpulseInfluencer> strengthControl =
-                new FloatParticleInfluencerPropertyControl<>(strength,
-                        Messages.MODEL_PROPERTY_STRENGTH, changeConsumer, parent);
+        var strengthControl = new FloatParticleInfluencerPropertyControl<ImpulseInfluencer>(strength,
+                Messages.MODEL_PROPERTY_STRENGTH, changeConsumer, parent);
 
         strengthControl.setSyncHandler(ImpulseInfluencer::getStrength);
         strengthControl.setApplyHandler(ImpulseInfluencer::setStrength);
         strengthControl.setEditObject(influencer);
 
-        final FloatParticleInfluencerPropertyControl<ImpulseInfluencer> magnitudeControl =
-                new FloatParticleInfluencerPropertyControl<>(magnitude,
-                        Messages.MODEL_PROPERTY_MAGNITUDE, changeConsumer, parent);
+        var magnitudeControl = new FloatParticleInfluencerPropertyControl<ImpulseInfluencer>(magnitude,
+                Messages.MODEL_PROPERTY_MAGNITUDE, changeConsumer, parent);
 
         magnitudeControl.setSyncHandler(ImpulseInfluencer::getMagnitude);
         magnitudeControl.setApplyHandler(ImpulseInfluencer::setMagnitude);
         magnitudeControl.setEditObject(influencer);
 
-        FXUtils.addToPane(chanceControl, container);
-        FXUtils.addToPane(strengthControl, container);
-        FXUtils.addToPane(magnitudeControl, container);
+        FxUtils.addChild(container, chanceControl, strengthControl, magnitudeControl);
     }
 
     /**
@@ -345,41 +355,39 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final GravityInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull GravityInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final Vector3f gravity = influencer.getGravity().clone();
-        final GravityAlignment alignment = influencer.getAlignment();
+        var gravity = influencer.getGravity().clone();
+        var alignment = influencer.getAlignment();
+        var magnitude = influencer.getMagnitude();
 
-        final float magnitude = influencer.getMagnitude();
-
-        final Vector3fParticleInfluencerPropertyControl<GravityInfluencer> gravityControl =
-                new Vector3fParticleInfluencerPropertyControl<>(gravity,
-                        Messages.MODEL_PROPERTY_GRAVITY, changeConsumer, parent);
+        var gravityControl = new Vector3fParticleInfluencerPropertyControl<GravityInfluencer>(gravity,
+                Messages.MODEL_PROPERTY_GRAVITY, changeConsumer, parent);
 
         gravityControl.setSyncHandler(GravityInfluencer::getGravity);
         gravityControl.setApplyHandler(GravityInfluencer::setGravity);
         gravityControl.setEditObject(influencer);
 
-        final EnumParticleInfluencerEmitterPropertyControl<GravityInfluencer, GravityAlignment> gravityAlignmentControl =
-                new EnumParticleInfluencerEmitterPropertyControl<>(alignment,
-                        Messages.MODEL_PROPERTY_ALIGNMENT, changeConsumer, GRAVITY_ALIGNMENTS, parent);
+        var gravityAlignmentControl = new EnumParticleInfluencerEmitterPropertyControl<GravityInfluencer, GravityAlignment>(
+                alignment, Messages.MODEL_PROPERTY_ALIGNMENT, changeConsumer, GRAVITY_ALIGNMENTS, parent);
 
         gravityAlignmentControl.setSyncHandler(GravityInfluencer::getAlignment);
         gravityAlignmentControl.setApplyHandler(GravityInfluencer::setAlignment);
         gravityAlignmentControl.setEditObject(influencer);
 
-        final FloatParticleInfluencerPropertyControl<GravityInfluencer> magnitudeControl =
-                new FloatParticleInfluencerPropertyControl<>(magnitude,
-                        Messages.MODEL_PROPERTY_MAGNITUDE, changeConsumer, parent);
+        var magnitudeControl = new FloatParticleInfluencerPropertyControl<GravityInfluencer>(magnitude,
+                Messages.MODEL_PROPERTY_MAGNITUDE, changeConsumer, parent);
 
         magnitudeControl.setSyncHandler(GravityInfluencer::getMagnitude);
         magnitudeControl.setApplyHandler(GravityInfluencer::setMagnitude);
         magnitudeControl.setEditObject(influencer);
 
-        FXUtils.addToPane(gravityAlignmentControl, container);
-        FXUtils.addToPane(magnitudeControl, container);
-        FXUtils.addToPane(gravityControl, container);
+        FxUtils.addChild(container, gravityAlignmentControl, magnitudeControl, gravityControl);
     }
 
     /**
@@ -391,37 +399,38 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final PhysicsInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull PhysicsInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final CollisionReaction collisionReaction = influencer.getCollisionReaction();
-        final float restitution = influencer.getRestitution();
+        var collisionReaction = influencer.getCollisionReaction();
+        var restitution = influencer.getRestitution();
 
-        final PhysicsNodeListControl nodeListControl = new PhysicsNodeListControl(changeConsumer, influencer, parent);
+        var nodeListControl = new PhysicsNodeListControl(changeConsumer, influencer, parent);
         nodeListControl.reload();
 
-        final EnumParticleInfluencerEmitterPropertyControl<PhysicsInfluencer, CollisionReaction> reactionControl =
-                new EnumParticleInfluencerEmitterPropertyControl<>(collisionReaction,
-                        Messages.MODEL_PROPERTY_REACTION, changeConsumer, COLLISION_REACTIONS, parent);
+        var reactionControl = new EnumParticleInfluencerEmitterPropertyControl<PhysicsInfluencer, CollisionReaction>(
+                collisionReaction, Messages.MODEL_PROPERTY_REACTION, changeConsumer, COLLISION_REACTIONS, parent);
 
         reactionControl.setSyncHandler(PhysicsInfluencer::getCollisionReaction);
         reactionControl.setApplyHandler(PhysicsInfluencer::setCollisionReaction);
         reactionControl.setEditObject(influencer);
 
-        final FloatParticleInfluencerPropertyControl<PhysicsInfluencer> restitutionControl =
-                new FloatParticleInfluencerPropertyControl<>(restitution,
-                        Messages.MODEL_PROPERTY_RESTITUTION, changeConsumer, parent);
+        var restitutionControl = new FloatParticleInfluencerPropertyControl<PhysicsInfluencer>(restitution,
+                Messages.MODEL_PROPERTY_RESTITUTION, changeConsumer, parent);
 
         restitutionControl.setSyncHandler(PhysicsInfluencer::getRestitution);
         restitutionControl.setApplyHandler(PhysicsInfluencer::setRestitution);
         restitutionControl.setEditObject(influencer);
 
-        FXUtils.addToPane(nodeListControl, container);
+        FxUtils.addChild(container, nodeListControl);
 
         buildSplitLine(container);
 
-        FXUtils.addToPane(reactionControl, container);
-        FXUtils.addToPane(restitutionControl, container);
+        FxUtils.addChild(container, reactionControl, restitutionControl);
     }
 
     /**
@@ -433,72 +442,64 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final RadialVelocityInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull RadialVelocityInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final RadialPullCenter pullCenter = influencer.getRadialPullCenter();
-        final RadialPullAlignment pullAlignment = influencer.getRadialPullAlignment();
-        final RadialUpAlignment upAlignment = influencer.getRadialUpAlignment();
+        var pullCenter = influencer.getRadialPullCenter();
+        var pullAlignment = influencer.getRadialPullAlignment();
+        var upAlignment = influencer.getRadialUpAlignment();
+        var tangentForce = influencer.getTangentForce();
+        var radialPull = influencer.getRadialPull();
+        var randomDirection = influencer.isRandomDirection();
 
-        final float tangentForce = influencer.getTangentForce();
-        final float radialPull = influencer.getRadialPull();
-
-        final boolean randomDirection = influencer.isRandomDirection();
-
-        final BooleanParticleInfluencerPropertyControl<RadialVelocityInfluencer> randomDirectionControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomDirection,
-                        Messages.MODEL_PROPERTY_IS_RANDOM_DIRECTION, changeConsumer, parent);
+        var randomDirectionControl = new BooleanParticleInfluencerPropertyControl<RadialVelocityInfluencer>(
+                randomDirection, Messages.MODEL_PROPERTY_IS_RANDOM_DIRECTION, changeConsumer, parent);
 
         randomDirectionControl.setSyncHandler(RadialVelocityInfluencer::isRandomDirection);
         randomDirectionControl.setApplyHandler(RadialVelocityInfluencer::setRandomDirection);
         randomDirectionControl.setEditObject(influencer);
 
-        final EnumParticleInfluencerEmitterPropertyControl<RadialVelocityInfluencer, RadialPullCenter> pullCenterControl =
-                new EnumParticleInfluencerEmitterPropertyControl<>(pullCenter,
-                        Messages.MODEL_PROPERTY_PULL_CENTER, changeConsumer, RADIAL_PULL_CENTERS, parent);
+        var pullCenterControl = new EnumParticleInfluencerEmitterPropertyControl<RadialVelocityInfluencer, RadialPullCenter>(
+                pullCenter, Messages.MODEL_PROPERTY_PULL_CENTER, changeConsumer, RADIAL_PULL_CENTERS, parent);
 
         pullCenterControl.setSyncHandler(RadialVelocityInfluencer::getRadialPullCenter);
         pullCenterControl.setApplyHandler(RadialVelocityInfluencer::setRadialPullCenter);
         pullCenterControl.setEditObject(influencer);
 
-        final EnumParticleInfluencerEmitterPropertyControl<RadialVelocityInfluencer, RadialPullAlignment> pullAlignmentControl =
-                new EnumParticleInfluencerEmitterPropertyControl<>(pullAlignment,
-                        Messages.MODEL_PROPERTY_PULL_ALIGNMENT, changeConsumer, RADIAL_PULL_ALIGNMENTS, parent);
+        var pullAlignmentControl = new EnumParticleInfluencerEmitterPropertyControl<RadialVelocityInfluencer, RadialPullAlignment>(
+                pullAlignment, Messages.MODEL_PROPERTY_PULL_ALIGNMENT, changeConsumer, RADIAL_PULL_ALIGNMENTS, parent);
 
         pullAlignmentControl.setSyncHandler(RadialVelocityInfluencer::getRadialPullAlignment);
         pullAlignmentControl.setApplyHandler(RadialVelocityInfluencer::setRadialPullAlignment);
         pullAlignmentControl.setEditObject(influencer);
 
-        final EnumParticleInfluencerEmitterPropertyControl<RadialVelocityInfluencer, RadialUpAlignment> upAlignmentControl =
-                new EnumParticleInfluencerEmitterPropertyControl<>(upAlignment,
-                        Messages.MODEL_PROPERTY_UP_ALIGNMENT, changeConsumer, RADIAL_UP_ALIGNMENTS, parent);
+        var upAlignmentControl = new EnumParticleInfluencerEmitterPropertyControl<RadialVelocityInfluencer, RadialUpAlignment>(
+                upAlignment, Messages.MODEL_PROPERTY_UP_ALIGNMENT, changeConsumer, RADIAL_UP_ALIGNMENTS, parent);
 
         upAlignmentControl.setSyncHandler(RadialVelocityInfluencer::getRadialUpAlignment);
         upAlignmentControl.setApplyHandler(RadialVelocityInfluencer::setRadialUpAlignment);
         upAlignmentControl.setEditObject(influencer);
 
-        final FloatParticleInfluencerPropertyControl<RadialVelocityInfluencer> radialPullControl =
-                new FloatParticleInfluencerPropertyControl<>(radialPull,
-                        Messages.MODEL_PROPERTY_RADIAL_PULL, changeConsumer, parent);
+        var radialPullControl = new FloatParticleInfluencerPropertyControl<RadialVelocityInfluencer>(radialPull,
+                Messages.MODEL_PROPERTY_RADIAL_PULL, changeConsumer, parent);
 
         radialPullControl.setSyncHandler(RadialVelocityInfluencer::getRadialPull);
         radialPullControl.setApplyHandler(RadialVelocityInfluencer::setRadialPull);
         radialPullControl.setEditObject(influencer);
 
-        final FloatParticleInfluencerPropertyControl<RadialVelocityInfluencer> tangetForceControl =
-                new FloatParticleInfluencerPropertyControl<>(tangentForce,
-                        Messages.MODEL_PROPERTY_TANGENT_FORCE, changeConsumer, parent);
+        var tangentForceControl = new FloatParticleInfluencerPropertyControl<RadialVelocityInfluencer>(tangentForce,
+                Messages.MODEL_PROPERTY_TANGENT_FORCE, changeConsumer, parent);
 
-        tangetForceControl.setSyncHandler(RadialVelocityInfluencer::getTangentForce);
-        tangetForceControl.setApplyHandler(RadialVelocityInfluencer::setTangentForce);
-        tangetForceControl.setEditObject(influencer);
+        tangentForceControl.setSyncHandler(RadialVelocityInfluencer::getTangentForce);
+        tangentForceControl.setApplyHandler(RadialVelocityInfluencer::setTangentForce);
+        tangentForceControl.setEditObject(influencer);
 
-        FXUtils.addToPane(randomDirectionControl, container);
-        FXUtils.addToPane(pullCenterControl, container);
-        FXUtils.addToPane(pullAlignmentControl, container);
-        FXUtils.addToPane(upAlignmentControl, container);
-        FXUtils.addToPane(radialPullControl, container);
-        FXUtils.addToPane(tangetForceControl, container);
+        FxUtils.addChild(container, randomDirectionControl, pullCenterControl, pullAlignmentControl,
+                upAlignmentControl, radialPullControl, tangentForceControl);
     }
 
     /**
@@ -510,64 +511,62 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param parent         the parent.
      */
     @FxThread
-    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                @NotNull final RotationInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(
+            @NotNull VBox container,
+            @NotNull ModelChangeConsumer changeConsumer,
+            @NotNull RotationInfluencer influencer,
+            @NotNull Object parent
+    ) {
 
-        final boolean randomDirection = influencer.isRandomDirection();
-        final boolean randomSpeed = influencer.isRandomSpeed();
-        final boolean randomStartRotationX = influencer.isRandomStartRotationX();
-        final boolean randomStartRotationY = influencer.isRandomStartRotationY();
-        final boolean randomStartRotationZ = influencer.isRandomStartRotationZ();
+        var randomDirection = influencer.isRandomDirection();
+        var randomSpeed = influencer.isRandomSpeed();
+        var randomStartRotationX = influencer.isRandomStartRotationX();
+        var randomStartRotationY = influencer.isRandomStartRotationY();
+        var randomStartRotationZ = influencer.isRandomStartRotationZ();
 
-        final RotationInfluencerControl influencerControl = new RotationInfluencerControl(changeConsumer, influencer, parent);
+        var influencerControl = new RotationInfluencerControl(changeConsumer, influencer, parent);
         influencerControl.reload();
 
-        final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomDirectionControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomDirection,
-                        Messages.MODEL_PROPERTY_IS_RANDOM_DIRECTION, changeConsumer, parent);
+        var randomDirectionControl = new BooleanParticleInfluencerPropertyControl<RotationInfluencer>(randomDirection,
+                Messages.MODEL_PROPERTY_IS_RANDOM_DIRECTION, changeConsumer, parent);
 
         randomDirectionControl.setSyncHandler(RotationInfluencer::isRandomDirection);
         randomDirectionControl.setApplyHandler(RotationInfluencer::setRandomDirection);
         randomDirectionControl.setEditObject(influencer);
 
-        final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomSpeedControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomSpeed,
-                        Messages.MODEL_PROPERTY_IS_RANDOM_SPEED, changeConsumer, parent);
+        var randomSpeedControl = new BooleanParticleInfluencerPropertyControl<RotationInfluencer>(randomSpeed,
+                Messages.MODEL_PROPERTY_IS_RANDOM_SPEED, changeConsumer, parent);
 
         randomSpeedControl.setSyncHandler(RotationInfluencer::isRandomSpeed);
         randomSpeedControl.setApplyHandler(RotationInfluencer::setRandomSpeed);
         randomSpeedControl.setEditObject(influencer);
 
-        final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomStartRotationXControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomStartRotationX,
-                        Messages.MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X + " X", changeConsumer, parent);
+        var randomStartRotationXControl = new BooleanParticleInfluencerPropertyControl<RotationInfluencer>(
+                randomStartRotationX, Messages.MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X + " X", changeConsumer, parent);
 
         randomStartRotationXControl.setSyncHandler(RotationInfluencer::isRandomStartRotationX);
         randomStartRotationXControl.setApplyHandler(RotationInfluencer::setRandomStartRotationX);
         randomStartRotationXControl.setEditObject(influencer);
 
-        final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomStartRotationYControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomStartRotationY,
-                        Messages.MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X + " Y", changeConsumer, parent);
+        var randomStartRotationYControl = new BooleanParticleInfluencerPropertyControl<RotationInfluencer>(
+                randomStartRotationY, Messages.MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X + " Y", changeConsumer, parent);
 
         randomStartRotationYControl.setSyncHandler(RotationInfluencer::isRandomStartRotationY);
         randomStartRotationYControl.setApplyHandler(RotationInfluencer::setRandomStartRotationY);
         randomStartRotationYControl.setEditObject(influencer);
 
-        final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomStartRotationZControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomStartRotationZ,
-                        Messages.MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X + " Z", changeConsumer, parent);
+        var randomStartRotationZControl = new BooleanParticleInfluencerPropertyControl<RotationInfluencer>(
+                randomStartRotationZ, Messages.MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X + " Z", changeConsumer, parent);
 
         randomStartRotationZControl.setSyncHandler(RotationInfluencer::isRandomStartRotationZ);
         randomStartRotationZControl.setApplyHandler(RotationInfluencer::setRandomStartRotationZ);
         randomStartRotationZControl.setEditObject(influencer);
 
-        FXUtils.addToPane(influencerControl, container);
+        FxUtils.addChild(container, influencerControl);
+
         buildSplitLine(container);
-        FXUtils.addToPane(randomDirectionControl, container);
-        FXUtils.addToPane(randomSpeedControl, container);
-        FXUtils.addToPane(randomStartRotationXControl, container);
-        FXUtils.addToPane(randomStartRotationYControl, container);
-        FXUtils.addToPane(randomStartRotationZControl, container);
+
+        FxUtils.addChild(container, randomDirectionControl, randomSpeedControl, randomStartRotationXControl,
+                randomStartRotationYControl, randomStartRotationZControl);
     }
 }
