@@ -5,3 +5,8 @@
 /embedded-plugins/
 *.iml
 *.so
+/bin/
+/.settings/
+.project
+.classpath
+.dll
