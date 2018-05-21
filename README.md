@@ -1,5 +1,5 @@
 
-## Tonegod.Emitter Support 1.1.1
+## Tonegod.Emitter Support 1.1.2
 
 It's a plugin for jMonkeyBuilder which provides an integration the tonegod.emitter library with jMB.
 This plugin is embedded in jMB since 1.6.0 version.
