@@ -3,9 +3,8 @@ package com.ss.editor.tonedog.emitter;
 import static com.ss.editor.util.NodeUtils.findParent;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.annotation.FxThread;
-import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.part3d.editor.impl.scene.AbstractSceneEditor3DPart;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.editor.plugin.api.RenderFilterExtension;
@@ -44,7 +43,7 @@ import java.net.URL;
  */
 @PluginDescription(
         id = "com.ss.editor.tonegod.emitter",
-        version = "1.1.2",
+        version = "1.1.3",
         minAppVersion = "1.8.0",
         name = "Tonegod.Emitter Support",
         description = "Provides integration with the library 'tonegod.emitter'."
@@ -53,10 +52,7 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
 
     private static final Class<TonegodEmitterEditorPlugin> CLASS = TonegodEmitterEditorPlugin.class;
 
-    @NotNull
     private static final String GRADLE_DEPENDENCIES;
-
-    @NotNull
     private static final String MAVEN_DEPENDENCIES;
 
 
@@ -70,7 +66,7 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
     }
 
     @Override
-    @JmeThread
+    @BackgroundThread
     public void onAfterCreateJmeContext(@NotNull PluginSystem pluginSystem) {
         super.onAfterCreateJmeContext(pluginSystem);
 
@@ -89,7 +85,7 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
     }
 
     @Override
-    @FxThread
+    @BackgroundThread
     public void onAfterCreateJavaFxContext(@NotNull PluginSystem pluginSystem) {
         super.onAfterCreateJavaFxContext(pluginSystem);
 
@@ -132,6 +128,7 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
             }
             return null;
         });
+
         SpatialTreeNode.registerCreationAction((node, nodeTree) -> {
             if (node instanceof NodeTreeNode) {
                 return new CreateSoftParticleEmitterAction(nodeTree, node);
@@ -141,7 +138,7 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
     }
 
     @Override
-    @FromAnyThread
+    @BackgroundThread
     public void register(@NotNull PropertyBuilderRegistry registry) {
         super.register(registry);
         registry.register(ParticleEmitterPropertyBuilder.getInstance());
@@ -149,7 +146,7 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
     }
 
     @Override
-    @FromAnyThread
+    @BackgroundThread
     public void register(@NotNull TreeNodeFactoryRegistry registry) {
         super.register(registry);
         registry.register(ParticlesTreeNodeFactory.getInstance());
