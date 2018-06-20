@@ -43,8 +43,8 @@ import java.net.URL;
  */
 @PluginDescription(
         id = "com.ss.editor.tonegod.emitter",
-        version = "1.1.3",
-        minAppVersion = "1.8.0",
+        version = "1.1.4",
+        minAppVersion = "1.9.0",
         name = "Tonegod.Emitter Support",
         description = "Provides integration with the library 'tonegod.emitter'."
 )
@@ -54,7 +54,6 @@ public class TonegodEmitterEditorPlugin extends EditorPlugin {
 
     private static final String GRADLE_DEPENDENCIES;
     private static final String MAVEN_DEPENDENCIES;
-
 
     static {
         GRADLE_DEPENDENCIES = FileUtils.read(CLASS.getResourceAsStream("/com/ss/editor/tonegod/emitter/dependency/gradle.html"));
