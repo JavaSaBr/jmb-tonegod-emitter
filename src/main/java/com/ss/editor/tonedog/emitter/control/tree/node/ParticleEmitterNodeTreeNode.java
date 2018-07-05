@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;
 
+import java.util.Optional;
+
 /**
  * The implementation of the {@link NodeTreeNode} to represent the {@link ParticleEmitterNode} in the editor.
  *
@@ -43,14 +45,14 @@ public class ParticleEmitterNodeTreeNode extends NodeTreeNode<ParticleEmitterNod
 
     @Override
     @FxThread
-    protected @Nullable Menu createToolMenu(@NotNull NodeTree<?> nodeTree) {
-        return null;
+    protected @NotNull Optional<Menu> createToolMenu(@NotNull NodeTree<?> nodeTree) {
+        return Optional.empty();
     }
 
     @Override
     @FxThread
-    protected @Nullable Menu createCreationMenu(@NotNull NodeTree<?> nodeTree) {
-        return null;
+    protected @NotNull Optional<Menu> createCreationMenu(@NotNull NodeTree<?> nodeTree) {
+        return Optional.empty();
     }
 
     @Override

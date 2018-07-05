@@ -12,7 +12,6 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +47,7 @@ public class CreateBoxShapeEmitterAction extends AbstractCreateShapeEmitterActio
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        var definitions = ArrayFactory.<PropertyDefinition>newArray(PropertyDefinition.class);
+        var definitions = Array.<PropertyDefinition>ofType(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(VECTOR_3F, Messages.MODEL_PROPERTY_SIZE,
                 PROPERTY_SIZE, new Vector3f(1, 1, 1)));
 

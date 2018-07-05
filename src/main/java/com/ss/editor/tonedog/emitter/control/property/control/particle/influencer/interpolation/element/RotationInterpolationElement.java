@@ -28,7 +28,7 @@ public class RotationInterpolationElement extends
     @Override
     @FxThread
     protected void requestToChange(float x, float y, float z) {
-        getControl().requestToChange(new Vector3f(x, y, z), getIndex());
+        control.requestToChange(new Vector3f(x, y, z), getIndex());
     }
 
     @Override

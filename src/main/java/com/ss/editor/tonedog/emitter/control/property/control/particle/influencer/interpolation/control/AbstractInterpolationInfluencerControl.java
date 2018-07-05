@@ -1,8 +1,8 @@
 package com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.control;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.tonedog.emitter.PluginCss;
 import com.ss.editor.tonedog.emitter.control.operation.ParticleInfluencerPropertyOperation;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.InterpolationElement;
 import com.ss.editor.ui.Icons;
@@ -45,7 +45,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
      * The influencer.
      */
     @NotNull
-    private final I influencer;
+    protected final I influencer;
 
     /**
      * The parent.
@@ -56,8 +56,8 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     /**
      * The element container.
      */
-    @Nullable
-    private VBox elementContainer;
+    @NotNull
+    private final VBox elementContainer;
 
     public AbstractInterpolationInfluencerControl(
             @NotNull ModelChangeConsumer modelChangeConsumer,
@@ -67,10 +67,13 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
         this.modelChangeConsumer = modelChangeConsumer;
         this.parent = parent;
         this.influencer = influencer;
+        this.elementContainer = new VBox();
+
         createControls();
+
         FxUtils.addClass(this,
                 CssClasses.DEF_VBOX,
-                CssClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER);
+                PluginCss.PROPERTY_CONTROL_INFLUENCER);
     }
 
     /**
@@ -80,8 +83,6 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     protected void createControls() {
 
         var propertyNameLabel = new Label(getControlTitle() + ":");
-
-        elementContainer = new VBox();
 
         var addButton = new Button();
         addButton.setGraphic(new ImageView(Icons.ADD_16));
@@ -97,7 +98,6 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
         children.addListener((ListChangeListener<Node>)
                 change -> removeButton.setDisable(children.size() < (getMinElements() + 1)));
 
-
         FxUtils.addClass(propertyNameLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW)
                 .addClass(elementContainer, CssClasses.DEF_VBOX)
                 .addClass(addButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER)
@@ -107,6 +107,16 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
         FxUtils.addChild(this, propertyNameLabel, elementContainer, buttonContainer);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
+    }
+
+    /**
+     * Get the influencer.
+     *
+     * @return the influencer.
+     */
+    @FxThread
+    public @NotNull I getInfluencer() {
+        return influencer;
     }
 
     /**
@@ -130,48 +140,16 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * Get the influencer.
-     *
-     * @return the influencer.
-     */
-    @FxThread
-    public @NotNull I getInfluencer() {
-        return influencer;
-    }
-
-    /**
-     * Get the element container.
-     *
-     * @return the element container.
-     */
-    @FxThread
-    protected @NotNull VBox getElementContainer() {
-        return notNull(elementContainer);
-    }
-
-    /**
-     * Get the model change consumer.
-     *
-     * @return the model change consumer.
-     */
-    @FxThread
-    protected @NotNull ModelChangeConsumer getModelChangeConsumer() {
-        return modelChangeConsumer;
-    }
-
-    /**
      * Reload this control.
      */
     @FxThread
     public void reload() {
 
-        var influencer = getInfluencer();
-        var root = getElementContainer();
-        var children = root.getChildren();
+        var children = elementContainer.getChildren();
 
         if (isNeedRebuild(influencer, children.size())) {
-            UiUtils.clear(root);
-            fillControl(influencer, root);
+            UiUtils.clear(elementContainer);
+            fillControl(influencer, elementContainer);
         } else {
             children.stream()
                     .map(InterpolationElement.class::cast)
@@ -199,6 +177,24 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
      */
     @FxThread
     protected void fillControl(@NotNull I influencer, @NotNull VBox root) {
+
+        var steps = influencer.getStepCount();
+
+        for (int i = 0; i < steps; i++) {
+
+            var element = createElement(i);
+            element.createComponents();
+            element.reload();
+            element.prefWidthProperty()
+                    .bind(widthProperty());
+
+            FxUtils.addChild(root, element);
+        }
+    }
+
+    @FxThread
+    protected @NotNull InterpolationElement<?, ?, ?> createElement(int i) {
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -224,7 +220,6 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     @FxThread
     public void requestToChange(@Nullable Interpolation newValue, int index) {
 
-        var influencer = getInfluencer();
         var oldValue = influencer.getInterpolation(index);
 
         execute(newValue, oldValue, (alphaInfluencer, interpolation) ->
@@ -247,7 +242,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
 
         operation.setApplyHandler(applyHandler);
 
-        getModelChangeConsumer().execute(operation);
+        modelChangeConsumer.execute(operation);
     }
 
     /**

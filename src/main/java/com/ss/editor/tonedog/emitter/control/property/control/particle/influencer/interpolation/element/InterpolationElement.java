@@ -1,9 +1,9 @@
 package com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.tonedog.emitter.PluginCss;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.control.AbstractInterpolationInfluencerControl;
 import com.ss.editor.ui.css.CssClasses;
 import com.ss.rlib.fx.util.FxControlUtils;
@@ -16,7 +16,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.influencers.InterpolatedParticleInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
 import tonegod.emitter.interpolation.InterpolationManager;
@@ -25,35 +24,27 @@ import tonegod.emitter.interpolation.InterpolationManager;
  * The implementation of the element for {@link AbstractInterpolationInfluencerControl} for editing something and
  * interpolation.
  *
- * @param <P> the type parameter
- * @param <E> the type parameter
- * @param <C> the type parameter
+ * @param <P> the interpolated particle influencer's type.
+ * @param <E> the node's type.
+ * @param <C> the control's type.
  * @author JavaSaBr
  */
 public abstract class InterpolationElement<P extends InterpolatedParticleInfluencer, E extends Node,
         C extends AbstractInterpolationInfluencerControl<P>> extends HBox {
 
-    /**
-     * The constant STRING_CONVERTER.
-     */
-    @NotNull
-    protected static final StringConverter<Interpolation> STRING_CONVERTER = new StringConverter<Interpolation>() {
+    protected static final StringConverter<Interpolation> STRING_CONVERTER = new StringConverter<>() {
 
         @Override
-        public String toString(final Interpolation object) {
+        public String toString(@NotNull Interpolation object) {
             return object.getName();
         }
 
         @Override
-        public Interpolation fromString(final String string) {
+        public Interpolation fromString(@NotNull String string) {
             return null;
         }
     };
 
-    /**
-     * The constant INTERPOLATIONS.
-     */
-    @NotNull
     protected static final ObservableList<Interpolation> INTERPOLATIONS;
 
     static {
@@ -65,19 +56,19 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
      * The parent control.
      */
     @NotNull
-    private final C control;
+    protected final C control;
 
     /**
      * The editable control.
      */
-    @Nullable
-    protected E editableControl;
+    @NotNull
+    protected final E editableControl;
 
     /**
      * The interpolation chooser.
      */
-    @Nullable
-    protected ComboBox<Interpolation> interpolationComboBox;
+    @NotNull
+    protected final ComboBox<Interpolation> interpolationComboBox;
 
     /**
      * The index.
@@ -92,18 +83,19 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
     public InterpolationElement(@NotNull C control, int index) {
         this.control = control;
         this.index = index;
-        createComponents();
-        setIgnoreListeners(true);
-        reload();
-        setIgnoreListeners(false);
-        FxUtils.addClass(this, CssClasses.DEF_HBOX, CssClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT);
+        this.editableControl = createEditableControl();
+        this.interpolationComboBox = new ComboBox<>();
+
+        FxUtils.addClass(this,
+                CssClasses.DEF_HBOX,
+                PluginCss.PROPERTY_CONTROL_INFLUENCER_ELEMENT);
     }
 
     /**
      * Create components.
      */
     @FxThread
-    protected void createComponents() {
+    public void createComponents() {
 
         Label editableLabel = null;
 
@@ -115,12 +107,9 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
             FxUtils.addClass(editableLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         }
 
-        editableControl = createEditableControl();
-
         var interpolationLabel = new Label(Messages.MODEL_PROPERTY_INTERPOLATION + ":");
         interpolationLabel.prefWidthProperty().bind(widthProperty().multiply(0.25));
 
-        interpolationComboBox = new ComboBox<>();
         interpolationComboBox.setEditable(false);
         interpolationComboBox.setConverter(STRING_CONVERTER);
         interpolationComboBox.getItems().setAll(INTERPOLATIONS);
@@ -130,7 +119,7 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
         FxControlUtils.onSelectedItemChange(interpolationComboBox, this::apply);
 
         FxUtils.addClass(interpolationLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW)
-                .addClass(interpolationComboBox, CssClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+                .addClass(interpolationComboBox, CssClasses.PROPERTY_CONTROL_COMBO_BOX);
 
         if (editableLabel != null) {
             FxUtils.addChild(this, editableLabel);
@@ -164,19 +153,9 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
      */
     @FxThread
     protected void apply(@NotNull Interpolation newValue) {
-        if (isIgnoreListeners()) {
-            getControl().requestToChange(newValue, index);
+        if (!isIgnoreListeners()) {
+            control.requestToChange(newValue, index);
         }
-    }
-
-    /**
-     * Get the control.
-     *
-     * @return the control
-     */
-    @FromAnyThread
-    protected @NotNull C getControl() {
-        return control;
     }
 
     /**
@@ -210,36 +189,25 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
     }
 
     /**
-     * Get the editable control.
-     *
-     * @return the editable control.
-     */
-    @FxThread
-    protected @NotNull E getEditableControl() {
-        return notNull(editableControl);
-    }
-
-    /**
-     * Get the interpolation combo box.
-     *
-     * @return the interpolation combo box.
-     */
-    @FxThread
-    protected @NotNull ComboBox<Interpolation> getInterpolationComboBox() {
-        return notNull(interpolationComboBox);
-    }
-
-    /**
      * Reload this element.
      */
     @FxThread
     public void reload() {
+        setIgnoreListeners(true);
+        try {
+            reloadImpl();
+        } finally {
+            setIgnoreListeners(false);
+        }
+    }
 
-        var control = getControl();
+    @FxThread
+    protected void reloadImpl() {
+
         var influencer = control.getInfluencer();
         var newInterpolation = influencer.getInterpolation(getIndex());
 
-        getInterpolationComboBox().getSelectionModel()
+        interpolationComboBox.getSelectionModel()
                 .select(newInterpolation);
     }
 

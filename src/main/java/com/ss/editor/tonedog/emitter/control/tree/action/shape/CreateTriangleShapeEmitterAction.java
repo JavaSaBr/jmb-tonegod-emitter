@@ -10,7 +10,6 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +23,6 @@ import tonegod.emitter.shapes.TriangleEmitterShape;
  */
 public class CreateTriangleShapeEmitterAction extends AbstractCreateShapeEmitterAction {
 
-    @NotNull
     private static final String PROPERTY_SIZE = "size";
 
     public CreateTriangleShapeEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
@@ -47,7 +45,7 @@ public class CreateTriangleShapeEmitterAction extends AbstractCreateShapeEmitter
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        var definitions = ArrayFactory.<PropertyDefinition>newArray(PropertyDefinition.class);
+        var definitions = Array.<PropertyDefinition>ofType(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_SIZE, PROPERTY_SIZE, 1F));
 
         return definitions;

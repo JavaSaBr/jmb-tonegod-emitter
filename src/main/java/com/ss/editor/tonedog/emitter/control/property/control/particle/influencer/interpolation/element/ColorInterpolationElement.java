@@ -40,7 +40,7 @@ public class ColorInterpolationElement extends
                 .bind(widthProperty().multiply(0.35));
 
         FxControlUtils.onColorChange(colorPicker, this::apply);
-        FxUtils.addClass(colorPicker, CssClasses.ABSTRACT_PARAM_CONTROL_COLOR_PICKER);
+        FxUtils.addClass(colorPicker, CssClasses.PROPERTY_CONTROL_COLOR_PICKER);
 
         return colorPicker;
     }
@@ -51,15 +51,15 @@ public class ColorInterpolationElement extends
     @FxThread
     private void apply(@NotNull Color newValue) {
         if (!isIgnoreListeners()) {
-            getControl().requestToChange(UiUtils.from(newValue), getIndex());
+            control.requestToChange(UiUtils.from(newValue), getIndex());
         }
     }
 
     @Override
     @FxThread
-    public void reload() {
+    protected void reloadImpl() {
 
-        var influencer = getControl().getInfluencer();
+        var influencer = control.getInfluencer();
         var newColor = influencer.getColor(getIndex());
 
         var red = min(newColor.getRed(), 1F);
@@ -67,8 +67,8 @@ public class ColorInterpolationElement extends
         var blue = min(newColor.getBlue(), 1F);
         var alpha = min(newColor.getAlpha(), 1F);
 
-        getEditableControl().setValue(new Color(red, green, blue, alpha));
+        editableControl.setValue(new Color(red, green, blue, alpha));
 
-        super.reload();
+        super.reloadImpl();
     }
 }

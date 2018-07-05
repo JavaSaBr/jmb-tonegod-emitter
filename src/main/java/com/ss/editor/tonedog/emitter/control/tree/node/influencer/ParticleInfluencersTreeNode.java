@@ -12,7 +12,6 @@ import com.ss.editor.ui.control.model.ModelNodeTree;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import com.ss.rlib.common.util.dictionary.DictionaryFactory;
 import com.ss.rlib.common.util.dictionary.ObjectDictionary;
 import javafx.collections.ObservableList;
@@ -34,7 +33,6 @@ import java.lang.reflect.Constructor;
  */
 public class ParticleInfluencersTreeNode extends TreeNode<ParticleInfluencers> {
 
-    @NotNull
     private static final ObjectDictionary<Class<? extends ParticleInfluencer>, Constructor<? extends MenuItem>> CONSTRUCTORS =
             DictionaryFactory.newObjectDictionary();
 
@@ -91,7 +89,7 @@ public class ParticleInfluencersTreeNode extends TreeNode<ParticleInfluencers> {
     @FxThread
     public @NotNull Array<TreeNode<?>> getChildren(@NotNull NodeTree<?> nodeTree) {
 
-        var result = ArrayFactory.<TreeNode<?>>newArray(TreeNode.class);
+        var result = Array.<TreeNode<?>>ofType(TreeNode.class);
 
         getElement().getInfluencers()
                 .forEach(influencer -> result.add(FACTORY_REGISTRY.createFor(influencer)));

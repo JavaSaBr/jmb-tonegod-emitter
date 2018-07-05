@@ -2,7 +2,6 @@ package com.ss.editor.tonedog.emitter.dialog;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.asset.MaterialKey;
 import com.jme3.shader.VarType;
 import com.ss.editor.Messages;
@@ -38,17 +37,19 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     /**
      * The combo box with texture parameter name.
      */
-    @Nullable
-    private ComboBox<String> textureParamNameComboBox;
+    @NotNull
+    private final ComboBox<String> textureParamNameComboBox;
 
     /**
      * The check box for applying the lighting transform.
      */
-    @Nullable
-    private CheckBox applyLightingTransformCheckBox;
+    @NotNull
+    private final CheckBox applyLightingTransformCheckBox;
 
     public ParticlesAssetEditorDialog(@NotNull Consumer<ParticlesMaterial> consumer) {
         super(consumer);
+        this.textureParamNameComboBox = new ComboBox<>();
+        this.applyLightingTransformCheckBox = new CheckBox();
     }
 
     @Override
@@ -64,11 +65,9 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
         applyLightingTransformLabel.prefWidthProperty()
                 .bind(container.widthProperty().multiply(0.25));
 
-        textureParamNameComboBox = new ComboBox<>();
         textureParamNameComboBox.prefWidthProperty()
                 .bind(container.widthProperty().multiply(0.25));
 
-        applyLightingTransformCheckBox = new CheckBox();
         applyLightingTransformCheckBox.prefWidthProperty()
                 .bind(container.widthProperty().multiply(0.25));
 
@@ -84,36 +83,13 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
         return settingsContainer;
     }
 
-    /**
-     * Get the combo box with texture parameter name.
-     *
-     * @return the combo box with texture parameter name.
-     */
-    @FxThread
-    private @NotNull ComboBox<String> getTextureParamNameComboBox() {
-        return notNull(textureParamNameComboBox);
-    }
-
-    /**
-     * Get the check box to apply lighting transformations.
-     *
-     * @return the check box to apply lighting transformations.
-     */
-    @FxThread
-    private @NotNull CheckBox getApplyLightingTransformCheckBox() {
-        return notNull(applyLightingTransformCheckBox);
-    }
-
     @Override
     @FxThread
     protected void processOpen(@NotNull ResourceElement element) {
         super.processOpen(element);
 
-        var textureParamNameBox = getTextureParamNameComboBox();
-        var selectionModel = textureParamNameBox.getSelectionModel();
-        var textureParamName = selectionModel.getSelectedItem();
-
-        var transformBox = getApplyLightingTransformCheckBox();
+        boolean applyLightingTransform = applyLightingTransformCheckBox.isSelected();
+        var textureParamName = textureParamNameComboBox.getValue();
 
         var assetManager = EditorUtil.getAssetManager();
 
@@ -125,7 +101,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
         }
 
         var material = assetManager.loadAsset(new MaterialKey(toAssetPath(assetFile)));
-        var particlesMaterial = new ParticlesMaterial(material, textureParamName, transformBox.isSelected());
+        var particlesMaterial = new ParticlesMaterial(material, textureParamName, applyLightingTransform);
 
         getConsumer().accept(particlesMaterial);
     }
@@ -134,7 +110,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     @FxThread
     protected @NotNull ObservableBooleanValue buildAdditionalDisableCondition() {
 
-        var itemProperty = getTextureParamNameComboBox()
+        var itemProperty = textureParamNameComboBox
                 .getSelectionModel()
                 .selectedItemProperty();
 
@@ -147,8 +123,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     @FxThread
     protected void validate(@NotNull Label warningLabel, @Nullable ResourceElement element) {
 
-        var comboBox = getTextureParamNameComboBox();
-        var items = comboBox.getItems();
+        var items = textureParamNameComboBox.getItems();
         items.clear();
 
         final Path file = element == null ? null : element.getFile();
@@ -172,7 +147,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
                     .filter(matParam -> material.getTextureParam(matParam.getName()) != null)
                     .forEach(filtered -> items.add(filtered.getName()));
 
-            var selectionModel = comboBox.getSelectionModel();
+            var selectionModel = textureParamNameComboBox.getSelectionModel();
 
             if (!items.isEmpty()) {
                 selectionModel.select(0);

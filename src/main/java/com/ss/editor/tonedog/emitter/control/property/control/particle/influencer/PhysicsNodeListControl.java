@@ -1,11 +1,11 @@
 package com.ss.editor.tonedog.emitter.control.property.control.particle.influencer;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.tonedog.emitter.PluginCss;
 import com.ss.editor.tonedog.emitter.control.operation.ParticleInfluencerPropertyOperation;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.UpdatableControl;
@@ -55,8 +55,8 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     /**
      * The element container.
      */
-    @Nullable
-    private VBox elementContainer;
+    @NotNull
+    private final VBox elementContainer;
 
     public PhysicsNodeListControl(
             @NotNull ModelChangeConsumer modelChangeConsumer,
@@ -66,10 +66,13 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         this.modelChangeConsumer = modelChangeConsumer;
         this.parent = parent;
         this.influencer = influencer;
+        this.elementContainer = new VBox();
+
         createControls();
+
         FxUtils.addClass(this,
                 CssClasses.DEF_VBOX,
-                CssClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER,
+                PluginCss.PROPERTY_CONTROL_INFLUENCER,
                 CssClasses.PHYSICS_NODE_LIST_CONTROL);
     }
 
@@ -80,8 +83,6 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     private void createControls() {
 
         var propertyNameLabel = new Label(getControlTitle() + ":");
-
-        elementContainer = new VBox();
 
         var addButton = new Button();
         addButton.setGraphic(new ImageView(Icons.ADD_16));
@@ -100,16 +101,11 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
 
         FxUtils.addChild(this, propertyNameLabel, elementContainer, buttonContainer);
 
-        FxUtils.addClass(propertyNameLabel,
-                        CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW)
-                .addClass(addButton,
-                        CssClasses.BUTTON_WITHOUT_RIGHT_BORDER)
-                .addClass(removeButton,
-                        CssClasses.BUTTON_WITHOUT_LEFT_BORDER)
-                .addClass(buttonContainer,
-                        CssClasses.DEF_HBOX)
-                .addClass(elementContainer,
-                        CssClasses.DEF_VBOX);
+        FxUtils.addClass(propertyNameLabel, CssClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW)
+                .addClass(addButton, CssClasses.BUTTON_WITHOUT_RIGHT_BORDER)
+                .addClass(removeButton, CssClasses.BUTTON_WITHOUT_LEFT_BORDER)
+                .addClass(buttonContainer, CssClasses.DEF_HBOX)
+                .addClass(elementContainer, CssClasses.DEF_VBOX);
 
         DynamicIconSupport.addSupport(addButton, removeButton);
     }
@@ -135,48 +131,16 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     }
 
     /**
-     * Get the influencer.
-     *
-     * @return the influencer.
-     */
-    @FromAnyThread
-    public @NotNull PhysicsInfluencer getInfluencer() {
-        return influencer;
-    }
-
-    /**
-     * Get the element container.
-     *
-     * @return the element container.
-     */
-    @FromAnyThread
-    protected @NotNull VBox getElementContainer() {
-        return notNull(elementContainer);
-    }
-
-    /**
-     * Get the model change consumer.
-     *
-     * @return the model change consumer.
-     */
-    @FromAnyThread
-    protected @NotNull ModelChangeConsumer getModelChangeConsumer() {
-        return modelChangeConsumer;
-    }
-
-    /**
      * Reload this control.
      */
     @FxThread
     public void reload() {
 
-        var influencer = getInfluencer();
-        var root = getElementContainer();
-        var children = root.getChildren();
+        var children = elementContainer.getChildren();
 
         if (isNeedRebuild(influencer, children.size())) {
-            UiUtils.clear(root);
-            fillControl(influencer, root);
+            UiUtils.clear(elementContainer);
+            fillControl(influencer, elementContainer);
         }
     }
 
@@ -219,7 +183,6 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     @FromAnyThread
     protected void processRemove() {
 
-        var influencer = getInfluencer();
         var geometries = influencer.getGeometries();
 
         var geometry = geometries.get(geometries.size() - 1);
@@ -238,10 +201,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      */
     @FxThread
     protected void processAdd() {
-
-        var modelChangeConsumer = getModelChangeConsumer();
         var model = modelChangeConsumer.getCurrentModel();
-
         var dialog = new GeometrySelectorDialog(model, this::processAdd);
         dialog.show();
     }
@@ -281,7 +241,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
                 getPropertyName(), newValue, oldValue);
         operation.setApplyHandler(applyHandler);
 
-        getModelChangeConsumer().execute(operation);
+        modelChangeConsumer.execute(operation);
     }
 
     /**

@@ -12,7 +12,6 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,16 +24,9 @@ import tonegod.emitter.ParticleEmitterNode;
  */
 public class CreateTorusShapeEmitterAction extends AbstractCreateShapeEmitterAction {
 
-    @NotNull
     private static final String PROPERTY_CIRCLE_SAMPLES = "circleSamples";
-
-    @NotNull
     private static final String PROPERTY_RADIAL_SAMPLES = "radialSamples";
-
-    @NotNull
     private static final String PROPERTY_INNER_RADIUS = "innerRadius";
-
-    @NotNull
     private static final String PROPERTY_OUTER_RADIUS = "outerRadius";
 
     public CreateTorusShapeEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
@@ -57,7 +49,7 @@ public class CreateTorusShapeEmitterAction extends AbstractCreateShapeEmitterAct
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        var definitions = ArrayFactory.<PropertyDefinition>newArray(PropertyDefinition.class);
+        var definitions = Array.<PropertyDefinition>ofType(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_CIRCLE_SAMPLES, PROPERTY_CIRCLE_SAMPLES, 10));
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_RADIAL_SAMPLES, PROPERTY_RADIAL_SAMPLES, 10));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_INNER_RADIUS, PROPERTY_INNER_RADIUS, 0.1F));

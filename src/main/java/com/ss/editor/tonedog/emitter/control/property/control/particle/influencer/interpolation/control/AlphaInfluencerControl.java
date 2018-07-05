@@ -4,8 +4,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.AlphaInterpolationElement;
-import com.ss.rlib.fx.util.FxUtils;
-import javafx.scene.layout.VBox;
+import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.InterpolationElement;
 import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.AlphaInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
@@ -39,7 +38,6 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
      */
     @FxThread
     public void requestToChange(@NotNull Float newValue, int index) {
-        var influencer = getInfluencer();
         var oldValue = influencer.getAlpha(index);
         execute(newValue, oldValue, (alphaInfluencer, alpha) ->
                 alphaInfluencer.updateAlpha(alpha, index));
@@ -47,15 +45,8 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
 
     @Override
     @FxThread
-    protected void fillControl(@NotNull AlphaInfluencer influencer, @NotNull VBox root) {
-
-        var alphas = influencer.getAlphas();
-
-        for (int i = 0, length = alphas.size(); i < length; i++) {
-            var element = new AlphaInterpolationElement(this, i);
-            element.prefWidthProperty().bind(widthProperty());
-            FxUtils.addChild(root, element);
-        }
+    protected @NotNull InterpolationElement<?, ?, ?> createElement(int i) {
+        return new AlphaInterpolationElement(this, i);
     }
 
     @Override
@@ -74,7 +65,6 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
     @FxThread
     protected void processRemove() {
 
-        var influencer = getInfluencer();
         var alphas = influencer.getAlphas();
 
         var alpha = influencer.getAlpha(alphas.size() - 1);

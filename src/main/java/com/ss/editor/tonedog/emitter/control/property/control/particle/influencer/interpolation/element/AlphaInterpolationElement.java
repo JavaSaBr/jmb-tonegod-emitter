@@ -49,22 +49,21 @@ public class AlphaInterpolationElement extends
     @FxThread
     private void apply(@NotNull Float newValue) {
         if (!isIgnoreListeners()) {
-            getControl().requestToChange(newValue, getIndex());
+            control.requestToChange(newValue, getIndex());
         }
     }
 
     @Override
     @FxThread
-    public void reload() {
+    protected void reloadImpl() {
 
-        var influencer = getControl().getInfluencer();
+        var influencer = control.getInfluencer();
         var alpha = influencer.getAlpha(getIndex());
 
-        var editableControl = getEditableControl();
         var caretPosition = editableControl.getCaretPosition();
         editableControl.setValue(alpha);
         editableControl.positionCaret(caretPosition);
 
-        super.reload();
+        super.reloadImpl();
     }
 }

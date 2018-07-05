@@ -20,7 +20,6 @@ import tonegod.emitter.influencers.ParticleInfluencer;
  */
 public class ParticlesTreeNodeFactory implements TreeNodeFactory {
 
-    @NotNull
     private static final ParticlesTreeNodeFactory INSTANCE = new ParticlesTreeNodeFactory();
 
     public static @NotNull ParticlesTreeNodeFactory getInstance() {

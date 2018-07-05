@@ -4,9 +4,8 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.InterpolationElement;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.SizeInterpolationElement;
-import com.ss.rlib.fx.util.FxUtils;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.SizeInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
@@ -41,7 +40,6 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
     @FxThread
     public void requestToChange(@NotNull Vector3f newValue, int index) {
 
-        var influencer = getInfluencer();
         var oldValue = influencer.getSize(index);
 
         execute(newValue, oldValue, (sizeInfluencer, alpha) ->
@@ -50,15 +48,8 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
 
     @Override
     @FxThread
-    protected void fillControl(@NotNull SizeInfluencer influencer, @NotNull VBox root) {
-
-        var sizes = influencer.getSizes();
-
-        for (int i = 0, length = sizes.size(); i < length; i++) {
-            var element = new SizeInterpolationElement(this, i);
-            element.prefWidthProperty().bind(widthProperty());
-            FxUtils.addChild(root, element);
-        }
+    protected @NotNull InterpolationElement<?, ?, ?> createElement(int i) {
+        return new SizeInterpolationElement(this, i);
     }
 
     @Override
@@ -77,7 +68,6 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
     @FxThread
     protected void processRemove() {
 
-        var influencer = getInfluencer();
         var sizes = influencer.getSizes();
 
         var size = influencer.getSize(sizes.size() - 1);

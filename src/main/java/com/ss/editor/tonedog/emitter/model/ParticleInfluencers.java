@@ -45,7 +45,7 @@ public class ParticleInfluencers {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        final ParticleInfluencers that = (ParticleInfluencers) o;
+        var that = (ParticleInfluencers) o;
         return emitterNode.equals(that.emitterNode);
     }
 

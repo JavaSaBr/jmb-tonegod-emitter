@@ -4,9 +4,8 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.InterpolationElement;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.RotationInterpolationElement;
-import com.ss.rlib.fx.util.FxUtils;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.RotationInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
@@ -47,7 +46,6 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
     @FxThread
     public void requestToChange(@NotNull Vector3f newValue, int index) {
 
-        var influencer = getInfluencer();
         var oldValue = influencer.getRotationSpeed(index);
 
         execute(newValue, oldValue, (rotationInfluencer, alpha) ->
@@ -56,15 +54,8 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
 
     @Override
     @FxThread
-    protected void fillControl(@NotNull RotationInfluencer influencer, @NotNull VBox root) {
-
-        var speeds = influencer.getRotationSpeeds();
-
-        for (int i = 0, length = speeds.size(); i < length; i++) {
-            var element = new RotationInterpolationElement(this, i);
-            element.prefWidthProperty().bind(widthProperty());
-            FxUtils.addChild(root, element);
-        }
+    protected @NotNull InterpolationElement<?, ?, ?> createElement(int i) {
+        return new RotationInterpolationElement(this, i);
     }
 
     @Override
@@ -83,7 +74,6 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
     @FxThread
     protected void processRemove() {
 
-        var influencer = getInfluencer();
         var speeds = influencer.getRotationSpeeds();
 
         var speed = influencer.getRotationSpeed(speeds.size() - 1);

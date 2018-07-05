@@ -1,0 +1,32 @@
+.property-control-influencer-element {
+    -fx-spacing: 2px;
+    -fx-padding: 0px;
+}
+
+.property-control-influencer-element > .hbox {
+    -fx-spacing: 2px;
+}
+
+.property-control-influencer {
+    -fx-padding: 4px 0px 0px 0px;
+    -fx-alignment: top-center;
+    -fx-spacing: 4px;
+}
+
+.property-control-influencer > .vbox {
+    -fx-spacing: 2px;
+}
+
+.property-control-influencer > .hbox {
+    -fx-alignment: center;
+    -fx-padding: 4px 0px 0px 0px;
+}
+
+.property-control-influencer > .hbox > .button {
+    -fx-min-height: -var-default-toolbar-button-size;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: -var-default-toolbar-button-size;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}

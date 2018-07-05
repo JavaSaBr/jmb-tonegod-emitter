@@ -12,7 +12,6 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.common.util.VarTable;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,13 +24,8 @@ import tonegod.emitter.ParticleEmitterNode;
  */
 public class CreateQuadShapeEmitterAction extends AbstractCreateShapeEmitterAction {
 
-    @NotNull
     private static final String PROPERTY_WIDTH = "width";
-
-    @NotNull
     private static final String PROPERTY_HEIGHT = "height";
-
-    @NotNull
     private static final String PROPERTY_FLIP_COORDS = "flipCoords";
 
     public CreateQuadShapeEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
@@ -54,7 +48,7 @@ public class CreateQuadShapeEmitterAction extends AbstractCreateShapeEmitterActi
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        var definitions = ArrayFactory.<PropertyDefinition>newArray(PropertyDefinition.class);
+        var definitions = Array.<PropertyDefinition>ofType(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_WIDTH, PROPERTY_WIDTH, 1F));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_HEIGHT, PROPERTY_HEIGHT, 1F));
         definitions.add(new PropertyDefinition(BOOLEAN, Messages.MODEL_PROPERTY_FLIP_COORDS, PROPERTY_FLIP_COORDS, true));

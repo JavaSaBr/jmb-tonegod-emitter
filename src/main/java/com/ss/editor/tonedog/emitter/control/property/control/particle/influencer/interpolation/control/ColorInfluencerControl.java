@@ -5,8 +5,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.ColorInterpolationElement;
-import com.ss.rlib.fx.util.FxUtils;
-import javafx.scene.layout.VBox;
+import com.ss.editor.tonedog.emitter.control.property.control.particle.influencer.interpolation.element.InterpolationElement;
 import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.ColorInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
@@ -34,15 +33,8 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
 
     @Override
     @FxThread
-    protected void fillControl(@NotNull ColorInfluencer influencer, @NotNull VBox root) {
-
-        var colors = influencer.getColors();
-
-        for (int i = 0, length = colors.size(); i < length; i++) {
-            var element = new ColorInterpolationElement(this, i);
-            element.prefWidthProperty().bind(widthProperty());
-            FxUtils.addChild(root, element);
-        }
+    protected @NotNull InterpolationElement<?, ?, ?> createElement(int i) {
+        return new ColorInterpolationElement(this, i);
     }
 
     /**
@@ -54,7 +46,6 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
     @FxThread
     public void requestToChange(@NotNull ColorRGBA newValue, int index) {
 
-        var influencer = getInfluencer();
         var oldValue = influencer.getColor(index);
 
         execute(newValue, oldValue, (colorInfluencer, colorRGBA) ->
@@ -77,7 +68,6 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
     @FxThread
     protected void processRemove() {
 
-        var influencer = getInfluencer();
         var colors = influencer.getColors();
 
         var color = influencer.getColor(colors.size() - 1);
