@@ -47,7 +47,7 @@ public class CreateBoxShapeEmitterAction extends AbstractCreateShapeEmitterActio
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        var definitions = Array.<PropertyDefinition>ofType(PropertyDefinition.class);
+        var definitions = Array.ofType(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(VECTOR_3F, Messages.MODEL_PROPERTY_SIZE,
                 PROPERTY_SIZE, new Vector3f(1, 1, 1)));
 

@@ -48,7 +48,7 @@ public class CreateQuadShapeEmitterAction extends AbstractCreateShapeEmitterActi
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        var definitions = Array.<PropertyDefinition>ofType(PropertyDefinition.class);
+        var definitions = Array.ofType(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_WIDTH, PROPERTY_WIDTH, 1F));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_HEIGHT, PROPERTY_HEIGHT, 1F));
         definitions.add(new PropertyDefinition(BOOLEAN, Messages.MODEL_PROPERTY_FLIP_COORDS, PROPERTY_FLIP_COORDS, true));

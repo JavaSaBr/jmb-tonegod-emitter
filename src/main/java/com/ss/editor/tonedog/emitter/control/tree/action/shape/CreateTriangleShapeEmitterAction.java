@@ -45,7 +45,7 @@ public class CreateTriangleShapeEmitterAction extends AbstractCreateShapeEmitter
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        var definitions = Array.<PropertyDefinition>ofType(PropertyDefinition.class);
+        var definitions = Array.ofType(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_SIZE, PROPERTY_SIZE, 1F));
 
         return definitions;

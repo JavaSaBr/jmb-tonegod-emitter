@@ -170,8 +170,10 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         for (int i = 0, length = geometries.size(); i < length; i++) {
 
             var geometry = geometries.get(i);
+
             var label = new Label(Messages.MODEL_PROPERTY_GEOMETRY + ": " + geometry.getName());
-            label.prefWidthProperty().bind(widthProperty());
+            label.prefWidthProperty()
+                    .bind(widthProperty());
 
             FxUtils.addChild(root, label);
         }
@@ -184,7 +186,6 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     protected void processRemove() {
 
         var geometries = influencer.getGeometries();
-
         var geometry = geometries.get(geometries.size() - 1);
 
         execute(true, false, (physicsInfluencer, needRemove) -> {

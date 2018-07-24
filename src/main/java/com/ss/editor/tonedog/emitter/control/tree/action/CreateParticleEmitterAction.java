@@ -53,7 +53,10 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
         var defaultLayer = getDefaultLayer(changeConsumer);
 
         var emitter = createEmitterNode();
-        emitter.addInfluencers(new ColorInfluencer(), new AlphaInfluencer(), new SizeInfluencer(0.1F, 0F));
+        emitter.addInfluencers(new ColorInfluencer(),
+                               new AlphaInfluencer(),
+                               new SizeInfluencer(0.1F, 0F));
+
         emitter.setEnabled(true);
 
         var treeNode = getNode();

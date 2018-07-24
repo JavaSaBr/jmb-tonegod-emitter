@@ -49,7 +49,7 @@ public class CreateTorusShapeEmitterAction extends AbstractCreateShapeEmitterAct
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        var definitions = Array.<PropertyDefinition>ofType(PropertyDefinition.class);
+        var definitions = Array.ofType(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_CIRCLE_SAMPLES, PROPERTY_CIRCLE_SAMPLES, 10));
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_RADIAL_SAMPLES, PROPERTY_RADIAL_SAMPLES, 10));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_INNER_RADIUS, PROPERTY_INNER_RADIUS, 0.1F));
@@ -67,10 +67,12 @@ public class CreateTorusShapeEmitterAction extends AbstractCreateShapeEmitterAct
     @Override
     @FxThread
     protected @NotNull Mesh createMesh(@NotNull VarTable vars) {
+
         var circleSamples = vars.getInteger(PROPERTY_CIRCLE_SAMPLES);
         var radialSamples = vars.getInteger(PROPERTY_RADIAL_SAMPLES);
         var innerRadius = vars.getFloat(PROPERTY_INNER_RADIUS);
         var outerRadius = vars.getFloat(PROPERTY_OUTER_RADIUS);
+
         return new Torus(circleSamples, radialSamples, innerRadius, outerRadius);
     }
 }

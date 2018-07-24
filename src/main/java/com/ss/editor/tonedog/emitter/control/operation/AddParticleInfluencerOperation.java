@@ -1,6 +1,7 @@
 package com.ss.editor.tonedog.emitter.control.operation;
 
 import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.tonedog.emitter.model.ParticleInfluencers;
@@ -34,29 +35,34 @@ public class AddParticleInfluencerOperation extends AbstractEditorOperation<Mode
     }
 
     @Override
-    @FxThread
-    protected void redoImpl(@NotNull ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-
-            parent.killAllParticles();
-            parent.addInfluencer(influencer);
-            parent.emitAllParticles();
-
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxAddedChild(new ParticleInfluencers(parent),
-                    influencer, -1, true));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        parent.killAllParticles();
+        parent.addInfluencer(influencer);
+        parent.emitAllParticles();
     }
 
     @Override
     @FxThread
-    protected void undoImpl(@NotNull ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
+    protected void endRedoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endRedoInFx(editor);
+        editor.notifyFxAddedChild(new ParticleInfluencers(parent), influencer, -1, true);
+    }
 
-            parent.killAllParticles();
-            parent.removeInfluencer(influencer);
-            parent.emitAllParticles();
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        parent.killAllParticles();
+        parent.removeInfluencer(influencer);
+        parent.emitAllParticles();
+    }
 
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxRemovedChild(new ParticleInfluencers(parent), influencer));
-        });
+    @Override
+    @FxThread
+    protected void endUndoInFx(@NotNull ModelChangeConsumer editor) {
+        super.endUndoInFx(editor);
+        editor.notifyFxRemovedChild(new ParticleInfluencers(parent), influencer);
     }
 }

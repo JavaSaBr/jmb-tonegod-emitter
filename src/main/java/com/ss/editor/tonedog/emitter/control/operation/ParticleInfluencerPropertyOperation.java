@@ -1,6 +1,8 @@
 package com.ss.editor.tonedog.emitter.control.operation;
 
 import static com.ss.rlib.common.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.FxThread;
+import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import org.jetbrains.annotations.NotNull;
@@ -79,11 +81,24 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
     }
 
     @Override
-    protected void redoImpl(@NotNull ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            apply(influencer, newValue);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(parent, influencer, propertyName));
-        });
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        apply(influencer, newValue);
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        apply(influencer, oldValue);
+    }
+
+    @Override
+    @FxThread
+    protected void endInFx(@NotNull ModelChangeConsumer editor) {
+        super.endInFx(editor);
+        editor.notifyFxChangeProperty(parent, influencer, propertyName);
     }
 
     /**
@@ -94,13 +109,5 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
      */
     protected void apply(@NotNull D spatial, @Nullable T value) {
         notNull(applyHandler).accept(spatial, value);
-    }
-
-    @Override
-    protected void undoImpl(@NotNull ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> {
-            apply(influencer, oldValue);
-            EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxChangeProperty(parent, influencer, propertyName));
-        });
     }
 }

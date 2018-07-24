@@ -210,7 +210,7 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
 
         emissionPerSecControl.setApplyHandler(EMISSIONS_PER_SECOND_HANDLER);
         emissionPerSecControl.setSyncHandler(ParticleEmitterNode::getEmissionsPerSecond);
-        emissionPerSecControl.setMinMax(0.1F, Integer.MAX_VALUE);
+        emissionPerSecControl.setMinMax(0.1F, (float) Integer.MAX_VALUE);
         emissionPerSecControl.setScrollPower(3F);
         emissionPerSecControl.setEditObject(emitterNode);
 

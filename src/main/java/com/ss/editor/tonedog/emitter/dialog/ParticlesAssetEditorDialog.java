@@ -88,7 +88,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     protected void processOpen(@NotNull ResourceElement element) {
         super.processOpen(element);
 
-        boolean applyLightingTransform = applyLightingTransformCheckBox.isSelected();
+        var applyLightingTransform = applyLightingTransformCheckBox.isSelected();
         var textureParamName = textureParamNameComboBox.getValue();
 
         var assetManager = EditorUtil.getAssetManager();
@@ -141,8 +141,8 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
             var material = assetManager.loadAsset(materialKey);
             var materialDef = material.getMaterialDef();
 
-            var materialParams = materialDef.getMaterialParams();
-            materialParams.stream()
+            materialDef.getMaterialParams()
+                    .stream()
                     .filter(param -> param.getVarType() == VarType.Texture2D)
                     .filter(matParam -> material.getTextureParam(matParam.getName()) != null)
                     .forEach(filtered -> items.add(filtered.getName()));

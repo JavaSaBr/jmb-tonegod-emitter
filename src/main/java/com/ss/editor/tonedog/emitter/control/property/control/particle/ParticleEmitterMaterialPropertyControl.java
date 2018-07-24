@@ -6,9 +6,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.tonedog.emitter.dialog.ParticlesAssetEditorDialog;
 import com.ss.editor.ui.control.property.impl.MaterialPropertyControl;
 import com.ss.editor.util.EditorUtil;
-import javafx.event.ActionEvent;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.material.ParticlesMaterial;
 
@@ -29,11 +27,11 @@ public class ParticleEmitterMaterialPropertyControl extends
         super(element, paramName, modelChangeConsumer);
     }
 
-    /**
-     * Show a dialog to choose another material.
-     */
+    @Override
     @FxThread
-    protected void processChange() {
+    protected void chooseKey() {
+        super.chooseKey();
+
         var dialog = new ParticlesAssetEditorDialog(this::addMaterial);
         dialog.setExtensionFilter(MATERIAL_EXTENSIONS);
         dialog.show();
@@ -45,34 +43,29 @@ public class ParticleEmitterMaterialPropertyControl extends
     @FxThread
     private void addMaterial(@NotNull ParticlesMaterial particlesMaterial) {
         changed(particlesMaterial, getPropertyValue());
-    }
-
-    @Override
-    protected void openToEdit(@Nullable ActionEvent event) {
-        super.openToEdit(event);
-
-        var element = getPropertyValue();
-        if (element == null) {
-            return;
-        }
-
-        var material = element.getMaterial();
-
-        EditorUtil.openInEditor(material.getKey());
+        reloadImpl();
     }
 
     @Override
     @FxThread
-    protected void reload() {
+    protected void openKey() {
+        super.openKey();
 
-        var element = getPropertyValue();
-        if (element == null) {
-            return;
-        }
+        getPropertyValueOpt()
+                .map(ParticlesMaterial::getMaterial)
+                .map(Material::getKey)
+                .ifPresent(EditorUtil::openInEditor);
+    }
 
-        var material = element.getMaterial();
-        var key = material.getKey();
+    @Override
+    @FxThread
+    protected void reloadImpl() {
+        super.reloadImpl();
 
-        getMaterialLabel().setText(EditorUtil.isEmpty(key) ? NO_MATERIAL : key.getName());
+        keyLabel.setText(getPropertyValueOpt()
+                .map(ParticlesMaterial::getMaterial)
+                .map(Material::getKey)
+                .map(assetKey -> EditorUtil.ifEmpty(assetKey, NO_MATERIAL))
+                .orElse(NO_MATERIAL));
     }
 }

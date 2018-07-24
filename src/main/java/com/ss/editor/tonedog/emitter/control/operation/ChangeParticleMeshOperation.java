@@ -1,6 +1,5 @@
 package com.ss.editor.tonedog.emitter.control.operation;
 
-import com.ss.editor.annotation.FxThread;
 import com.ss.editor.annotation.JmeThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
@@ -36,13 +35,21 @@ public class ChangeParticleMeshOperation extends AbstractEditorOperation<ModelCh
     }
 
     @Override
-    @FxThread
-    protected void redoImpl(@NotNull ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> switchInfo(editor));
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        switchInfo();
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        switchInfo();
     }
 
     @JmeThread
-    private void switchInfo(@NotNull ModelChangeConsumer editor) {
+    private void switchInfo() {
 
         var emitterNode = NodeUtils.<ParticleEmitterNode>findParent(geometry, ParticleEmitterNode.class::isInstance);
         if (emitterNode == null) {
@@ -52,11 +59,5 @@ public class ChangeParticleMeshOperation extends AbstractEditorOperation<ModelCh
         var newInfo = prevInfo;
         prevInfo = emitterNode.getParticleMeshType();
         emitterNode.changeParticleMeshType(newInfo);
-    }
-
-    @Override
-    @FxThread
-    protected void undoImpl(@NotNull ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> switchInfo(editor));
     }
 }

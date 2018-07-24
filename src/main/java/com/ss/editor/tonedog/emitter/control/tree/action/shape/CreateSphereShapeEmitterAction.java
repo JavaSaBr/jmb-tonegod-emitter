@@ -48,7 +48,7 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        var definitions = Array.<PropertyDefinition>ofType(PropertyDefinition.class);
+        var definitions = Array.ofType(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_Z_SAMPLES, PROPERTY_Z_SAMPLES, 10));
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_RADIAL_SAMPLES, PROPERTY_RADIAL_SAMPLES, 10));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_RADIUS, PROPERTY_RADIUS, 1F));

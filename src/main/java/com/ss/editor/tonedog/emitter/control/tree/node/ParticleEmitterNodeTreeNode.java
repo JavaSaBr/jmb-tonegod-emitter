@@ -14,7 +14,6 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.control.tree.node.impl.spatial.NodeTreeNode;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -103,7 +102,7 @@ public class ParticleEmitterNodeTreeNode extends NodeTreeNode<ParticleEmitterNod
         var element = getElement();
         var emitterShape = element.getEmitterShape();
 
-        var children = ArrayFactory.<TreeNode<?>>newArray(TreeNode.class);
+        var children = Array.<TreeNode<?>>ofType(TreeNode.class);
         children.add(FACTORY_REGISTRY.createFor(new ParticleInfluencers(element)));
         children.add(FACTORY_REGISTRY.createFor(emitterShape.getMesh()));
 

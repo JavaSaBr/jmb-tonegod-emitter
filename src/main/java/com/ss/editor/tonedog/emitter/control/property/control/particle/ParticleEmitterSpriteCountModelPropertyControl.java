@@ -21,7 +21,6 @@ public class ParticleEmitterSpriteCountModelPropertyControl extends
             @NotNull ModelChangeConsumer modelChangeConsumer
     ) {
         super(element, paramName, modelChangeConsumer);
-        getXField().setMinMax(1, Integer.MAX_VALUE);
-        getYField().setMinMax(1, Integer.MAX_VALUE);
+        setMinMax(1, Integer.MAX_VALUE);
     }
 }

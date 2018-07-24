@@ -20,7 +20,6 @@ import com.ss.editor.ui.util.UiUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.common.util.array.Array;
-import com.ss.rlib.common.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,15 +35,12 @@ import java.util.function.Predicate;
  */
 public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
+    private static final Predicate<Class<?>> ACTION_TESTER = type ->
+            type == NewFileAction.class ||
             type == DeleteFileAction.class ||
             type == RenameFileAction.class;
 
-    private static final Array<String> MODEL_EXTENSIONS = ArrayFactory.newArray(String.class);
-
-    static {
-        MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
-    }
+    private static final Array<String> MODEL_EXTENSIONS = Array.of(FileExtensions.JME_OBJECT);
 
     public LoadModelShapeEmitterAction(@NotNull NodeTree<?> nodeTree, @NotNull TreeNode<?> node) {
         super(nodeTree, node);
@@ -89,7 +85,8 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
             return;
         }
 
-        var element = (ParticleEmitterNode) getNode().getElement();
+        var element = (ParticleEmitterNode) getNode()
+                .getElement();
 
         changeConsumer.execute(new ChangeEmitterMeshOperation(geometry.getMesh(), element));
     }

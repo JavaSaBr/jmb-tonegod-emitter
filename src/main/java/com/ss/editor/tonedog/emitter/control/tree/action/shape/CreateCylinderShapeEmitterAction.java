@@ -49,7 +49,7 @@ public class CreateCylinderShapeEmitterAction extends AbstractCreateShapeEmitter
     @FxThread
     protected @NotNull Array<PropertyDefinition> getPropertyDefinitions() {
 
-        var definitions = Array.<PropertyDefinition>ofType(PropertyDefinition.class);
+        var definitions = Array.ofType(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_AXIS_SAMPLES, PROPERTY_AXIS_SAMPLES, 8));
         definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_RADIAL_SAMPLES, PROPERTY_RADIAL_SAMPLES, 16));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_RADIUS, PROPERTY_RADIUS, 0.25F));

@@ -33,26 +33,32 @@ public class ChangeEmitterMeshOperation extends AbstractEditorOperation<ModelCha
     }
 
     @Override
+    @JmeThread
+    protected void redoInJme(@NotNull ModelChangeConsumer editor) {
+        super.redoInJme(editor);
+        switchShape();
+    }
+
+    @Override
+    @JmeThread
+    protected void undoInJme(@NotNull ModelChangeConsumer editor) {
+        super.undoInJme(editor);
+        switchShape();
+    }
+
     @FxThread
-    protected void redoImpl(@NotNull ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> switchShape(editor));
+    @Override
+    protected void endInFx(@NotNull ModelChangeConsumer editor) {
+        super.endInFx(editor);
+        var emitterMesh = emitterNode.getEmitterShape();
+        editor.notifyFxReplaced(emitterNode, emitterMesh, emitterMesh, true, true);
     }
 
     @JmeThread
-    private void switchShape(@NotNull ModelChangeConsumer editor) {
-
+    private void switchShape() {
         var emitterMesh = emitterNode.getEmitterShape();
         var newShape = prevShape;
         prevShape = emitterMesh.getMesh();
         emitterNode.changeEmitterShapeMesh(newShape);
-
-        EXECUTOR_MANAGER.addFxTask(() -> editor.notifyFxReplaced(emitterNode, emitterMesh,
-                emitterMesh, true, true));
-    }
-
-    @Override
-    @FxThread
-    protected void undoImpl(@NotNull ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJmeTask(() -> switchShape(editor));
     }
 }

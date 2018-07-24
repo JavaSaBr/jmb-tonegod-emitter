@@ -1,6 +1,5 @@
 package com.ss.editor.tonedog.emitter.control.tree.action.shape;
 
-import static com.ss.rlib.common.util.ObjectUtils.notNull;
 import com.jme3.scene.Mesh;
 import com.ss.editor.annotation.FxThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -64,7 +63,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
         var element = (ParticleEmitterNode) treeNode.getElement();
         var shape = createMesh(vars);
 
-        notNull(getNodeTree().getChangeConsumer())
+        getNodeTree().requireChangeConsumer()
                 .execute(new ChangeEmitterMeshOperation(shape, element));
     }
 
